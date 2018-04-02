@@ -1,4 +1,4 @@
-package com.muhib.restaurant;
+package com.muhib.restaurant.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.muhib.restaurant.R;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -74,9 +76,12 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        //onLoginSuccess();
                         // onLoginFailed();
                         progressDialog.dismiss();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }, 3000);
     }
@@ -100,10 +105,12 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
-        finish();
-    }
+//    public void onLoginSuccess() {
+//        //_loginButton.setEnabled(true);
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
