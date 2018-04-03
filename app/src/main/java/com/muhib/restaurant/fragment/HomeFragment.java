@@ -144,6 +144,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         list.add("b");
         list.add("c");
         list.add("d");
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
 
         return list;
     }

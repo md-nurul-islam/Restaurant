@@ -99,7 +99,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (viewType) {
             case ITEM:
-                View viewItem = inflater.inflate(R.layout.home_item_list, parent, false);
+                View viewItem = inflater.inflate(R.layout.single_item_res, parent, false);
                 viewHolder = new OrderListItem(viewItem);
                 break;
 //            case LOADING:
