@@ -31,6 +31,8 @@ import com.bumptech.glide.request.target.Target;
 
 import com.google.gson.Gson;
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.fragment.HomeFragment;
+import com.muhib.restaurant.utils.PaginationAdapterCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,33 +56,40 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w150";
 
-    private List<CategoryModel> movieResults;
+    private List<CategoryModel> orderList;
+    private List<String> strList = new ArrayList<>();
     private Context context;
 
     private boolean isLoadingAdded = false;
     private boolean retryPageLoad = false;
 
-//    private PaginationAdapterCallback mCallback;
+    private PaginationAdapterCallback mCallback;
 //
 //    private String errorMsg;
 //
-//    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback) {
-//        this.context = context;
-//        this.mCallback = mCallback;
-//        movieResults = new ArrayList<>();
-//    }
+    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback) {
+        this.context = context;
+        this.mCallback = mCallback;
+        orderList = new ArrayList<>();
+    }
 
     public HomepageAdapter(Context context) {
         this.context = context;
-        movieResults = new ArrayList<>();
+        orderList = new ArrayList<>();
+    }
+
+    public HomepageAdapter(Context context, HomeFragment homeFragment, ArrayList<String> strList) {
+        this.context = context;
+        this.mCallback = mCallback;
+        this.strList = strList;
     }
 
     public List<CategoryModel> getMovies() {
-        return movieResults;
+        return orderList;
     }
 
-    public void setMovies(List<CategoryModel> movieResults) {
-        this.movieResults = movieResults;
+    public void setMovies(List<CategoryModel> orderList) {
+        this.orderList = orderList;
     }
 
     @Override
@@ -91,7 +100,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (viewType) {
             case ITEM:
                 View viewItem = inflater.inflate(R.layout.home_item_list, parent, false);
-                viewHolder = new MovieVH(viewItem);
+                viewHolder = new OrderListItem(viewItem);
                 break;
 //            case LOADING:
 //                View viewLoading = inflater.inflate(R.layout.item_progress, parent, false);
@@ -111,7 +120,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        CategoryModel result = movieResults.get(position); // Movie
+        //CategoryModel result = orderList.get(position); // Movie
         final Bundle bundle = new Bundle();
         switch (getItemViewType(position)) {
 //            case HERO:
@@ -124,7 +133,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                            next = 5;
 //                        else
 //                            next = 1;
-//                        ArrayList<CategoryModel> childList = new ArrayList<CategoryModel>(movieResults.subList(position, position+next));
+//                        ArrayList<CategoryModel> childList = new ArrayList<CategoryModel>(orderList.subList(position, position+next));
 //                        String str = new Gson().toJson(childList);
 //                        bundle.putString("childList", str);
 //                        gotoSingleNewsFragment(bundle);
@@ -136,9 +145,9 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                loadImage(result.getEmbedded().getFeatureMedia().get(0).get("source_url").getAsString()).into(topItem.mPosterImg);
 //                break;
             case ITEM:
-//                final MovieVH itemHolder = (MovieVH) holder;
+                final OrderListItem itemHolder = (OrderListItem) holder;
 //
-//                itemHolder.mMovieTitle.setText(result.getTitle().getRendered());
+                itemHolder.orderTitle.setText(strList.get(position));
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
 //                itemHolder.mPosterImg.setImageResource(R.drawable.sample);
@@ -172,7 +181,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                            next = 5-(position%6);
 //                        else
 //                            next = 1;
-//                        ArrayList<CategoryModel> childList = new ArrayList<CategoryModel>(movieResults.subList(position, position+next));
+//                        ArrayList<CategoryModel> childList = new ArrayList<CategoryModel>(orderList.subList(position, position+next));
 //                        String str = new Gson().toJson(childList);
 //                        bundle.putString("childList", str);
 //                        gotoSingleNewsFragment(bundle);
@@ -193,9 +202,9 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                                    case R.id.share:
 //                                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
 //                                        shareIntent.setType("text/plain");
-//                                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, movieResults.get(position).getTitle().getRendered());
-//                                        shareIntent.putExtra(Intent.EXTRA_TITLE, movieResults.get(position).getTitle().getRendered());
-//                                        shareIntent.putExtra(Intent.EXTRA_TEXT, movieResults.get(position).getLink());
+//                                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, orderList.get(position).getTitle().getRendered());
+//                                        shareIntent.putExtra(Intent.EXTRA_TITLE, orderList.get(position).getTitle().getRendered());
+//                                        shareIntent.putExtra(Intent.EXTRA_TEXT, orderList.get(position).getLink());
 //                                        context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
 //                                        break;
 ////                                    case R.id.save:
@@ -275,21 +284,22 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return movieResults == null ? 0 : movieResults.size();
+        return strList == null ? 0 : strList.size();
+        //return orderList == null ? 0 : orderList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position % 6 == 0) {
-            return HERO;
-        } else if ((position % 6) == 5) {
-            if (position == 23 && isLoadingAdded)
-                return LOADING;
-            else
-                return ADD;
-        } else {
+//        if (position % 6 == 0) {
+//            return HERO;
+//        } else if ((position % 6) == 5) {
+//            if (position == 23 && isLoadingAdded)
+//                return LOADING;
+//            else
+//                return ADD;
+//        } else {
             return ITEM;
-        }
+//        }
 
 //        if (position!= 24 && position%6 == 0 ) {
 //            return HERO;
@@ -318,14 +328,14 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                + result.getOriginalLanguage().toUpperCase();
 //    }
 
-    /**
-     * Using Glide to handle image loading.
-     * Learn more about Glide here:
-     * <a href="http://blog.grafixartist.com/image-gallery-app-android-studio-1-4-glide/" />
-     *
-     * @param posterPath from {@link Result#getPosterPath()}
-     * @return Glide builder
-     */
+//    /**
+//     * Using Glide to handle image loading.
+//     * Learn more about Glide here:
+//     * <a href="http://blog.grafixartist.com/image-gallery-app-android-studio-1-4-glide/" />
+//     *
+//     * @param posterPath from {@link Result#getPosterPath()}
+//     * @return Glide builder
+//     */
     private DrawableRequestBuilder<String> loadImage(@NonNull String posterPath) {
         return Glide
                 .with(context)
@@ -351,8 +361,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     */
 
     public void add(CategoryModel r) {
-        movieResults.add(r);
-        notifyItemInserted(movieResults.size() - 1);
+        orderList.add(r);
+        notifyItemInserted(orderList.size() - 1);
     }
 
     public void addAllData(List<CategoryModel> moveResults) {
@@ -363,20 +373,20 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void addAllNewData(List<CategoryModel> moveResults) {
-        movieResults.clear();
-        movieResults.addAll(moveResults);
+        orderList.clear();
+        orderList.addAll(moveResults);
         notifyDataSetChanged();
     }
 
     public void clearList() {
-        movieResults.clear();
+        orderList.clear();
     }
 
 
     public void remove(CategoryModel r) {
-        int position = movieResults.indexOf(r);
+        int position = orderList.indexOf(r);
         if (position > -1) {
-            movieResults.remove(position);
+            orderList.remove(position);
             notifyItemRemoved(position);
         }
     }
@@ -401,17 +411,17 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
-        int position = movieResults.size() - 1;
+        int position = orderList.size() - 1;
         CategoryModel result = getItem(position);
 
         if (result != null) {
-            movieResults.remove(position);
+            orderList.remove(position);
             notifyItemRemoved(position);
         }
     }
 
     public CategoryModel getItem(int position) {
-        return movieResults.get(position);
+        return orderList.get(position);
     }
 
     /**
@@ -422,7 +432,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
 //    public void showRetry(boolean show, @Nullable String errorMsg) {
 //        retryPageLoad = show;
-//        notifyItemChanged(movieResults.size() - 1);
+//        notifyItemChanged(orderList.size() - 1);
 //
 //        if (errorMsg != null) this.errorMsg = errorMsg;
 //    }
@@ -457,8 +467,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     /**
      * Main list's content ViewHolder
      */
-    protected class MovieVH extends RecyclerView.ViewHolder {
-        private TextView mMovieTitle;
+    protected class OrderListItem extends RecyclerView.ViewHolder {
+        private TextView orderTitle;
         private TextView mMovieDesc;
         private TextView mYear; // displays "year | language"
         private ImageView mPosterImg;
@@ -468,10 +478,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private LinearLayout moreNewsLayout;
         private TextView moreText;
 
-        public MovieVH(View itemView) {
+        public OrderListItem(View itemView) {
             super(itemView);
 
-//            mMovieTitle = (TextView) itemView.findViewById(R.id.movie_title);
+            orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
 //            mMovieDesc = (TextView) itemView.findViewById(R.id.movie_desc);
 ////            mYear = (TextView) itemView.findViewById(R.id.movie_year);
 //            mPosterImg = (ImageView) itemView.findViewById(R.id.movie_poster);

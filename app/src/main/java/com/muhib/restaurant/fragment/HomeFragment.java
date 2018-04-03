@@ -10,18 +10,45 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
+import com.muhib.restaurant.utils.PaginationAdapterCallback;
+import com.muhib.restaurant.utils.PaginationScrollListener;
+
+import java.util.ArrayList;
+
+import model.CategoryModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements  SwipeRefreshLayout.OnRefreshListener{
+public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener{
     HomepageAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
     RecyclerView rv;
+    ProgressBar progressBar;
+    LinearLayout errorLayout;
+    Button btnRetry;
+    TextView txtError;
+
+    private static final int PAGE_START = 15;
+    private static final int PAGE_START_OFFSET = 0;
+
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    // limiting to 5 for this tutorial, since total pages in actual API is very large. Feel free to modify.
+    private static int TOTAL_ITEM = 60;
+    private int currentPage = PAGE_START;
+    private int currentOffst = PAGE_START_OFFSET;
+    private int SELECTED;
+    ArrayList<CategoryModel> results = new ArrayList<>();
+    ArrayList<String> strList = new ArrayList<>();
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     public HomeFragment() {
@@ -52,22 +79,92 @@ public class HomeFragment extends Fragment implements  SwipeRefreshLayout.OnRefr
             }
         });
 
-        initView(view);
-        return view;
-    }
-
-    private void initView(View view) {
         rv = (RecyclerView) view.findViewById(R.id.main_recycler);
-        adapter = new HomepageAdapter(getContext());
+//        progressBar = (ProgressBar) view.findViewById(R.id.main_progress);
+        errorLayout = (LinearLayout) view.findViewById(R.id.error_layout);
+        btnRetry = (Button) view.findViewById(R.id.error_btn_retry);
+        txtError = (TextView) view.findViewById(R.id.error_txt_cause);
+        strList = getStrList();
+
+
+        adapter = new HomepageAdapter(getContext(), this, strList);
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
         rv.setItemAnimator(new DefaultItemAnimator());
 
+
+        rv.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+//                currentPage = 15;
+                //currentOffst += 15;
+
+                //loadNextPage();
+                //callNewsApiNext();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_ITEM;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        rv.setAdapter(adapter);
+//        loadFirstPage();
+       // callNewsApiFirst();
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //loadFirstPage();
+                //callNewsApiFirst();
+            }
+        });
+
+
+        //initView(view);
+        return view;
     }
+
+    private ArrayList<String> getStrList() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+
+        return list;
+    }
+
+//    private void initView(View view) {
+//        rv = (RecyclerView) view.findViewById(R.id.main_recycler);
+//        adapter = new HomepageAdapter(getContext());
+//
+//        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//        rv.setLayoutManager(linearLayoutManager);
+//        rv.setItemAnimator(new DefaultItemAnimator());
+//
+//    }
 
     @Override
     public void onRefresh() {
+
+    }
+
+    @Override
+    public void retryPageLoad() {
 
     }
 }
