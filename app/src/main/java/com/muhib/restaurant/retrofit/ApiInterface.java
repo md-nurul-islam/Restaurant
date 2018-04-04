@@ -62,8 +62,8 @@ public interface ApiInterface {
 //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //
-//    @GET("posts?_embed")
-//    Observable<Response<List<CategoryModel>>> getSearachTopics(@Query("search") String search, @Query("per_page") int per_page, @Query("offset") int offest);
+    @POST("api/user/register")
+    Observable<Response> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 }
 
 

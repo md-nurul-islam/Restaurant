@@ -12,6 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.retrofit.RetrofitApiClient;
+
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import model.CategoryModel;
+import okhttp3.Headers;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -139,5 +151,42 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+
+
+    private void callNewsApiFirst( String userId, String password) {
+
+
+        RetrofitApiClient.getApiInterface().getUserAuthentication(userId, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response value) {
+
+                        if(value.code()==200){
+                            Headers headers = value.headers();
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
     }
 }
