@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
+import com.muhib.restaurant.utils.MySheardPreference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MySheardPreference.setUsingFirstTime(false);
         goesToHomeFragment();
 //        Intent intent = new Intent(this, LoginActivity.class);
 //        startActivity(intent);

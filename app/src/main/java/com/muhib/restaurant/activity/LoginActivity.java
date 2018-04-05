@@ -83,19 +83,22 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+//
+//        new android.os.Handler().postDelayed(
+//                new Runnable() {
+//                    public void run() {
+//                        // On complete call either onLoginSuccess or onLoginFailed
+//                        //onLoginSuccess();
+//                        // onLoginFailed();
+//                        progressDialog.dismiss();
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+//                }, 3000);
+        callLoginApi(email, password);
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        //onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, 3000);
+
     }
 
 
@@ -155,13 +158,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void callNewsApiFirst( String userId, String password) {
+    private void callLoginApi( String userId, String password) {
 
 
         RetrofitApiClient.getApiInterface().getUserAuthentication(userId, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response>() {
+                .subscribe(new Observer<Response<ResponseBody>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -170,14 +173,20 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Response value) {
 
-                        if(value.code()==200){
+//                        if(value.code()==200){
                             Headers headers = value.headers();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
 
-                        }
+//                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
 

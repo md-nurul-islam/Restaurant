@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.FieldMap;
@@ -63,7 +64,7 @@ public interface ApiInterface {
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //
     @POST("api/user/register")
-    Observable<Response> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
+    Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 }
 
 
