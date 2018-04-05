@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         strList = getStrList();
 
 
-        adapter = new HomepageAdapter(getContext(), this, strList);
+        adapter = new HomepageAdapter(getContext(), this);
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
@@ -107,10 +107,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             protected void loadMoreItems() {
                 isLoading = true;
 //                currentPage = 15;
-                //currentOffst += 15;
+                currentOffst += 15;
 
                 //loadNextPage();
-                //callNewsApiNext();
+                callNewsApiNext();
             }
 
             @Override
@@ -131,13 +131,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
         rv.setAdapter(adapter);
 //        loadFirstPage();
-       // callNewsApiFirst();
+        callNewsApiFirst();
 
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //loadFirstPage();
-                //callNewsApiFirst();
+                callNewsApiFirst();
             }
         });
 
@@ -182,10 +182,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
 
 
-    public void callNewsApiFirst( int selected) {
+    public void callNewsApiFirst() {
         //hideErrorView();
 
-        RetrofitApiClient.getApiInterface().getTopics(selected, currentPage, 0)
+        RetrofitApiClient.getApiInterface().getTopics(currentPage, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<CategoryModel>>>() {
@@ -201,8 +201,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
                             List<CategoryModel> singleList = value.body();
                             //singleList.size();
-                            progressBar.setVisibility(View.GONE);
-                            //adapter.addAll(singleList);
+                            //progressBar.setVisibility(View.GONE);
+                            adapter.addAllData(singleList);
 
                             if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
                             else isLastPage = true;
@@ -226,5 +226,45 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     }
                 });
 
+    }
+
+
+
+    private void callNewsApiNext( ) {
+        RetrofitApiClient.getApiInterface().getTopics(currentPage, currentOffst)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<List<CategoryModel>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<List<CategoryModel>> value) {
+                        if (value.code() == 200) {
+                            adapter.removeLoadingFooter();
+                            isLoading = false;
+                            List<CategoryModel> singleList = value.body();
+                            //singleList.size();
+                            adapter.addAllData(singleList);
+
+                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
+                            else isLastPage = true;
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //adapter.showRetry(true, fetchErrorMessage(e));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

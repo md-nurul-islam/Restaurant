@@ -9,9 +9,9 @@ public class CategoryModel {
 //    @Expose
 //    private String code;
 //
-//    @SerializedName("_embedded")
-//    @Expose
-//    private Embedded embedded;
+    @SerializedName("_embedded")
+    @Expose
+    private Embedded embedded;
 
     @SerializedName("id")
     @Expose
@@ -26,9 +26,9 @@ public class CategoryModel {
     @Expose
     private String link;
 
-//    @SerializedName("title")
-//    @Expose
-//    private Title title;
+    @SerializedName("title")
+    @Expose
+    private Title title;
 //
 //    @SerializedName("content")
 //    @Expose
@@ -67,13 +67,13 @@ public class CategoryModel {
         this.link = link;
     }
 
-//    public Title getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(Title title) {
-//        this.title = title;
-//    }
+    public Title getTitle() {
+        return title;
+    }
+
+    public void setTitle(Title title) {
+        this.title = title;
+    }
 //
 //    public ExcerptModel getExcerptModel() {
 //        return excerptModel;
@@ -106,11 +106,11 @@ public class CategoryModel {
 //        this.embedded = embedded;
 //    }
 //
-//    public Embedded getEmbedded() {
-//        return embedded;
-//    }
-//
-//    public void setEmbedded(Embedded embedded) {
-//        this.embedded = embedded;
-//    }
+    public Embedded getEmbedded() {
+        return embedded;
+    }
+
+    public void setEmbedded(Embedded embedded) {
+        this.embedded = embedded;
+    }
 }

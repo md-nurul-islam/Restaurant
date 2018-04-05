@@ -6,4 +6,6 @@
     <string name="btn_retry">Retry</string>
     <string name="error_msg">No Connectivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="tap_to_reload">Tap to relode</string>
+    <string name="error_msg_unknown">error unkown</string>
 </resources>

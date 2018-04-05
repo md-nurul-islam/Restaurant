@@ -36,7 +36,7 @@
                     android:theme="@style/CircularProgress" />
 
                 <ImageView
-                    android:id="@+id/nextImage"
+                    android:id="@+id/itemImage"
                     android:layout_width="72dp"
                     android:layout_height="90dp"
                     android:fitsSystemWindows="true"

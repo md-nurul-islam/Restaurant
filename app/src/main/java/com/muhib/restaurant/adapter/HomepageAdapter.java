@@ -65,7 +65,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private PaginationAdapterCallback mCallback;
 //
-//    private String errorMsg;
+    private String errorMsg;
 //
     public HomepageAdapter(Context context, PaginationAdapterCallback mCallback) {
         this.context = context;
@@ -102,10 +102,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View viewItem = inflater.inflate(R.layout.single_item_res, parent, false);
                 viewHolder = new OrderListItem(viewItem);
                 break;
-//            case LOADING:
-//                View viewLoading = inflater.inflate(R.layout.item_progress, parent, false);
-//                viewHolder = new LoadingVH(viewLoading);
-//                break;
+            case LOADING:
+                View viewLoading = inflater.inflate(R.layout.item_progress, parent, false);
+                viewHolder = new LoadingVH(viewLoading);
+                break;
 //            case HERO:
 //                View viewHero = inflater.inflate(R.layout.item_hero, parent, false);
 //                viewHolder = new HeroVH(viewHero);
@@ -120,7 +120,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        //CategoryModel result = orderList.get(position); // Movie
+        CategoryModel result = orderList.get(position); // Movie
         final Bundle bundle = new Bundle();
         switch (getItemViewType(position)) {
 //            case HERO:
@@ -147,7 +147,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case ITEM:
                 final OrderListItem itemHolder = (OrderListItem) holder;
 //
-                itemHolder.orderTitle.setText(strList.get(position));
+                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
 //                itemHolder.mPosterImg.setImageResource(R.drawable.sample);
@@ -220,46 +220,46 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                });
 //
 ////                // load movie thumbnail
-//                try {
-//                    loadThumbImage(result.getEmbedded().getFeatureMedia().get(0).get("source_url").getAsString())
-//                            .listener(new RequestListener<String, GlideDrawable>() {
-//                                @Override
-//                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                                    // TODO: 08/11/16 handle failure
-//                                    itemHolder.mProgress.setVisibility(View.GONE);
-//                                    return false;
-//                                }
-//
-//                                @Override
-//                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                                    // image ready, hide progress now
-//                                    itemHolder.mProgress.setVisibility(View.GONE);
-//                                    return false;   // return false if you want Glide to handle everything else.
-//                                }
-//                            })
-//                            .into(itemHolder.mPosterImg);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    loadThumbImage(result.getEmbedded().getFeatureMedia().get(0).get("source_url").getAsString())
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    // TODO: 08/11/16 handle failure
+                                    itemHolder.mProgress.setVisibility(View.GONE);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    // image ready, hide progress now
+                                    itemHolder.mProgress.setVisibility(View.GONE);
+                                    return false;   // return false if you want Glide to handle everything else.
+                                }
+                            })
+                            .into(itemHolder.itemImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
 
-//            case LOADING:
-//                LoadingVH loadingVH = (LoadingVH) holder;
-//
-//                if (retryPageLoad) {
-//                    loadingVH.mErrorLayout.setVisibility(View.VISIBLE);
-//                    loadingVH.mProgressBar.setVisibility(View.GONE);
-//
-//                    loadingVH.mErrorTxt.setText(
-//                            errorMsg != null ?
-//                                    errorMsg :
-//                                    context.getString(R.string.error_msg_unknown));
-//
-//                } else {
-//                    loadingVH.mErrorLayout.setVisibility(View.GONE);
-//                    loadingVH.mProgressBar.setVisibility(View.VISIBLE);
-//                }
-//                break;
+            case LOADING:
+                LoadingVH loadingVH = (LoadingVH) holder;
+
+                if (retryPageLoad) {
+                    loadingVH.mErrorLayout.setVisibility(View.VISIBLE);
+                    loadingVH.mProgressBar.setVisibility(View.GONE);
+
+                    loadingVH.mErrorTxt.setText(
+                            errorMsg != null ?
+                                    errorMsg :
+                                    context.getString(R.string.error_msg_unknown));
+
+                } else {
+                    loadingVH.mErrorLayout.setVisibility(View.GONE);
+                    loadingVH.mProgressBar.setVisibility(View.VISIBLE);
+                }
+                break;
 //            case ADD:
 //                final HeroAdd addHolder = (HeroAdd) holder;
 //                //heroAdd.mMovieTitle.setText(result.getTitle().getRendered());
@@ -284,8 +284,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return strList == null ? 0 : strList.size();
-        //return orderList == null ? 0 : orderList.size();
+        //return strList == null ? 0 : strList.size();
+        return orderList == null ? 0 : orderList.size();
     }
 
     @Override
@@ -298,7 +298,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            else
 //                return ADD;
 //        } else {
-            return ITEM;
+//            return ITEM;
 //        }
 
 //        if (position!= 24 && position%6 == 0 ) {
@@ -309,7 +309,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            return ADD;
 //        }
 //        else {
-//            return (position == 24 && isLoadingAdded) ? LOADING : ITEM;
+        return (position == orderList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
 //        }
     }
 
@@ -319,7 +319,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     */
 
     /**
-     * @param result
+//     * @param result
      * @return [releasedate] | [2letterlangcode]
      */
 //    private String formatYearLabel(Result result) {
@@ -430,12 +430,12 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      * @param show
      * @param errorMsg to display if page load fails
      */
-//    public void showRetry(boolean show, @Nullable String errorMsg) {
-//        retryPageLoad = show;
-//        notifyItemChanged(orderList.size() - 1);
-//
-//        if (errorMsg != null) this.errorMsg = errorMsg;
-//    }
+    public void showRetry(boolean show, @Nullable String errorMsg) {
+        retryPageLoad = show;
+        notifyItemChanged(orderList.size() - 1);
+
+        if (errorMsg != null) this.errorMsg = errorMsg;
+    }
 
 
    /*
@@ -471,7 +471,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView orderTitle;
         private TextView mMovieDesc;
         private TextView mYear; // displays "year | language"
-        private ImageView mPosterImg;
+        private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
         private FrameLayout itemLayout;
@@ -484,8 +484,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
 //            mMovieDesc = (TextView) itemView.findViewById(R.id.movie_desc);
 ////            mYear = (TextView) itemView.findViewById(R.id.movie_year);
-//            mPosterImg = (ImageView) itemView.findViewById(R.id.movie_poster);
-//            mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
+            itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
+            mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
 //            menuOption = (TextView) itemView.findViewById(R.id.menuOptions);
 //            itemLayout = (FrameLayout) itemView.findViewById(R.id.itemLayout);
 //            moreNewsLayout = (LinearLayout) itemView.findViewById(R.id.moreNews);
@@ -505,36 +505,36 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //    }
 
 
-//    protected class LoadingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        private ProgressBar mProgressBar;
-//        private ImageButton mRetryBtn;
-//        private TextView mErrorTxt;
-//        private LinearLayout mErrorLayout;
-//
-//        public LoadingVH(View itemView) {
-//            super(itemView);
-//
-//            mProgressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
-//            mRetryBtn = (ImageButton) itemView.findViewById(R.id.loadmore_retry);
-//            mErrorTxt = (TextView) itemView.findViewById(R.id.loadmore_errortxt);
-//            mErrorLayout = (LinearLayout) itemView.findViewById(R.id.loadmore_errorlayout);
-//
-//            mRetryBtn.setOnClickListener(this);
-//            mErrorLayout.setOnClickListener(this);
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            switch (view.getId()) {
-//                case R.id.loadmore_retry:
-//                case R.id.loadmore_errorlayout:
-//
-//                    showRetry(false, null);
-//                    mCallback.retryPageLoad();
-//
-//                    break;
-//            }
-//        }
-//    }
+    protected class LoadingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ProgressBar mProgressBar;
+        private ImageButton mRetryBtn;
+        private TextView mErrorTxt;
+        private LinearLayout mErrorLayout;
+
+        public LoadingVH(View itemView) {
+            super(itemView);
+
+            mProgressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
+            mRetryBtn = (ImageButton) itemView.findViewById(R.id.loadmore_retry);
+            mErrorTxt = (TextView) itemView.findViewById(R.id.loadmore_errortxt);
+            mErrorLayout = (LinearLayout) itemView.findViewById(R.id.loadmore_errorlayout);
+
+            mRetryBtn.setOnClickListener(this);
+            mErrorLayout.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.loadmore_retry:
+                case R.id.loadmore_errorlayout:
+
+                    showRetry(false, null);
+                    mCallback.retryPageLoad();
+
+                    break;
+            }
+        }
+    }
 
 }
