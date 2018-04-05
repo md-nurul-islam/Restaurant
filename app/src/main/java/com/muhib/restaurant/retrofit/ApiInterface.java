@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import model.CategoryModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -58,8 +59,8 @@ public interface ApiInterface {
 //    Call<List<CategoryModel>> getTopicsList(@Query("categories") int post, @Query("per_page") int per_page);
 //
 //
-//    @GET("posts?_embed")
-//    Observable<Response<List<CategoryModel>>> getTopics(@Query("categories") int post, @Query("per_page") int per_page, @Query("offset") int offest);
+    @GET("posts?_embed")
+    Observable<Response<List<CategoryModel>>> getTopics(@Query("categories") int post, @Query("per_page") int per_page, @Query("offset") int offest);
 //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //

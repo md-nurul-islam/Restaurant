@@ -17,12 +17,20 @@ import android.widget.TextView;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
+import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 import com.muhib.restaurant.utils.PaginationScrollListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import model.CategoryModel;
+import okhttp3.Headers;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -169,6 +177,54 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     @Override
     public void retryPageLoad() {
+
+    }
+
+
+
+    public void callNewsApiFirst( int selected) {
+        //hideErrorView();
+
+        RetrofitApiClient.getApiInterface().getTopics(selected, currentPage, 0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<List<CategoryModel>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<List<CategoryModel>> value) {
+                        if(value.code()==200){
+                            Headers headers = value.headers();
+                            TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
+                            List<CategoryModel> singleList = value.body();
+                            //singleList.size();
+                            progressBar.setVisibility(View.GONE);
+                            //adapter.addAll(singleList);
+
+                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
+                            else isLastPage = true;
+//                            results.addAll(singleList);
+//                            results.add(singleList.get(4));
+//                            si++;
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //showErrorView(e);
+                        //adapter.showRetry(true, fetchErrorMessage(e));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 }
