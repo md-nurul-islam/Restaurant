@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
@@ -32,6 +33,7 @@ import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
+import com.muhib.restaurant.fragment.OrderDetailsFragment;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 
 import java.util.ArrayList;
@@ -241,6 +243,24 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                itemHolder.accepted.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ordeProcess(true);
+                    }
+                });
+                itemHolder.rejected.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ordeProcess(false);
+                    }
+                });
+                itemHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        gotoOrderDetailsFragment();
+                    }
+                });
                 break;
 
             case LOADING:
@@ -272,14 +292,23 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    private void ordeProcess(boolean b) {
+        String status="";
+        if(b)
+            status = "Accepted";
+        else
+            status = "Rejected";
+        Toast.makeText(context, "Order " + status , Toast.LENGTH_SHORT).show();
+    }
 
-    private void gotoPagerFragment(Bundle bundle) {
-//        PagerFragment pagerFragment = new PagerFragment();
-//        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        pagerFragment.setArguments(bundle);
-//        transaction.add(R.id.main_acitivity_container, pagerFragment, "pagerFragment").addToBackStack(null);
-//        transaction.commit();
+
+    private void gotoOrderDetailsFragment() {
+        OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
+        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        //pagerFragment.setArguments(bundle);
+        transaction.add(R.id.container, detailsFragment, "detailsFragment").addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -469,25 +498,25 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     protected class OrderListItem extends RecyclerView.ViewHolder {
         private TextView orderTitle;
-        private TextView mMovieDesc;
+        private TextView accepted;
         private TextView mYear; // displays "year | language"
         private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
-        private FrameLayout itemLayout;
+        private LinearLayout itemLayout;
         private LinearLayout moreNewsLayout;
-        private TextView moreText;
+        private TextView rejected;
 
         public OrderListItem(View itemView) {
             super(itemView);
 
             orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
-//            mMovieDesc = (TextView) itemView.findViewById(R.id.movie_desc);
-////            mYear = (TextView) itemView.findViewById(R.id.movie_year);
+            accepted = (TextView) itemView.findViewById(R.id.accept);
+            rejected = (TextView) itemView.findViewById(R.id.reject);
             itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
             mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
 //            menuOption = (TextView) itemView.findViewById(R.id.menuOptions);
-//            itemLayout = (FrameLayout) itemView.findViewById(R.id.itemLayout);
+            itemLayout = (LinearLayout) itemView.findViewById(R.id.itemLayout);
 //            moreNewsLayout = (LinearLayout) itemView.findViewById(R.id.moreNews);
 //            moreText = (TextView) itemView.findViewById(R.id.moreText);
         }

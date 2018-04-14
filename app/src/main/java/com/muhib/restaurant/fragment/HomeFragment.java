@@ -1,9 +1,11 @@
 package com.muhib.restaurant.fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,6 +71,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_home, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -184,6 +187,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     public void callNewsApiFirst() {
         //hideErrorView();
+        showProgress();
 
         RetrofitApiClient.getApiInterface().getTopics(currentPage, 0)
                 .subscribeOn(Schedulers.io())
@@ -196,6 +200,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
                     @Override
                     public void onNext(Response<List<CategoryModel>> value) {
+                        hideProgress();
                         if(value.code()==200){
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
@@ -218,6 +223,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     public void onError(Throwable e) {
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
+                        hideProgress();
                     }
 
                     @Override
@@ -267,4 +273,19 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     }
                 });
     }
+
+    public void showProgress() {
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("please wait.");
+        dialog.show();
+    }
+
+    public void hideProgress() {
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    private ProgressDialog dialog;
+
 }

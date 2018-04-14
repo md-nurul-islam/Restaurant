@@ -5,17 +5,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.utils.MySheardPreference;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         MySheardPreference.setUsingFirstTime(false);
         goesToHomeFragment();
 //        Intent intent = new Intent(this, LoginActivity.class);
@@ -29,5 +35,39 @@ public class MainActivity extends AppCompatActivity {
 //        paginationSingleFragment.setArguments(bundle);
         transaction.replace(R.id.container, homeFragment, "homeFragment");
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStack();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+                return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }
