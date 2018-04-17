@@ -64,7 +64,9 @@ public interface ApiInterface {
 //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //
-    @POST("api/user/register")
+    ///wc-auth/v1/authorize
+//    @POST("api/user/register")
+    @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 }
 

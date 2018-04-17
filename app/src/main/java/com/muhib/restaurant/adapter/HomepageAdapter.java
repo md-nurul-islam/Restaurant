@@ -32,8 +32,10 @@ import com.bumptech.glide.request.target.Target;
 
 import com.google.gson.Gson;
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.activity.MainActivity;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
+import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 
 import java.util.ArrayList;
@@ -66,13 +68,17 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean retryPageLoad = false;
 
     private PaginationAdapterCallback mCallback;
+    private OrderProcess mOrderProcessCallback;
 //
     private String errorMsg;
+    //HomeFragment homeFragment;
 //
-    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback) {
+    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback, OrderProcess orderProcessCallback) {
         this.context = context;
         this.mCallback = mCallback;
         orderList = new ArrayList<>();
+        this.mOrderProcessCallback = orderProcessCallback;
+        //this.homeFragment = fragment;
     }
 
     public HomepageAdapter(Context context) {
@@ -84,6 +90,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.context = context;
         this.mCallback = mCallback;
         this.strList = strList;
+
     }
 
     public List<CategoryModel> getMovies() {
@@ -299,6 +306,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else
             status = "Rejected";
         Toast.makeText(context, "Order " + status , Toast.LENGTH_SHORT).show();
+        mOrderProcessCallback.processOrder();
+
     }
 
 

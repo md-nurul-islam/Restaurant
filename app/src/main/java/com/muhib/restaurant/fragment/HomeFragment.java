@@ -1,6 +1,7 @@
 package com.muhib.restaurant.fragment;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
+import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 import com.muhib.restaurant.utils.PaginationScrollListener;
@@ -37,7 +39,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener{
+public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener, OrderProcess{
     HomepageAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     ArrayList<CategoryModel> results = new ArrayList<>();
     ArrayList<String> strList = new ArrayList<>();
     SwipeRefreshLayout mSwipeRefreshLayout;
+    OrderProcess orderProcessCallback;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -98,7 +101,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         strList = getStrList();
 
 
-        adapter = new HomepageAdapter(getContext(), this);
+        adapter = new HomepageAdapter(getContext(), this, this);
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(linearLayoutManager);
@@ -288,4 +291,34 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     private ProgressDialog dialog;
 
+    public void orderProcess() {
+
+
+    }
+
+    @Override
+    public void processOrder() {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
+        final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
+        myDialog.setView(dateDialogView);
+
+//        dateDialogView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String description = "";
+//
+//                myDialog.dismiss();
+//            }
+//        });
+//        dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                myDialog.dismiss();
+//            }
+//        });
+
+
+        myDialog.show();
+    }
 }

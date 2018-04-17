@@ -16,8 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitApiClient {
 //    www.champs21.com/wp-json/wp/v2/
 
-    public static final String BASE_URL = "http://champs21.com/wp-json/wp/v2/";
-    //public static final String BASE_URL = "http://api.champs21.com/";
+    //public static final String BASE_URL = "http://champs21.com/wp-json/wp/v2/";
+    public static final String BASE_URL = "http://woocom.endix.net/wc-auth/v1/";
     //public static final String BASE_URL = " https://api.themoviedb.org/3/";
 
     private static Retrofit retrofit = null;

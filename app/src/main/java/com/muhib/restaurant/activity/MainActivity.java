@@ -17,6 +17,8 @@ import com.muhib.restaurant.utils.MySheardPreference;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     Toolbar toolbar;
 
+   // https://github.com/rameshvoltella/WoocommerceAndroidOAuth1
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
