@@ -8,7 +8,15 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ImageUrl {
-    @SerializedName("source_url")
+    @SerializedName("src")
     @Expose
     private String source_url;
+
+    public String getSource_url() {
+        return source_url;
+    }
+
+    public void setSource_url(String source_url) {
+        this.source_url = source_url;
+    }
 }

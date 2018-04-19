@@ -7,6 +7,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import model.CategoryModel;
+import model.Products;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -59,8 +60,8 @@ public interface ApiInterface {
 //    Call<List<CategoryModel>> getTopicsList(@Query("categories") int post, @Query("per_page") int per_page);
 //
 //
-    @GET("posts?_embed")
-    Observable<Response<List<CategoryModel>>> getTopics( @Query("per_page") int per_page, @Query("offset") int offest);
+    @GET("wp-json/wc/v2/orders")
+    Observable<Response<List<Products>>> getTopics();
 //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //

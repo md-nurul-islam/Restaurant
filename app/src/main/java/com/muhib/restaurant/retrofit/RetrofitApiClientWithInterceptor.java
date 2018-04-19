@@ -2,6 +2,9 @@ package com.muhib.restaurant.retrofit;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.woocommerse.OAuth1.OauthConstants.ParameterList;
 import com.woocommerse.OAuth1.services.HMACSha1SignatureService;
 import com.woocommerse.OAuth1.services.TimestampServiceImpl;
@@ -14,19 +17,16 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-public class OAuthInterceptor implements Interceptor {
+//import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-   /*THIS CLASS CONTAIN ERROR ITS BECAUSE THIS APP DOES NOT IMPORTED THE RETROFIT LIBRARY*/
+/**
+ * Created by RR on 27-Dec-17.
+ */
 
-
-   /*IMPORT below dependency to gradel to fix error
-   *
-   *  compile 'com.squareup.retrofit2:retrofit:2.1.0'
-   compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-   compile 'com.squareup.okhttp3:okhttp:3.3.1'
-   compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
-   * */
+public class RetrofitApiClientWithInterceptor implements Interceptor{
 
     private static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
     private static final String OAUTH_NONCE = "oauth_nonce";
@@ -37,17 +37,39 @@ public class OAuthInterceptor implements Interceptor {
     private static final String OAUTH_VERSION = "oauth_version";
     private static final String OAUTH_VERSION_VALUE = "1.0";
 
-    private final String consumerKey;
-    private final String consumerSecret;
+    private final String consumerKey="";
+    private final String consumerSecret="";
+//    www.champs21.com/wp-json/wp/v2/
 
+    //public static final String BASE_URL = "http://champs21.com/wp-json/wp/v2/";
+    public static final String BASE_URL = "http://woocom.endix.net/wc-auth/v1/";
+    //public static final String BASE_URL = " https://api.themoviedb.org/3/";
 
-    public OAuthInterceptor(String consumerKey, String consumerSecret) {
-        this.consumerKey = consumerKey;
-        this.consumerSecret = consumerSecret;
+    private static Retrofit retrofit = null;
+
+    private static Gson gson = new GsonBuilder()
+            .setLenient()
+            .create();
+
+    private RetrofitApiClientWithInterceptor() {} // So that nobody can create an object with constructor
+
+    public static synchronized Retrofit getClient() {
+        if (retrofit==null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+        }
+        return retrofit;
     }
-//
-//    public OAuthInterceptor() {
-//    }
+
+    public static ApiInterface getApiInterface(){
+        return  RetrofitApiClientWithInterceptor.getClient().create(ApiInterface.class);
+    }
+
+
+
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -124,36 +146,6 @@ public class OAuthInterceptor implements Interceptor {
         return chain.proceed(request);
     }
 
-
-    public static final class Builder {
-
-        private String consumerKey;
-        private String consumerSecret;
-        private int type;
-
-        public Builder consumerKey(String consumerKey) {
-            if (consumerKey == null) throw new NullPointerException("consumerKey = null");
-            this.consumerKey = consumerKey;
-            return this;
-        }
-
-        public Builder consumerSecret(String consumerSecret) {
-            if (consumerSecret == null) throw new NullPointerException("consumerSecret = null");
-            this.consumerSecret = consumerSecret;
-            return this;
-        }
-
-
-
-        public OAuthInterceptor build() {
-
-            if (consumerKey == null) throw new IllegalStateException("consumerKey not set");
-            if (consumerSecret == null) throw new IllegalStateException("consumerSecret not set");
-
-            return new OAuthInterceptor(consumerKey, consumerSecret);
-        }
-    }
-
     public String urlEncoded(String url) {
         String encodedurl = "";
         try {
@@ -166,4 +158,6 @@ public class OAuthInterceptor implements Interceptor {
 
         return encodedurl;
     }
+
 }
+
