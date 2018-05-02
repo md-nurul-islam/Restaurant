@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.CategoryModel;
+import model.Products;
 
 /**
  * Created by Suleiman on 19/10/16.
@@ -60,7 +61,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final String BASE_URL_IMG = "https://image.tmdb.org/t/p/w150";
 
-    private List<CategoryModel> orderList;
+    private List<Products> orderList;
     private List<String> strList = new ArrayList<>();
     private Context context;
 
@@ -93,11 +94,11 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    public List<CategoryModel> getMovies() {
+    public List<Products> getMovies() {
         return orderList;
     }
 
-    public void setMovies(List<CategoryModel> orderList) {
+    public void setMovies(List<Products> orderList) {
         this.orderList = orderList;
     }
 
@@ -129,7 +130,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        CategoryModel result = orderList.get(position); // Movie
+        Products result = orderList.get(position); // Movie
         final Bundle bundle = new Bundle();
         switch (getItemViewType(position)) {
 //            case HERO:
@@ -156,7 +157,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case ITEM:
                 final OrderListItem itemHolder = (OrderListItem) holder;
 //
-                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
+                itemHolder.orderTitle.setText(orderList.get(position).getId());
+                itemHolder.name.setText("Pizza");
+                itemHolder.quantity.setText("Total ietm 10");
+//                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
 //                itemHolder.mPosterImg.setImageResource(R.drawable.sample);
@@ -229,27 +233,27 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                });
 //
 ////                // load movie thumbnail
-                try {
-                    loadThumbImage(result.getEmbedded().getFeatureMedia().get(0).get("source_url").getAsString())
-                            .listener(new RequestListener<String, GlideDrawable>() {
-                                @Override
-                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                    // TODO: 08/11/16 handle failure
-                                    itemHolder.mProgress.setVisibility(View.GONE);
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                    // image ready, hide progress now
-                                    itemHolder.mProgress.setVisibility(View.GONE);
-                                    return false;   // return false if you want Glide to handle everything else.
-                                }
-                            })
-                            .into(itemHolder.itemImage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    loadThumbImage(result.getEmbedded().getFeatureMedia().get(0).get("source_url").getAsString())
+//                            .listener(new RequestListener<String, GlideDrawable>() {
+//                                @Override
+//                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                                    // TODO: 08/11/16 handle failure
+//                                    itemHolder.mProgress.setVisibility(View.GONE);
+//                                    return false;
+//                                }
+//
+//                                @Override
+//                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                                    // image ready, hide progress now
+//                                    itemHolder.mProgress.setVisibility(View.GONE);
+//                                    return false;   // return false if you want Glide to handle everything else.
+//                                }
+//                            })
+//                            .into(itemHolder.itemImage);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 itemHolder.accepted.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -398,19 +402,19 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
    _________________________________________________________________________________________________
     */
 
-    public void add(CategoryModel r) {
+    public void add(Products r) {
         orderList.add(r);
         notifyItemInserted(orderList.size() - 1);
     }
 
-    public void addAllData(List<CategoryModel> moveResults) {
-        for (CategoryModel result : moveResults) {
+    public void addAllData(List<Products> moveResults) {
+        for (Products result : moveResults) {
             add(result);
         }
 
     }
 
-    public void addAllNewData(List<CategoryModel> moveResults) {
+    public void addAllNewData(List<Products> moveResults) {
         orderList.clear();
         orderList.addAll(moveResults);
         notifyDataSetChanged();
@@ -421,7 +425,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    public void remove(CategoryModel r) {
+    public void remove(Products r) {
         int position = orderList.indexOf(r);
         if (position > -1) {
             orderList.remove(position);
@@ -443,14 +447,14 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addLoadingFooter() {
         isLoadingAdded = true;
-        add(new CategoryModel());
+        add(new Products());
     }
 
     public void removeLoadingFooter() {
         isLoadingAdded = false;
 
         int position = orderList.size() - 1;
-        CategoryModel result = getItem(position);
+        Products result = getItem(position);
 
         if (result != null) {
             orderList.remove(position);
@@ -458,7 +462,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public CategoryModel getItem(int position) {
+    public Products getItem(int position) {
         return orderList.get(position);
     }
 
@@ -508,7 +512,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected class OrderListItem extends RecyclerView.ViewHolder {
         private TextView orderTitle;
         private TextView accepted;
-        private TextView mYear; // displays "year | language"
+        private TextView name, quantity; // displays "year | language"
         private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
@@ -520,6 +524,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
 
             orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
+            name = (TextView) itemView.findViewById(R.id.pd_name);
+            quantity = (TextView) itemView.findViewById(R.id.quantity);
             accepted = (TextView) itemView.findViewById(R.id.accept);
             rejected = (TextView) itemView.findViewById(R.id.reject);
             itemImage = (ImageView) itemView.findViewById(R.id.itemImage);

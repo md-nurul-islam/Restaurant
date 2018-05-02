@@ -231,10 +231,12 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             List<Products> singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
-                            //adapter.addAllData(singleList);
+                            adapter.addAllData(singleList);
 
-//                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
-//                            else isLastPage = true;
+//                            if (currentOffst < TOTAL_ITEM)
+//                                adapter.addLoadingFooter();
+//                            else
+                                isLastPage = true;
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
