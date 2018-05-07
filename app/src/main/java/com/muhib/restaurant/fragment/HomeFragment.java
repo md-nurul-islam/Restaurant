@@ -12,12 +12,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
@@ -75,6 +78,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     ArrayList<String> strList = new ArrayList<>();
     SwipeRefreshLayout mSwipeRefreshLayout;
     OrderProcess orderProcessCallback;
+    private TextView select;
 
     OAuthInterceptor oAuthInterceptor;
 
@@ -325,6 +329,26 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
         final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
+        select = (TextView)dateDialogView.findViewById(R.id.select);
+        select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), select);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+            }
+        });
         myDialog.setView(dateDialogView);
 
         dateDialogView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {

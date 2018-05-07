@@ -1,0 +1,13 @@
+<menu xmlns:androclass="http://schemas.android.com/apk/res/android">
+
+    <item
+        androclass:id="@+id/one"
+        androclass:title="One" />
+    <item
+        androclass:id="@+id/two"
+        androclass:title="Two" />
+    <item
+        androclass:id="@+id/three"
+        androclass:title="Three" />
+
+</menu>
