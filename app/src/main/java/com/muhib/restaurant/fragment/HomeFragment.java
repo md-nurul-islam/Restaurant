@@ -327,20 +327,20 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
         myDialog.setView(dateDialogView);
 
-//        dateDialogView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String description = "";
-//
-//                myDialog.dismiss();
-//            }
-//        });
-//        dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                myDialog.dismiss();
-//            }
-//        });
+        dateDialogView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String description = "";
+
+                myDialog.dismiss();
+            }
+        });
+        dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
 
 
         myDialog.show();

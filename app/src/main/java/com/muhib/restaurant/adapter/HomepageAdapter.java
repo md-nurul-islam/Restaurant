@@ -160,6 +160,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemHolder.orderTitle.setText(orderList.get(position).getId());
                 itemHolder.name.setText("Pizza");
                 itemHolder.quantity.setText("Total ietm 10");
+                itemHolder.totalPay.setText("Total pay 10 Tk");
 //                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
@@ -512,7 +513,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected class OrderListItem extends RecyclerView.ViewHolder {
         private TextView orderTitle;
         private TextView accepted;
-        private TextView name, quantity; // displays "year | language"
+        private TextView name, quantity, totalPay; // displays "year | language"
         private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
@@ -526,6 +527,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
             name = (TextView) itemView.findViewById(R.id.pd_name);
             quantity = (TextView) itemView.findViewById(R.id.quantity);
+            totalPay = (TextView) itemView.findViewById(R.id.totalPay);
             accepted = (TextView) itemView.findViewById(R.id.accept);
             rejected = (TextView) itemView.findViewById(R.id.reject);
             itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
