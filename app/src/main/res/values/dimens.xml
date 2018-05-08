@@ -44,4 +44,5 @@
 
     <dimen name="poster_hero_height">192dp</dimen>
     <dimen name="text_size17">17sp</dimen>
+    <dimen name="text_size19">19sp</dimen>
 </resources>

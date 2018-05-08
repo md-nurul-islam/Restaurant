@@ -51,7 +51,8 @@
                     android:text="Admin ID" />
 
                 <EditText
-                    android:id="@+id/userId"
+                    android:textColor="@color/black"
+                    android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
@@ -67,7 +68,8 @@
                     android:text="Password" />
 
                 <EditText
-                    android:id="@+id/password"
+                    android:textColor="@color/black"
+                    android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
@@ -76,7 +78,7 @@
                     android:padding="@dimen/margin_10dp" />
 
                 <Button
-                    android:id="@+id/email_sign_in_button"
+                    android:id="@+id/btn_login"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="@dimen/margin_20dp"
