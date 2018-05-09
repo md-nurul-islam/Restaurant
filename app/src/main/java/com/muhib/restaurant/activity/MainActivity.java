@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
@@ -69,6 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getSupportFragmentManager().popBackStack();
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
+                return true;
+            case R.id.logout:
+                //Toast.makeText(this, "logout", Toast.LENGTH_SHORT).show();
+                MySheardPreference.setUsingFirstTime(true);
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
                 return true;
         }
 

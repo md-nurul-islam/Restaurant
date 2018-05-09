@@ -23,4 +23,6 @@
     <color name="placeholder_grey">#AAADC4</color>
     <color name="placeholder_grey_20">#33AAADC4</color>
     <color name="forgot_password_color">#239cdc</color>
+    <color name="primary_light">#4023dcdc</color>
+    <color name="colorPrimaryLight">#77303F9F</color>
 </resources>
