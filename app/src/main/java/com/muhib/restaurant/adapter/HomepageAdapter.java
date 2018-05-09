@@ -311,6 +311,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else
             status = "Rejected";
         Toast.makeText(context, "Order " + status , Toast.LENGTH_SHORT).show();
+        if(b)
         mOrderProcessCallback.processOrder();
 
     }
