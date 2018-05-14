@@ -47,4 +47,5 @@
     <dimen name="text_size19">19sp</dimen>
     <dimen name="size_3dp">3dp</dimen>
     <dimen name="text_size15">15sp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
 </resources>
