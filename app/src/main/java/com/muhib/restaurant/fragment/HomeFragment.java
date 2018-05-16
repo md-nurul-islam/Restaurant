@@ -3,6 +3,8 @@ package com.muhib.restaurant.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ import com.muhib.restaurant.adapter.HomepageAdapter;
 import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.retrofit.OAuthInterceptor;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
+import com.muhib.restaurant.utils.MySheardPreference;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 import com.muhib.restaurant.utils.PaginationScrollListener;
 import com.woocommerse.OAuth1.OauthConstants.ParameterList;
@@ -79,6 +84,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     SwipeRefreshLayout mSwipeRefreshLayout;
     OrderProcess orderProcessCallback;
     private TextView select;
+    private LinearLayout selectLay;
 
     OAuthInterceptor oAuthInterceptor;
 
@@ -218,7 +224,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         //hideErrorView();
         showProgress();
 
-        RetrofitApiClient.getApiInterface().getTopics()
+
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -241,7 +248,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //                            if (currentOffst < TOTAL_ITEM)
 //                                adapter.addLoadingFooter();
 //                            else
-                                isLastPage = true;
+                            isLastPage = true;
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
@@ -262,6 +269,51 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
                     }
                 });
+
+//        RetrofitApiClient.getApiInterface().getTopics()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<Response<List<Products>>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Response<List<Products>> value) {
+//                        hideProgress();
+//                        if(value.code()==200){
+//                            Headers headers = value.headers();
+//                            TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
+//                            List<Products> singleList = value.body();
+//                            singleList.size();
+//                            //progressBar.setVisibility(View.GONE);
+//                            adapter.addAllData(singleList);
+//
+////                            if (currentOffst < TOTAL_ITEM)
+////                                adapter.addLoadingFooter();
+////                            else
+//                                isLastPage = true;
+////                            results.addAll(singleList);
+////                            results.add(singleList.get(4));
+////                            si++;
+//
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        //showErrorView(e);
+//                        //adapter.showRetry(true, fetchErrorMessage(e));
+//                        hideProgress();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
 
     }
 
@@ -330,24 +382,27 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
         final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
-        select = (TextView)dateDialogView.findViewById(R.id.select);
-        select.setOnClickListener(new View.OnClickListener() {
+        selectLay = (LinearLayout) dateDialogView.findViewById(R.id.selectLay);
+        select = (TextView) dateDialogView.findViewById(R.id.selectText);
+        selectLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getActivity(), select);
+                PopupMenu popup = new PopupMenu(getActivity(), selectLay);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
 
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        select.setText(item.getTitle());
+                        //Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
 
                 popup.show();//showing popup menu
+                //initiatePopupWindow();
             }
         });
         myDialog.setView(dateDialogView);
@@ -369,6 +424,39 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
 
         myDialog.show();
+    }
+    private PopupWindow mDropdown = null;
+    LayoutInflater mInflater;
+
+    private PopupWindow initiatePopupWindow() {
+
+        try {
+
+            mInflater = (LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = mInflater.inflate(R.layout.popup_window_layout, null);
+
+            //If you want to add any listeners to your textviews, these are two //textviews.
+            final TextView itema = (TextView) layout.findViewById(R.id.ItemA);
+
+
+            final TextView itemb = (TextView) layout.findViewById(R.id.ItemB);
+
+
+
+            layout.measure(View.MeasureSpec.UNSPECIFIED,
+                    View.MeasureSpec.UNSPECIFIED);
+            mDropdown = new PopupWindow(layout, FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,true);
+            Drawable background = getResources().getDrawable(android.R.drawable.editbox_dropdown_dark_frame);
+            mDropdown.setBackgroundDrawable(background);
+            mDropdown.showAsDropDown(selectLay, 5, 5);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mDropdown;
+
     }
 
 

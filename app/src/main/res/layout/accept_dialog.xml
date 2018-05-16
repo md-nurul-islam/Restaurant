@@ -31,14 +31,14 @@
             android:textSize="@dimen/text_size19" />
 
         <LinearLayout
-            android:id="@+id/singleRoomNumberLay"
+            android:id="@+id/selectLay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/my_spinner">
 
             <TextView
-                android:id="@+id/select"
+                android:id="@+id/selectText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
+import com.muhib.restaurant.utils.MySheardPreference;
 
 import java.util.List;
 
@@ -162,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void callLoginApi(String userId, String password) {
+    private void callLoginApi(final String userId, final String password) {
 
 
         RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
@@ -179,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
 
                         if (value.code() == 200) {
+                            MySheardPreference.setUserIdAndPassword(userId, password);
                             Headers headers = value.headers();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);

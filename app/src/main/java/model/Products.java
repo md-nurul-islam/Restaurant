@@ -17,9 +17,18 @@ public class Products {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("total")
+    @Expose
+    private String total;
+
     @SerializedName("shipping")
     @Expose
     private Object shippingTo;
+
+    @SerializedName("line_items")
+    @Expose
+    private List<SingleItemModel> itemList;
 
 
 //    @SerializedName("shipping")
@@ -73,5 +82,21 @@ public class Products {
 
     public void setShippingTo(Object shippingTo) {
         this.shippingTo = shippingTo;
+    }
+
+    public List<SingleItemModel> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<SingleItemModel> itemList) {
+        this.itemList = itemList;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
     }
 }

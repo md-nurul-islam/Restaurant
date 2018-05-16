@@ -70,6 +70,9 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private PaginationAdapterCallback mCallback;
     private OrderProcess mOrderProcessCallback;
+    View myView;
+    LayoutInflater layoutInflater;
+    LinearLayout layout;
 //
     private String errorMsg;
     //HomeFragment homeFragment;
@@ -109,7 +112,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         switch (viewType) {
             case ITEM:
-                View viewItem = inflater.inflate(R.layout.single_item_res_new, parent, false);
+                View viewItem = inflater.inflate(R.layout.single_item_res_list, parent, false);
                 viewHolder = new OrderListItem(viewItem);
                 break;
             case LOADING:
@@ -156,11 +159,28 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                break;
             case ITEM:
                 final OrderListItem itemHolder = (OrderListItem) holder;
+                int total = orderList.get(position).getItemList().size();
+                layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //
-                itemHolder.orderTitle.setText(orderList.get(position).getId());
-                itemHolder.name.setText("Pizza");
-                itemHolder.quantity.setText("Total ietm 10");
-                itemHolder.totalPay.setText("Total pay 10 Tk");
+//                itemHolder.orderTitle.setText(orderList.get(position).getId());
+//                itemHolder.name.setText("Pizza");
+//                itemHolder.quantity.setText("Total ietm 10");
+                itemHolder.itemNameLayout.removeAllViews();
+                for(int i=0; i< total; i++){
+                    myView = layoutInflater.inflate(R.layout.item_row_view, itemHolder.itemNameLayout, false);
+                    LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
+                    TextView name = (TextView)myView.findViewById(R.id.itemName);
+                    if(!orderList.get(position).getItemList().get(i).getName().isEmpty())
+                        name.setText(orderList.get(position).getItemList().get(i).getName());
+                    TextView itemNo = (TextView)myView.findViewById(R.id.itemNo);
+                    if(orderList.get(position).getItemList().get(i).getQuantity()>0)
+                        itemNo.setText(""+orderList.get(position).getItemList().get(i).getQuantity());
+                    itemHolder.itemNameLayout.addView(ll);
+
+                }
+
+                itemHolder.totalPay.setText(orderList.get(position).getTotal());
+                itemHolder.totalPayText.setText("Total pay in BDT");
 //                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
@@ -270,7 +290,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        gotoOrderDetailsFragment();
+                        gotoOrderDetailsFragment(orderList.get(position).getId());
                     }
                 });
                 break;
@@ -317,11 +337,13 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    private void gotoOrderDetailsFragment() {
+    private void gotoOrderDetailsFragment(String id) {
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
         OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //pagerFragment.setArguments(bundle);
+        detailsFragment.setArguments(bundle);
         transaction.add(R.id.container, detailsFragment, "detailsFragment").addToBackStack(null);
         transaction.commit();
     }
@@ -514,28 +536,31 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected class OrderListItem extends RecyclerView.ViewHolder {
         private TextView orderTitle;
         private TextView accepted;
-        private TextView name, quantity, totalPay; // displays "year | language"
+        private TextView name, quantity, totalPay, totalPayText; // displays "year | language"
         private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
         private LinearLayout itemLayout;
-        private LinearLayout moreNewsLayout;
+        private LinearLayout itemNameLayout;
         private TextView rejected;
 
         public OrderListItem(View itemView) {
             super(itemView);
 
-            orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
-            name = (TextView) itemView.findViewById(R.id.pd_name);
-            quantity = (TextView) itemView.findViewById(R.id.quantity);
+//            orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
+//            name = (TextView) itemView.findViewById(R.id.pd_name);
+//            quantity = (TextView) itemView.findViewById(R.id.quantity);
             totalPay = (TextView) itemView.findViewById(R.id.totalPay);
+            totalPayText = (TextView) itemView.findViewById(R.id.totalPayText);
             accepted = (TextView) itemView.findViewById(R.id.accept);
             rejected = (TextView) itemView.findViewById(R.id.reject);
-            itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
-            mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
+            // Layout inflater
+
+//            itemImage = (ImageView) itemView.findViewById(R.id.itemImage);
+//            mProgress = (ProgressBar) itemView.findViewById(R.id.movie_progress);
 //            menuOption = (TextView) itemView.findViewById(R.id.menuOptions);
             itemLayout = (LinearLayout) itemView.findViewById(R.id.itemLayout);
-//            moreNewsLayout = (LinearLayout) itemView.findViewById(R.id.moreNews);
+            itemNameLayout = (LinearLayout) itemView.findViewById(R.id.itemNameLayout);
 //            moreText = (TextView) itemView.findViewById(R.id.moreText);
         }
     }

@@ -2,12 +2,15 @@
 
     <item
         androclass:id="@+id/one"
-        androclass:title="One" />
+        androclass:title="30 Mins" />
     <item
         androclass:id="@+id/two"
-        androclass:title="Two" />
+        androclass:title="60 Mins" />
     <item
         androclass:id="@+id/three"
-        androclass:title="Three" />
+        androclass:title="90 Mins" />
+    <item
+        androclass:id="@+id/four"
+        androclass:title="120 Mins" />
 
 </menu>

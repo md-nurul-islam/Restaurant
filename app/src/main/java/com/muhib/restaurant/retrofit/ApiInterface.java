@@ -56,15 +56,22 @@ public interface ApiInterface {
 //    @GET("posts")
 //    Call<JsonElement> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 
-//    @GET("posts")
+    //    @GET("posts")
 //    Call<List<CategoryModel>> getTopicsList(@Query("categories") int post, @Query("per_page") int per_page);
 //
 //
+//    @GET("wp-json/wc/v2/orders")
+//    Observable<Response<List<Products>>> getTopics();
     @GET("wp-json/wc/v2/orders")
-    Observable<Response<List<Products>>> getTopics();
+    Observable<Response<List<Products>>> getOrderList();
+
+    @GET("wp-json/wc/v2/orders")
+    Observable<Response<ResponseBody>> getOrderDetails(@Query("id") String id);
+
     @GET("wp-json/wc/v2/products")
     Observable<Response<List<Products>>> getLogedIn();
-//    @GET("posts?_embed")
+
+    //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //
     ///wc-auth/v1/authorize
@@ -72,7 +79,7 @@ public interface ApiInterface {
     @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 
-    
+
 }
 
 
