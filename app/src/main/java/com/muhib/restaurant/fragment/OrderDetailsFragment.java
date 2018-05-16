@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.MySheardPreference;
@@ -23,7 +25,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import model.Products;
 import okhttp3.Headers;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 /**
@@ -64,14 +65,14 @@ public class OrderDetailsFragment extends Fragment {
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderDetails(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseBody>>() {
+                .subscribe(new Observer<Response<Products>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Response<ResponseBody> value) {
+                    public void onNext(Response<Products> value) {
                         hideProgress();
                         if (value.code() == 200) {
 
@@ -88,7 +89,7 @@ public class OrderDetailsFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-                        hideProgress();
+
                     }
                 });
     }
@@ -107,3 +108,6 @@ public class OrderDetailsFragment extends Fragment {
 
     private ProgressDialog dialog;
 }
+
+//    Gson gson = new GsonBuilder().create();
+//    Products r = gson.fromJson(value, Products.class);
