@@ -49,6 +49,23 @@ public class RetrofitApiClient {
     public static ApiInterface getApiInterface(){
         return  RetrofitApiClient.getClient().create(ApiInterface.class);
     }
+    public static ApiInterface getLoginApiInterface(String userId, String password){
+        return  RetrofitApiClient.loginClient(userId, password).create(ApiInterface.class);
+    }
+
+    public static synchronized Retrofit loginClient(String userId, String password) {
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new BasicAuthInterceptor(userId, password))
+                .build();
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+        return retrofit;
+    }
 
 //    RandomAPIRequestA service = new Retrofit.Builder()
 //            .baseUrl("URL goes here")

@@ -62,6 +62,8 @@ public interface ApiInterface {
 //
     @GET("wp-json/wc/v2/orders")
     Observable<Response<List<Products>>> getTopics();
+    @GET("wp-json/wc/v2/products")
+    Observable<Response<List<Products>>> getLogedIn();
 //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
 //

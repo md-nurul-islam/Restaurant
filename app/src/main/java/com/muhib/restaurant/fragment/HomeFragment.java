@@ -198,7 +198,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     @Override
     public void onRefresh() {
-
+           // callNewsApiFirst();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

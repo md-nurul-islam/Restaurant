@@ -48,7 +48,7 @@
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Admin ID" />
+                    android:text="User ID" />
 
                 <EditText
                     android:textColor="@color/black"
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
-                    android:hint="Admin ID"
+                    android:hint="User ID"
                     android:inputType="text"
                     android:padding="@dimen/margin_10dp" />
 

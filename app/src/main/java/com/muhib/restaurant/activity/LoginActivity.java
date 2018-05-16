@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import model.CategoryModel;
+import model.Products;
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -38,9 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_new);
-        _emailText = (EditText)findViewById(R.id.input_email);
-        _passwordText = (EditText)findViewById(R.id.input_password);
-        _loginButton = (Button)findViewById(R.id.btn_login);
+        _emailText = (EditText) findViewById(R.id.input_email);
+        _passwordText = (EditText) findViewById(R.id.input_password);
+        _loginButton = (Button) findViewById(R.id.btn_login);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -63,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
 //        });
     }
 
+    ProgressDialog progressDialog;
+
     public void login() {
         Log.d(TAG, "Login");
 
@@ -73,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -139,15 +142,16 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+        if (email.isEmpty()) {
+//            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _emailText.setError("User name should not be empty");
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 4 || password.length() > 15) {
+            _passwordText.setError("between 4 and 15 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -157,14 +161,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private void callLoginApi(String userId, String password) {
 
-    private void callLoginApi( String userId, String password) {
 
-
-        RetrofitApiClient.getApiInterface().getUserAuthentication(userId, password)
+        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseBody>>() {
+                .subscribe(new Observer<Response<List<Products>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -172,27 +175,30 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(Response value) {
+                        progressDialog.dismiss();
 
-//                        if(value.code()==200){
+                        if (value.code() == 200) {
                             Headers headers = value.headers();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
 
-//                        }
+                        } else
+                            Toast.makeText(getApplicationContext(), value.message(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+                        progressDialog.dismiss();
 
                     }
 
                     @Override
                     public void onComplete() {
-
+                        progressDialog.dismiss();
                     }
                 });
 
