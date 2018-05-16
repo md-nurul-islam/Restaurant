@@ -71,6 +71,8 @@ public interface ApiInterface {
 //    @POST("api/user/register")
     @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
+
+    
 }
 
 

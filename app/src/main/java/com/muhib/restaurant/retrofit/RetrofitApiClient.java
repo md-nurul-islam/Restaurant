@@ -49,6 +49,8 @@ public class RetrofitApiClient {
     public static ApiInterface getApiInterface(){
         return  RetrofitApiClient.getClient().create(ApiInterface.class);
     }
+
+
     public static ApiInterface getLoginApiInterface(String userId, String password){
         return  RetrofitApiClient.loginClient(userId, password).create(ApiInterface.class);
     }
