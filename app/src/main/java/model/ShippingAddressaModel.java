@@ -16,6 +16,14 @@ public class ShippingAddressaModel {
     @Expose
     private String lastName;
 
+    @SerializedName("address_1")
+    @Expose
+    private String address1;
+
+    @SerializedName("address_2")
+    @Expose
+    private String getAddress2;
+
     public String getFirstName() {
         return firstName;
     }
@@ -30,5 +38,21 @@ public class ShippingAddressaModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getGetAddress2() {
+        return getAddress2;
+    }
+
+    public void setGetAddress2(String getAddress2) {
+        this.getAddress2 = getAddress2;
     }
 }
