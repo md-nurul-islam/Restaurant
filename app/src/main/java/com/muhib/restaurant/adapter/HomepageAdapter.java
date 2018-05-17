@@ -290,7 +290,10 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        gotoOrderDetailsFragment(orderList.get(position).getId());
+                        //gotoOrderDetailsFragment(orderList.get(position).getId());
+                        String str = new Gson().toJson(orderList.get(position));
+                        bundle.putString("products", str);
+                        gotoOrderDetailsFragment(bundle);
                     }
                 });
                 break;
@@ -337,9 +340,9 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
 
-    private void gotoOrderDetailsFragment(String id) {
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
+    private void gotoOrderDetailsFragment(Bundle bundle) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString("id", id);
         OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

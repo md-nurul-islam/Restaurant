@@ -20,6 +20,10 @@ public class SingleItemModel {
     @Expose
     private int quantity;
 
+    @SerializedName("price")
+    @Expose
+    private String price;
+
     public String getName() {
         return name;
     }
@@ -42,5 +46,13 @@ public class SingleItemModel {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 }

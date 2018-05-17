@@ -15,6 +15,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 //import io.reactivex.Observable;
@@ -65,9 +66,10 @@ public interface ApiInterface {
     @GET("wp-json/wc/v2/orders")
     Observable<Response<List<Products>>> getOrderList();
 
-    @GET("wp-json/wc/v2/orders")
-    Observable<Response<Products>> getOrderDetails(@Query("id") String id);
-//    Observable<JsonElement> getOrderDetails(@Query("id") String id);
+    @GET("wp-json/wc/v2/orders/{id}")
+//    Observable<Response<List<Products>>> getOrderDetails(@Path("id") String id);
+//    Observable<Response<Products>> getOrderDetails(@Query("id") String id);
+    Observable<JsonElement> getOrderDetails(@Path("id") String id);
 
     @GET("wp-json/wc/v2/products")
     Observable<Response<List<Products>>> getLogedIn();

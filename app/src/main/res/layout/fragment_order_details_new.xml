@@ -1,0 +1,179 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_8dp"
+    tools:context="com.muhib.restaurant.fragment.OrderDetailsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/size_3dp"
+                android:text="Order Details"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size19"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/margin_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/size_3dp"
+                    android:text="Product"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size17"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="@dimen/margin_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/size_3dp"
+                    android:text="Quantity"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size17"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="@dimen/margin_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/size_3dp"
+                    android:text="Price (BDT)"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size17"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/itemNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:background="@color/black" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/margin_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="end"
+                    android:padding="@dimen/size_3dp"
+                    android:text="Total Pay in BDT: "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size17"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/totalPay"
+                    android:layout_width="@dimen/margin_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/size_3dp"
+                    android:text="Price (BDT)"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size17"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="@dimen/size_3dp"
+                android:text="Shipping Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size19"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/address"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="@dimen/size_3dp"
+                android:text="Address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size15"
+                android:textStyle="normal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/size_5dp"
+                android:background="@color/colorPrimaryDark" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:padding="@dimen/size_10dp">
+
+                <TextView
+                    android:id="@+id/accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/button_background_fill"
+                    android:paddingBottom="@dimen/size_5dp"
+                    android:paddingLeft="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_10dp"
+                    android:paddingTop="@dimen/size_5dp"
+                    android:text="Accept"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size17" />
+
+                <TextView
+                    android:id="@+id/reject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/button_background_fill"
+                    android:paddingBottom="@dimen/size_5dp"
+                    android:paddingLeft="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_10dp"
+                    android:paddingTop="@dimen/size_5dp"
+                    android:text="Reject"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size17" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

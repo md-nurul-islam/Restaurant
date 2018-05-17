@@ -1,6 +1,7 @@
 package model;
 
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -24,7 +25,11 @@ public class Products {
 
     @SerializedName("shipping")
     @Expose
-    private Object shippingTo;
+    private JsonElement shippingTo;
+
+    @SerializedName("billing")
+    @Expose
+    private Object billing;
 
     @SerializedName("line_items")
     @Expose
@@ -76,11 +81,11 @@ public class Products {
         this.images = images;
     }
 
-    public Object getShippingTo() {
+    public JsonElement getShippingTo() {
         return shippingTo;
     }
 
-    public void setShippingTo(Object shippingTo) {
+    public void setShippingTo(JsonElement shippingTo) {
         this.shippingTo = shippingTo;
     }
 
@@ -98,5 +103,13 @@ public class Products {
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    public Object getBilling() {
+        return billing;
+    }
+
+    public void setBilling(Object billing) {
+        this.billing = billing;
     }
 }

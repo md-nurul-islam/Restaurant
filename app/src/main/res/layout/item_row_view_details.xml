@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_width="@dimen/margin_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/size_3dp"
+        android:text="Product"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size15"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/itemNo"
+        android:layout_width="@dimen/margin_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/size_3dp"
+        android:text="Quantity"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size15"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="@dimen/margin_0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="@dimen/size_3dp"
+        android:text="Price (BDT)"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size15"
+        android:textStyle="normal" />
+
+</LinearLayout>
