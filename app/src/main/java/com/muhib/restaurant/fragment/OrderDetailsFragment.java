@@ -85,6 +85,7 @@ public class OrderDetailsFragment extends Fragment {
 //        if (bundle != null) {
 //            id = bundle.getString("id");
 //        }
+
         if (getArguments().containsKey("products")) {
             String str = getArguments().getString("products");
             if (str != null)

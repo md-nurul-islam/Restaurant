@@ -190,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), value.message(), Toast.LENGTH_SHORT).show();
                     }
 
+                    
                     @Override
                     public void onError(Throwable e) {
 //                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
