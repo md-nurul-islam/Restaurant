@@ -45,7 +45,8 @@ public class OrderDetailsFragment extends Fragment {
     LayoutInflater layoutInflater;
     LinearLayout layout;
     private LinearLayout itemNameLayout;
-    TextView totalPay, address;
+    TextView totalPay, shippingUserName;
+    TextView addressOne, addressOneText, addressTwo, addressTwoText;
 
 
     public OrderDetailsFragment() {
@@ -68,8 +69,14 @@ public class OrderDetailsFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         itemNameLayout = (LinearLayout) view.findViewById(R.id.itemNameLayout);
         totalPay = (TextView)view.findViewById(R.id.totalPay);
-        address = (TextView)view.findViewById(R.id.address);
-        String addressSt  = " ";
+
+        addressOne = (TextView)view.findViewById(R.id.addressOne);
+        addressOneText = (TextView)view.findViewById(R.id.addressOneText);
+        addressTwo = (TextView)view.findViewById(R.id.addressTwo);
+        addressTwoText = (TextView)view.findViewById(R.id.addressTwoText);
+
+        shippingUserName = (TextView)view.findViewById(R.id.shippingUserName);
+        String FullName  = " ";
 
 //        if(products.getShippingTo().get(0).get("first_name")!= null)
 //            addressSt = addressSt + products.getShippingTo().get(0).get("first_name");
@@ -89,11 +96,34 @@ public class OrderDetailsFragment extends Fragment {
         if(products.getShippingTo()!=null){
             Gson gson = new GsonBuilder().create();
             ShippingAddressaModel shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
-            addressSt = addressSt + shippingAddressaModel.getFirstName();
+            FullName = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
+
+            if(!shippingAddressaModel.getAddressOne().isEmpty())
+            {
+                addressOne.setVisibility(View.VISIBLE);
+                addressOneText.setVisibility(View.VISIBLE);
+                addressOne.setText(shippingAddressaModel.getAddressOne());
+            }
+            else {
+                addressOne.setVisibility(View.GONE);
+                addressOneText.setVisibility(View.GONE);
+            }
+            if(!shippingAddressaModel.getAddressTwo().isEmpty())
+            {
+                addressTwo.setVisibility(View.VISIBLE);
+                addressTwoText.setVisibility(View.VISIBLE);
+                addressTwo.setText(shippingAddressaModel.getAddressTwo());
+            }
+            else {
+                addressTwo.setVisibility(View.GONE);
+                addressTwoText.setVisibility(View.GONE);
+            }
         }
-        address.setText(addressSt);
+        shippingUserName.setText(FullName);
         if(!products.getTotal().isEmpty()&& products.getTotal()!=null)
             totalPay.setText(products.getTotal());
+
+
 
         itemNameLayout.removeAllViews();
         int total = products.getItemList().size();
