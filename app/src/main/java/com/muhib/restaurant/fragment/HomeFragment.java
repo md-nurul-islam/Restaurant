@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     HomepageAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
+
     RecyclerView rv;
     ProgressBar progressBar;
     LinearLayout errorLayout;

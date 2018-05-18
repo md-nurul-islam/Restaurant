@@ -55,4 +55,5 @@ public class ShippingAddressaModel {
     public void setAddressTwo(String addressTwo) {
         this.addressTwo = addressTwo;
     }
+
 }

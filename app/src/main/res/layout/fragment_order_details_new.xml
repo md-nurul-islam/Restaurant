@@ -108,8 +108,6 @@
 
             </LinearLayout>
 
-
-
             <TextView
                 android:layout_marginTop="@dimen/margin_10dp"
                 android:layout_width="match_parent"
