@@ -88,7 +88,6 @@ public interface ApiInterface {
     @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 
-
 }
 
 

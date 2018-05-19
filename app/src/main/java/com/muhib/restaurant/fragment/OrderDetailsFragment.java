@@ -198,6 +198,7 @@ public class OrderDetailsFragment extends Fragment {
                 });
     }
 
+
     public void showProgress() {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("please wait.");

@@ -112,4 +112,5 @@ public class Products {
     public void setBilling(Object billing) {
         this.billing = billing;
     }
+
 }

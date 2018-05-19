@@ -56,4 +56,5 @@ public class ShippingAddressaModel {
         this.addressTwo = addressTwo;
     }
 
+
 }

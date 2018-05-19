@@ -255,8 +255,6 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 });
     }
 
-
-
     public void callNewsApiFirst() {
 //        final String nonce = new TimestampServiceImpl().getNonce();
 //        final String timestamp = new TimestampServiceImpl().getTimestampInSeconds();

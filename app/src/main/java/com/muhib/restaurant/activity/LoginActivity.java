@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView _signupLink;
     EditText _passwordText;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
