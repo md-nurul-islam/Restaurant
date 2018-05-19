@@ -26,6 +26,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
 import com.muhib.restaurant.myinterface.OrderProcess;
@@ -50,6 +53,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import model.CategoryModel;
 import model.Products;
+import model.UpdateModel;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -211,7 +215,44 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     @Override
     public void retryPageLoad() {
+        showProgress();
 
+        UpdateModel updateModel = new UpdateModel();
+        updateModel.setStatus("pending");
+
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonElement>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement value) {
+                        hideProgress();
+                        Gson gson = new GsonBuilder().create();
+                        Products r = gson.fromJson(value, Products.class);
+                        String st = r.getId();
+//                        if (value.code() == 200) {
+//
+//                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //showErrorView(e);
+                        //adapter.showRetry(true, fetchErrorMessage(e));
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -414,6 +455,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 String description = "";
 
                 myDialog.dismiss();
+                callUpdateApi("120 Min");
             }
         });
         dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -426,6 +468,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
         myDialog.show();
     }
+
+    private void callUpdateApi(String s) {
+    }
+
     private PopupWindow mDropdown = null;
     LayoutInflater mInflater;
 

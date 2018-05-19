@@ -8,13 +8,16 @@ import java.util.Map;
 import io.reactivex.Observable;
 import model.CategoryModel;
 import model.Products;
+import model.UpdateModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -73,6 +76,9 @@ public interface ApiInterface {
 
     @GET("wp-json/wc/v2/products")
     Observable<Response<List<Products>>> getLogedIn();
+
+    @PUT("wp-json/wc/v2/orders{id}")
+    Observable<JsonElement> updateOrder(@Path("id") String id, @Body UpdateModel updateModel);
 
     //    @GET("posts?_embed")
 //    Observable<Response<List<CategoryModel>>> getLatest(@Query("per_page") int per_page, @Query("offset") int offest);
