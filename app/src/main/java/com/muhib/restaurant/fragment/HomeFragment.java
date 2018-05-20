@@ -468,6 +468,42 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     private void callUpdateApi(String s) {
+        showProgress();
+        UpdateModel updateModel = new UpdateModel();
+
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(s, updateModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonElement>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement value) {
+                        hideProgress();
+                        Gson gson = new GsonBuilder().create();
+                        Products r = gson.fromJson(value, Products.class);
+                        String st = r.getId();
+//                        if (value.code() == 200) {
+//
+//                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //showErrorView(e);
+                        //adapter.showRetry(true, fetchErrorMessage(e));
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private PopupWindow mDropdown = null;
