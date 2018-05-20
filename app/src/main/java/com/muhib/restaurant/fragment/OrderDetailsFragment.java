@@ -69,13 +69,13 @@ public class OrderDetailsFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         itemNameLayout = (LinearLayout) view.findViewById(R.id.itemNameLayout);
         totalPay = (TextView)view.findViewById(R.id.totalPay);
-        shippingUserName = (TextView)view.findViewById(R.id.shippingUserName);
 
         addressOne = (TextView)view.findViewById(R.id.addressOne);
         addressOneText = (TextView)view.findViewById(R.id.addressOneText);
         addressTwo = (TextView)view.findViewById(R.id.addressTwo);
         addressTwoText = (TextView)view.findViewById(R.id.addressTwoText);
 
+        shippingUserName = (TextView)view.findViewById(R.id.shippingUserName);
         String FullName  = " ";
 
 //        if(products.getShippingTo().get(0).get("first_name")!= null)
@@ -85,6 +85,8 @@ public class OrderDetailsFragment extends Fragment {
 //        if (bundle != null) {
 //            id = bundle.getString("id");
 //        }
+
+
         if (getArguments().containsKey("products")) {
             String str = getArguments().getString("products");
             if (str != null)
@@ -96,34 +98,34 @@ public class OrderDetailsFragment extends Fragment {
         if(products.getShippingTo()!=null){
             Gson gson = new GsonBuilder().create();
             ShippingAddressaModel shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
-            FullName = shippingAddressaModel.getFirstName() + " " +shippingAddressaModel.getLastName();
+            FullName = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
 
-            if(!shippingAddressaModel.getAddress1().isEmpty() && shippingAddressaModel.getAddress1()!=null)
+            if(!shippingAddressaModel.getAddressOne().isEmpty())
             {
-                addressOneText.setVisibility(View.VISIBLE);
                 addressOne.setVisibility(View.VISIBLE);
-                addressOne.setText(shippingAddressaModel.getAddress1());
+                addressOneText.setVisibility(View.VISIBLE);
+                addressOne.setText(shippingAddressaModel.getAddressOne());
             }
             else {
                 addressOne.setVisibility(View.GONE);
                 addressOneText.setVisibility(View.GONE);
             }
-
-            if(!shippingAddressaModel.getGetAddress2().isEmpty() && shippingAddressaModel.getGetAddress2()!=null)
+            if(!shippingAddressaModel.getAddressTwo().isEmpty())
             {
-                addressTwoText.setVisibility(View.VISIBLE);
                 addressTwo.setVisibility(View.VISIBLE);
-                addressTwo.setText(shippingAddressaModel.getGetAddress2());
+                addressTwoText.setVisibility(View.VISIBLE);
+                addressTwo.setText(shippingAddressaModel.getAddressTwo());
             }
             else {
                 addressTwo.setVisibility(View.GONE);
                 addressTwoText.setVisibility(View.GONE);
             }
-
         }
         shippingUserName.setText(FullName);
         if(!products.getTotal().isEmpty()&& products.getTotal()!=null)
             totalPay.setText(products.getTotal());
+
+
 
         itemNameLayout.removeAllViews();
         int total = products.getItemList().size();
@@ -195,6 +197,7 @@ public class OrderDetailsFragment extends Fragment {
                     }
                 });
     }
+
 
     public void showProgress() {
         dialog = new ProgressDialog(getActivity());

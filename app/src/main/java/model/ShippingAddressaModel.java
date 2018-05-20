@@ -18,11 +18,11 @@ public class ShippingAddressaModel {
 
     @SerializedName("address_1")
     @Expose
-    private String address1;
+    private String addressOne;
 
     @SerializedName("address_2")
     @Expose
-    private String getAddress2;
+    private String addressTwo;
 
     public String getFirstName() {
         return firstName;
@@ -40,19 +40,21 @@ public class ShippingAddressaModel {
         this.lastName = lastName;
     }
 
-    public String getAddress1() {
-        return address1;
+    public String getAddressOne() {
+        return addressOne;
     }
 
-    public void setAddress1(String address1) {
-        this.address1 = address1;
+    public void setAddressOne(String addressOne) {
+        this.addressOne = addressOne;
     }
 
-    public String getGetAddress2() {
-        return getAddress2;
+    public String getAddressTwo() {
+        return addressTwo;
     }
 
-    public void setGetAddress2(String getAddress2) {
-        this.getAddress2 = getAddress2;
+    public void setAddressTwo(String addressTwo) {
+        this.addressTwo = addressTwo;
     }
+
+
 }

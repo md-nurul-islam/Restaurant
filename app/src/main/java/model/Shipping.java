@@ -22,4 +22,5 @@ public class Shipping {
     public void setFirstName(Shipping firstName) {
         this.firstName = firstName;
     }
+
 }

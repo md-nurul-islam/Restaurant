@@ -190,11 +190,13 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), value.message(), Toast.LENGTH_SHORT).show();
                     }
 
+
                     @Override
                     public void onError(Throwable e) {
 //                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                        startActivity(intent);
 //                        finish();
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
 
                     }
