@@ -52,6 +52,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import model.CategoryModel;
+import model.MetaDatum;
 import model.Products;
 import model.UpdateModel;
 import okhttp3.Headers;
@@ -468,10 +469,19 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     private void callUpdateApi(String s) {
+        List<MetaDatum> metaDataList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
+        updateModel.setStatus("pending");
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(s, updateModel)
+        MetaDatum metaDatum = new MetaDatum();
+        metaDatum.setKey("time_to_deliver");
+        metaDatum.setValue("120 Min");
+        metaDataList.add(metaDatum);
+        updateModel.setMetaData(metaDataList);
+
+
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {

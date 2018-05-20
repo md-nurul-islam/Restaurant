@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        _loginButton.setEnabled(false);
+        //_loginButton.setEnabled(false);
 
         progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -198,7 +198,6 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
-
                     }
 
                     @Override

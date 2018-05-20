@@ -74,7 +74,7 @@ public interface ApiInterface {
 //    Observable<Response<Products>> getOrderDetails(@Query("id") String id);
     Observable<JsonElement> getOrderDetails(@Path("id") String id);
 
-    @GET("wp-json/wc/v2/products")
+    @GET("wp-json/wc/v2/orders")
     Observable<Response<List<Products>>> getLogedIn();
 
     @PUT("wp-json/wc/v2/orders{id}")
