@@ -11,6 +11,10 @@ import java.util.List;
 
 public class Products {
 
+    @SerializedName("status")
+    @Expose
+    private String status;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -113,4 +117,11 @@ public class Products {
         this.billing = billing;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -65,7 +65,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener, OrderProcess{
+public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener{
     HomepageAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -132,7 +132,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         strList = getStrList();
 
 
-        adapter = new HomepageAdapter(getContext(), this, this);
+        adapter = new HomepageAdapter(getContext(), this, HomeFragment.this);
 
 
 
@@ -414,13 +414,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     private ProgressDialog dialog;
 
-    public void orderProcess() {
 
 
-    }
-
-    @Override
-    public void processOrder() {
+    String processTime = "";
+    public void processOrder(final String id) {
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
         final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
@@ -439,6 +436,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     public boolean onMenuItemClick(MenuItem item) {
                         select.setText(item.getTitle());
                         //Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        processTime = item.getTitle().toString();
                         return true;
                     }
                 });
@@ -455,7 +453,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 String description = "";
 
                 myDialog.dismiss();
-                callUpdateApi("120 Min");
+                callUpdateApi(id, processTime);
             }
         });
         dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -469,7 +467,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         myDialog.show();
     }
 
-    private void callUpdateApi(String s) {
+    private void callUpdateApi(String id, String timeToProcess) {
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
@@ -477,7 +475,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
         HashMap<String, String> params = new HashMap<>();
         params.put("key", "time_to_deliver");
-        params.put("value", "120 Min");
+        params.put("value", timeToProcess);
 
 //        MetaDatum metaDatum = new MetaDatum();
 //        metaDatum.setKey("time_to_deliver");
@@ -487,7 +485,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         updateModel.setMetaData(mapList);
 
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {

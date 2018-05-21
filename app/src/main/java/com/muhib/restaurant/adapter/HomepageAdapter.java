@@ -73,16 +73,17 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     View myView;
     LayoutInflater layoutInflater;
     LinearLayout layout;
+    HomeFragment homeFragment;
 //
     private String errorMsg;
     //HomeFragment homeFragment;
 //
-    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback, OrderProcess orderProcessCallback) {
+    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback, HomeFragment homeFragment) {
         this.context = context;
         this.mCallback = mCallback;
         orderList = new ArrayList<>();
-        this.mOrderProcessCallback = orderProcessCallback;
-        //this.homeFragment = fragment;
+        //this.mOrderProcessCallback = orderProcessCallback;
+        this.homeFragment = homeFragment;
     }
 
     public HomepageAdapter(Context context) {
@@ -181,6 +182,16 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 itemHolder.totalPay.setText(orderList.get(position).getTotal());
                 itemHolder.totalPayText.setText("Total pay in BDT");
+                itemHolder.status.setText(orderList.get(position).getStatus());
+                if(orderList.get(position).getStatus().equalsIgnoreCase("processing"))
+                {
+                    itemHolder.accepted.setVisibility(View.GONE);
+                    itemHolder.rejected.setVisibility(View.GONE);
+                }
+                else {
+                    itemHolder.accepted.setVisibility(View.VISIBLE);
+                    itemHolder.rejected.setVisibility(View.VISIBLE);
+                }
 //                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));
 //                itemHolder.mMovieDesc.setText(android.text.Html.fromHtml(result.getExcerptModel().getRendered()).toString());
@@ -278,13 +289,13 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemHolder.accepted.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ordeProcess(true);
+                        ordeProcess(true, orderList.get(position).getId());
                     }
                 });
                 itemHolder.rejected.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ordeProcess(false);
+                        ordeProcess(false, orderList.get(position).getId());
                     }
                 });
                 itemHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
@@ -327,7 +338,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private void ordeProcess(boolean b) {
+    private void ordeProcess(boolean b, String id) {
         String status="";
         if(b)
             status = "Accepted";
@@ -335,7 +346,9 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             status = "Rejected";
         Toast.makeText(context, "Order " + status , Toast.LENGTH_SHORT).show();
         if(b)
-        mOrderProcessCallback.processOrder();
+            homeFragment.processOrder(id);
+
+
 
     }
 
@@ -546,6 +559,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private LinearLayout itemLayout;
         private LinearLayout itemNameLayout;
         private TextView rejected;
+        private TextView status;
 
         public OrderListItem(View itemView) {
             super(itemView);
@@ -557,6 +571,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             totalPayText = (TextView) itemView.findViewById(R.id.totalPayText);
             accepted = (TextView) itemView.findViewById(R.id.accept);
             rejected = (TextView) itemView.findViewById(R.id.reject);
+            status = (TextView) itemView.findViewById(R.id.status);
             // Layout inflater
 
 //            itemImage = (ImageView) itemView.findViewById(R.id.itemImage);

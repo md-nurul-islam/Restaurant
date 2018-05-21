@@ -43,24 +43,24 @@
 
                     <TextView
                         android:id="@+id/totalPayText"
-                        android:layout_weight="1"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_20dp"
                         android:layout_marginTop="@dimen/activity_margin_quarter"
+                        android:layout_weight="1"
                         android:textColor="@color/black"
                         android:textStyle="normal"
                         tools:text="Total pay in BDT" />
 
                     <TextView
-                        android:layout_weight="1"
                         android:id="@+id/totalPay"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_20dp"
                         android:layout_marginTop="@dimen/activity_margin_quarter"
+                        android:layout_weight="1"
                         android:maxLines="2"
                         android:textColor="@color/black"
                         android:textStyle="normal"
@@ -89,6 +89,20 @@
                     android:paddingTop="@dimen/size_5dp"
                     android:text="Accept"
                     android:textColor="@color/white"
+                    android:textSize="@dimen/text_size17" />
+
+                <TextView
+                    android:background="@drawable/button_background"
+                    android:id="@+id/status"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:paddingBottom="@dimen/size_5dp"
+                    android:paddingLeft="@dimen/size_10dp"
+                    android:paddingRight="@dimen/size_10dp"
+                    android:paddingTop="@dimen/size_5dp"
+                    android:text="status"
                     android:textSize="@dimen/text_size17" />
 
                 <TextView
