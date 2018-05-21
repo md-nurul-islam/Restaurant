@@ -5,14 +5,21 @@ package model;
  * Created by Fahima on 5/19/2018.
  */
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class UpdateModel {
 
+    @SerializedName("status")
     private String status;
-    private List<MetaDatum> metaData = null;
+
+    @SerializedName("meta_data")
+    private List<HashMap> metaData = new ArrayList<>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public String getStatus() {
@@ -23,11 +30,11 @@ public class UpdateModel {
         this.status = status;
     }
 
-    public List<MetaDatum> getMetaData() {
+    public List<HashMap> getMetaData() {
         return metaData;
     }
 
-    public void setMetaData(List<MetaDatum> metaData) {
+    public void setMetaData(List<HashMap> metaData) {
         this.metaData = metaData;
     }
 

@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -469,16 +470,21 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     private void callUpdateApi(String s) {
-        List<MetaDatum> metaDataList = new ArrayList<>();
+        List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
         updateModel.setStatus("pending");
 
-        MetaDatum metaDatum = new MetaDatum();
-        metaDatum.setKey("time_to_deliver");
-        metaDatum.setValue("120 Min");
-        metaDataList.add(metaDatum);
-        updateModel.setMetaData(metaDataList);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("key", "time_to_deliver");
+        params.put("value", "120 Min");
+
+//        MetaDatum metaDatum = new MetaDatum();
+//        metaDatum.setKey("time_to_deliver");
+//        metaDatum.setValue("120 Min");
+//        metaDataList.add(metaDatum);
+        mapList.add(params);
+        updateModel.setMetaData(mapList);
 
 
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)

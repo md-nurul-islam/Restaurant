@@ -77,7 +77,7 @@ public interface ApiInterface {
     @GET("wp-json/wc/v2/orders")
     Observable<Response<List<Products>>> getLogedIn();
 
-    @PUT("wp-json/wc/v2/orders{id}")
+    @PUT("wp-json/wc/v2/orders/{id}")
     Observable<JsonElement> updateOrder(@Path("id") String id, @Body UpdateModel updateModel);
 
     //    @GET("posts?_embed")

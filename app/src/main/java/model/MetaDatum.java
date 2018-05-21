@@ -4,12 +4,16 @@ package model;
  * Created by Fahima on 5/19/2018.
  */
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class MetaDatum {
 
+    @SerializedName("key")
     private String key;
+    @SerializedName("value")
     private String value;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
