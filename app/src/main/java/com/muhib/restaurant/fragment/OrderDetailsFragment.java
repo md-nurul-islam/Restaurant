@@ -334,7 +334,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
-                        
+
 //                        if (value.code() == 200) {
 //
 //                        }
