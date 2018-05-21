@@ -25,4 +25,6 @@
     <color name="forgot_password_color">#239cdc</color>
     <color name="primary_light">#4023dcdc</color>
     <color name="colorPrimaryLight">#77303F9F</color>
+    <color name="red">#FF0000</color>
+    <color name="greenDark">#006400</color>
 </resources>

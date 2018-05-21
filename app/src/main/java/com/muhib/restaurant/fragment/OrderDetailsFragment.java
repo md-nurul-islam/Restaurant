@@ -1,18 +1,23 @@
 package com.muhib.restaurant.fragment;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +29,7 @@ import com.muhib.restaurant.utils.MySheardPreference;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -32,13 +38,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import model.Products;
 import model.ShippingAddressaModel;
+import model.UpdateModel;
 import okhttp3.Headers;
 import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderDetailsFragment extends Fragment {
+public class OrderDetailsFragment extends Fragment implements View.OnClickListener{
     private Products products;
 
     View myView;
@@ -47,7 +54,10 @@ public class OrderDetailsFragment extends Fragment {
     private LinearLayout itemNameLayout;
     TextView totalPay, shippingUserName;
     TextView addressOne, addressOneText, addressTwo, addressTwoText;
+    TextView acceptBtn, rejectBtn;
 
+    private LinearLayout selectLay;
+    private TextView select;
 
     public OrderDetailsFragment() {
         // Required empty public constructor
@@ -74,6 +84,11 @@ public class OrderDetailsFragment extends Fragment {
         addressOneText = (TextView)view.findViewById(R.id.addressOneText);
         addressTwo = (TextView)view.findViewById(R.id.addressTwo);
         addressTwoText = (TextView)view.findViewById(R.id.addressTwoText);
+
+        acceptBtn = (TextView)view.findViewById(R.id.accept);
+        rejectBtn = (TextView)view.findViewById(R.id.reject);
+        acceptBtn.setOnClickListener(this);
+        rejectBtn.setOnClickListener(this);
 
         shippingUserName = (TextView)view.findViewById(R.id.shippingUserName);
         String FullName  = " ";
@@ -212,6 +227,133 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private ProgressDialog dialog;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.accept:
+                ordeProcess(true);
+                break;
+            case R.id.reject:
+                ordeProcess(false);
+                break;
+        }
+    }
+
+    private void ordeProcess(boolean b) {
+        String status="";
+        if(b)
+            status = "Accepted";
+        else
+            status = "Rejected";
+        Toast.makeText(getActivity(), "Order " + status , Toast.LENGTH_SHORT).show();
+        if(b)
+            processOrder();
+
+    }
+
+    public void processOrder() {
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
+        final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
+        selectLay = (LinearLayout) dateDialogView.findViewById(R.id.selectLay);
+        select = (TextView) dateDialogView.findViewById(R.id.selectText);
+        selectLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), selectLay);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        select.setText(item.getTitle());
+                        //Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+                //initiatePopupWindow();
+            }
+        });
+        myDialog.setView(dateDialogView);
+
+        dateDialogView.findViewById(R.id.submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String description = "";
+
+                myDialog.dismiss();
+                callUpdateApi("120 Min");
+            }
+        });
+        dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+            }
+        });
+
+
+        myDialog.show();
+    }
+
+    private void callUpdateApi(String s) {
+        List<HashMap> mapList = new ArrayList<>();
+        showProgress();
+        UpdateModel updateModel = new UpdateModel();
+        updateModel.setStatus("pending");
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("key", "time_to_deliver");
+        params.put("value", "120 Min");
+
+//        MetaDatum metaDatum = new MetaDatum();
+//        metaDatum.setKey("time_to_deliver");
+//        metaDatum.setValue("120 Min");
+//        metaDataList.add(metaDatum);
+        mapList.add(params);
+        updateModel.setMetaData(mapList);
+
+
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonElement>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement value) {
+                        hideProgress();
+                        Gson gson = new GsonBuilder().create();
+                        Products r = gson.fromJson(value, Products.class);
+                        String st = r.getId();
+                        
+//                        if (value.code() == 200) {
+//
+//                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //showErrorView(e);
+                        //adapter.showRetry(true, fetchErrorMessage(e));
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 }
 
 ////    Gson gson = new GsonBuilder().create();
