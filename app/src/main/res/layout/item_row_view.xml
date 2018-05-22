@@ -11,7 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="@dimen/margin_5dp"
+        android:paddingLeft="@dimen/margin_5dp"
+        android:paddingTop="@dimen/margin_2dp"
+        android:paddingBottom="@dimen/margin_2dp"
         android:text="name"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size15" />
@@ -21,7 +23,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="@dimen/margin_5dp"
+        android:paddingLeft="@dimen/margin_5dp"
+        android:paddingTop="@dimen/margin_2dp"
+        android:paddingBottom="@dimen/margin_2dp"
         android:text=" 0"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size15" />
