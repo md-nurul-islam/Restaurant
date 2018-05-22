@@ -170,13 +170,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
         rv.setAdapter(adapter);
 //        loadFirstPage();
-        callNewsApiFirst();
+        callNewsApiFirst(false);
 
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //loadFirstPage();
-                callNewsApiFirst();
+                callNewsApiFirst(true);
             }
         });
 
@@ -211,8 +211,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     @Override
     public void onRefresh() {
-           // callNewsApiFirst();
-        mSwipeRefreshLayout.setRefreshing(false);
+            callNewsApiFirst(true);
+
     }
 
     @Override
@@ -258,13 +258,14 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     List<Products> singleList = new ArrayList<>();
-    public void callNewsApiFirst() {
+    public void callNewsApiFirst(boolean isRefresh) {
 //        final String nonce = new TimestampServiceImpl().getNonce();
 //        final String timestamp = new TimestampServiceImpl().getTimestampInSeconds();
 //        String firstBaseString = original.method() + "&" + urlEncoded(dynamicStructureUrl);
 //        String baseString = firstBaseString + secoundBaseString;
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
+        if(!isRefresh)
         showProgress();
 
 
@@ -287,6 +288,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
+                            adapter.clear();
                             adapter.addAllData(singleList);
 
 //                            if (currentOffst < TOTAL_ITEM)
@@ -296,6 +298,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
+                            mSwipeRefreshLayout.setRefreshing(false);
 
                         }
 
@@ -306,6 +309,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
@@ -511,7 +515,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
                         Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
-                        callNewsApiFirst();
+                        callNewsApiFirst(false);
 //                        if (value.code() == 200) {
 //
 //                        }
