@@ -24,6 +24,21 @@ public class ShippingAddressaModel {
     @Expose
     private String addressTwo;
 
+    @SerializedName("state")
+    @Expose
+    private String state;
+
+    @SerializedName("postcode")
+    @Expose
+    private String postcode;
+    @SerializedName("city")
+    @Expose
+    private String city;
+
+    @SerializedName("country")
+    @Expose
+    private String country;
+
     public String getFirstName() {
         return firstName;
     }
@@ -56,5 +71,35 @@ public class ShippingAddressaModel {
         this.addressTwo = addressTwo;
     }
 
+    public String getState() {
+        return state;
+    }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }

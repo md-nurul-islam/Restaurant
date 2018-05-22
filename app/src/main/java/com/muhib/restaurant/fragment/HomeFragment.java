@@ -257,6 +257,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 });
     }
 
+    List<Products> singleList = new ArrayList<>();
     public void callNewsApiFirst() {
 //        final String nonce = new TimestampServiceImpl().getNonce();
 //        final String timestamp = new TimestampServiceImpl().getTimestampInSeconds();
@@ -282,7 +283,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         if(value.code()==200){
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
-                            List<Products> singleList = value.body();
+                           singleList.clear();
+                            singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
                             adapter.addAllData(singleList);
@@ -467,11 +469,19 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         myDialog.show();
     }
 
-    private void callUpdateApi(String id, String timeToProcess) {
+    String statusSt = " ";
+    public void callUpdateApi(String id, String timeToProcess) {
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
-        updateModel.setStatus("pending");
+        if (timeToProcess.equals("-1")) {
+            updateModel.setStatus("rejected");
+            statusSt = "rejected";
+        }
+        else {
+            updateModel.setStatus("processing");
+            statusSt = "accepted";
+        }
 
         HashMap<String, String> params = new HashMap<>();
         params.put("key", "time_to_deliver");
@@ -500,6 +510,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
+                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
+                        callNewsApiFirst();
 //                        if (value.code() == 200) {
 //
 //                        }
@@ -511,6 +523,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
+                        Toast.makeText(getActivity(), "Something wrong, Please try again later", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

@@ -82,8 +82,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="@dimen/margin_20dp"
-                    android:background="@drawable/button_background_green"
-                    android:text="Admin Log-in"
+                    android:background="@drawable/button_background_fill"
+                    android:text="Log-in"
                     android:textAllCaps="false"
                     android:textColor="@color/white" />
 

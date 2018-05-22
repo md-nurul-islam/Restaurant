@@ -45,7 +45,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderDetailsFragment extends Fragment implements View.OnClickListener{
+public class OrderDetailsFragment extends Fragment implements View.OnClickListener {
     private Products products;
 
     View myView;
@@ -58,6 +58,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 
     private LinearLayout selectLay;
     private TextView select;
+    private TextView OrderStatus;
 
     public OrderDetailsFragment() {
         // Required empty public constructor
@@ -78,20 +79,22 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         itemNameLayout = (LinearLayout) view.findViewById(R.id.itemNameLayout);
-        totalPay = (TextView)view.findViewById(R.id.totalPay);
+        totalPay = (TextView) view.findViewById(R.id.totalPay);
 
-        addressOne = (TextView)view.findViewById(R.id.addressOne);
-        addressOneText = (TextView)view.findViewById(R.id.addressOneText);
-        addressTwo = (TextView)view.findViewById(R.id.addressTwo);
-        addressTwoText = (TextView)view.findViewById(R.id.addressTwoText);
+        OrderStatus = (TextView) view.findViewById(R.id.status);
 
-        acceptBtn = (TextView)view.findViewById(R.id.accept);
-        rejectBtn = (TextView)view.findViewById(R.id.reject);
+        addressOne = (TextView) view.findViewById(R.id.addressOne);
+        addressOneText = (TextView) view.findViewById(R.id.addressOneText);
+        addressTwo = (TextView) view.findViewById(R.id.addressTwo);
+        addressTwoText = (TextView) view.findViewById(R.id.addressTwoText);
+
+        acceptBtn = (TextView) view.findViewById(R.id.accept);
+        rejectBtn = (TextView) view.findViewById(R.id.reject);
         acceptBtn.setOnClickListener(this);
         rejectBtn.setOnClickListener(this);
 
-        shippingUserName = (TextView)view.findViewById(R.id.shippingUserName);
-        String FullName  = " ";
+        shippingUserName = (TextView) view.findViewById(R.id.shippingUserName);
+        String FullName = " ";
 
 //        if(products.getShippingTo().get(0).get("first_name")!= null)
 //            addressSt = addressSt + products.getShippingTo().get(0).get("first_name");
@@ -110,36 +113,45 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         }
 
         JsonElement jsonElement = products.getShippingTo();
-        if(products.getShippingTo()!=null){
+        if (products.getShippingTo() != null) {
             Gson gson = new GsonBuilder().create();
             ShippingAddressaModel shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
             FullName = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
 
-            if(!shippingAddressaModel.getAddressOne().isEmpty())
-            {
+            if (!shippingAddressaModel.getAddressOne().isEmpty()) {
                 addressOne.setVisibility(View.VISIBLE);
                 addressOneText.setVisibility(View.VISIBLE);
-                addressOne.setText(shippingAddressaModel.getAddressOne());
-            }
-            else {
+                addressOne.setText(shippingAddressaModel.getAddressOne() + "\n"
+                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry());
+            } else {
                 addressOne.setVisibility(View.GONE);
                 addressOneText.setVisibility(View.GONE);
             }
-            if(!shippingAddressaModel.getAddressTwo().isEmpty())
-            {
+            if (!shippingAddressaModel.getAddressTwo().isEmpty()) {
                 addressTwo.setVisibility(View.VISIBLE);
                 addressTwoText.setVisibility(View.VISIBLE);
-                addressTwo.setText(shippingAddressaModel.getAddressTwo());
-            }
-            else {
+                addressTwo.setText(shippingAddressaModel.getAddressTwo() + "\n"
+                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry());
+            } else {
                 addressTwo.setVisibility(View.GONE);
                 addressTwoText.setVisibility(View.GONE);
             }
         }
-        shippingUserName.setText(FullName);
-        if(!products.getTotal().isEmpty()&& products.getTotal()!=null)
-            totalPay.setText(products.getTotal());
 
+        if (products.getStatus().equalsIgnoreCase("pending")) {
+            acceptBtn.setVisibility(View.VISIBLE);
+            rejectBtn.setVisibility(View.VISIBLE);
+
+        } else {
+            acceptBtn.setVisibility(View.GONE);
+            rejectBtn.setVisibility(View.GONE);
+        }
+        shippingUserName.setText(FullName);
+        if (!products.getTotal().isEmpty() && products.getTotal() != null)
+            totalPay.setText(products.getTotal());
+        OrderStatus.setText(products.getStatus());
 
 
         itemNameLayout.removeAllViews();
@@ -230,29 +242,33 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.accept:
-                ordeProcess(true);
+                ordeProcess(products.getId(), true);
                 break;
             case R.id.reject:
-                ordeProcess(false);
+                ordeProcess(products.getId(), false);
                 break;
         }
     }
 
-    private void ordeProcess(boolean b) {
-        String status="";
-        if(b)
+    private void ordeProcess(String id, boolean b) {
+        String status = "";
+        if (b)
             status = "Accepted";
         else
             status = "Rejected";
-        Toast.makeText(getActivity(), "Order " + status , Toast.LENGTH_SHORT).show();
-        if(b)
-            processOrder();
+        //Toast.makeText(getActivity(), "Order " + status , Toast.LENGTH_SHORT).show();
+        if (b)
+            processOrder(id);
+        else
+            callUpdateApi(products.getId(), "-1");
 
     }
 
-    public void processOrder() {
+    String processTime = "";
+
+    public void processOrder(final String id) {
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
         final AlertDialog myDialog = new AlertDialog.Builder(getActivity()).create();
@@ -271,6 +287,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                     public boolean onMenuItemClick(MenuItem item) {
                         select.setText(item.getTitle());
                         //Toast.makeText(getActivity(),"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        processTime = item.getTitle().toString();
                         return true;
                     }
                 });
@@ -287,7 +304,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                 String description = "";
 
                 myDialog.dismiss();
-                callUpdateApi("120 Min");
+                callUpdateApi(id, processTime);
             }
         });
         dateDialogView.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -301,15 +318,24 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         myDialog.show();
     }
 
-    private void callUpdateApi(String s) {
+    String statusSt =" ";
+    private void callUpdateApi(String id, String timeToProcess) {
+
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
-        updateModel.setStatus("pending");
+        if (timeToProcess.equals("-1")) {
+            updateModel.setStatus("rejected");
+            statusSt = "rejected";
+        }
+        else {
+            updateModel.setStatus("processing");
+            statusSt = "accepted";
+        }
 
         HashMap<String, String> params = new HashMap<>();
         params.put("key", "time_to_deliver");
-        params.put("value", "120 Min");
+        params.put("value", timeToProcess);
 
 //        MetaDatum metaDatum = new MetaDatum();
 //        metaDatum.setKey("time_to_deliver");
@@ -319,7 +345,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         updateModel.setMetaData(mapList);
 
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {
@@ -334,6 +360,11 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
+                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
+                        if(statusSt.equals("accepted"))
+                            OrderStatus.setText("processing");
+                        else
+                            OrderStatus.setText("rejected");
 
 //                        if (value.code() == 200) {
 //
@@ -346,6 +377,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
+                        Toast.makeText(getActivity(), "Something wrong, Please try again later", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
