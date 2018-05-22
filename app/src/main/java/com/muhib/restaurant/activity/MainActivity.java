@@ -1,15 +1,20 @@
 package com.muhib.restaurant.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.muhib.restaurant.R;
@@ -56,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main_menu, menu);
+//        return true;
+//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -84,4 +89,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        // Associate searchable configuration with the SearchView
+//        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+//        searchEditText.setTextColor(getResources().getColor(R.color.colorAccent));
+//        searchEditText.setHintTextColor(getResources().getColor(R.color.colorAccent));
+
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+//        this.menu = menu;  // this will copy menu values to upper defined menu so that we can change icon later akash
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        final  MenuItem miSearch = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(Color.BLACK);
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorAccent));
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                SearchResultFragment fragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
+//                if(fragment!=null && fragment.isVisible())
+//                    getSupportFragmentManager().popBackStack();
+//                miSearch.collapseActionView();
+//                Bundle bundle = new Bundle();
+//                //Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
+//                bundle.putString(AppConstant.SEARCH_TEXT, query);
+//                gotoSearchResultFragment(bundle);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+        return true;
+    }
+    SearchView searchView;
 }
