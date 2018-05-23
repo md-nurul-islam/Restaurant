@@ -36,6 +36,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import model.BillingAddressaModel;
 import model.Products;
 import model.ShippingAddressaModel;
 import model.UpdateModel;
@@ -59,6 +60,13 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     private LinearLayout selectLay;
     private TextView select;
     private TextView OrderStatus;
+    private TextView addressHead, userPhone;
+
+    String shippingAddressOne = "";
+    String shippingAddressTwo = "";
+    String billingAddressOne = "";
+    String billingAddressTwo = "";
+    String phoneString = "";
 
     public OrderDetailsFragment() {
         // Required empty public constructor
@@ -82,6 +90,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         totalPay = (TextView) view.findViewById(R.id.totalPay);
 
         OrderStatus = (TextView) view.findViewById(R.id.status);
+        addressHead = (TextView) view.findViewById(R.id.addressHead);
+        userPhone = (TextView)view.findViewById(R.id.phoneNo);
 
         addressOne = (TextView) view.findViewById(R.id.addressOne);
         addressOneText = (TextView) view.findViewById(R.id.addressOneText);
@@ -94,7 +104,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         rejectBtn.setOnClickListener(this);
 
         shippingUserName = (TextView) view.findViewById(R.id.shippingUserName);
-        String FullName = " ";
+        String FullNameShipping = " ";
+        String FullNameBilling = " ";
 
 //        if(products.getShippingTo().get(0).get("first_name")!= null)
 //            addressSt = addressSt + products.getShippingTo().get(0).get("first_name");
@@ -112,18 +123,20 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             //callNewsApiFirst(id);
         }
 
+        ShippingAddressaModel shippingAddressaModel;
         JsonElement jsonElement = products.getShippingTo();
         if (products.getShippingTo() != null) {
             Gson gson = new GsonBuilder().create();
-            ShippingAddressaModel shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
-            FullName = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
+            shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
+            FullNameShipping = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
 
             if (!shippingAddressaModel.getAddressOne().isEmpty()) {
                 addressOne.setVisibility(View.VISIBLE);
                 addressOneText.setVisibility(View.VISIBLE);
-                addressOne.setText(shippingAddressaModel.getAddressOne() + "\n"
+                shippingAddressOne = shippingAddressaModel.getAddressOne() + "\n"
                         + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
-                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry());
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressOne.setText(shippingAddressOne);
             } else {
                 addressOne.setVisibility(View.GONE);
                 addressOneText.setVisibility(View.GONE);
@@ -131,9 +144,42 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             if (!shippingAddressaModel.getAddressTwo().isEmpty()) {
                 addressTwo.setVisibility(View.VISIBLE);
                 addressTwoText.setVisibility(View.VISIBLE);
-                addressTwo.setText(shippingAddressaModel.getAddressTwo() + "\n"
+                shippingAddressTwo = shippingAddressaModel.getAddressTwo() + "\n"
                         + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
-                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry());
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressTwo.setText(shippingAddressTwo);
+            } else {
+                addressTwo.setVisibility(View.GONE);
+                addressTwoText.setVisibility(View.GONE);
+            }
+        }
+
+        BillingAddressaModel billingAddressaModel;
+        JsonElement jsonElementBilling = products.getBilling();
+        if (products.getShippingTo() != null) {
+            Gson gson = new GsonBuilder().create();
+            billingAddressaModel= gson.fromJson(products.getBilling(), BillingAddressaModel.class);
+            FullNameBilling = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();
+
+            phoneString = billingAddressaModel.getPhone();
+            if (!billingAddressaModel.getAddressOne().isEmpty()) {
+                addressOne.setVisibility(View.VISIBLE);
+                addressOneText.setVisibility(View.VISIBLE);
+                billingAddressOne = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+                //addressOne.setText(billingAddressOne);
+            } else {
+                addressOne.setVisibility(View.GONE);
+                addressOneText.setVisibility(View.GONE);
+            }
+            if (!billingAddressaModel.getAddressTwo().isEmpty()) {
+                addressTwo.setVisibility(View.VISIBLE);
+                addressTwoText.setVisibility(View.VISIBLE);
+                billingAddressTwo = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+                //addressTwo.setText(billingAddressTwo);
             } else {
                 addressTwo.setVisibility(View.GONE);
                 addressTwoText.setVisibility(View.GONE);
@@ -148,7 +194,24 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             acceptBtn.setVisibility(View.GONE);
             rejectBtn.setVisibility(View.GONE);
         }
-        shippingUserName.setText(FullName);
+
+        if(shippingAddressOne.isEmpty() && shippingAddressTwo.isEmpty())
+        {
+            addressOne.setText(billingAddressOne);
+            addressTwo.setText(billingAddressTwo);
+            addressHead.setText("Billing Address");
+            shippingUserName.setText(FullNameBilling);
+            userPhone.setText(phoneString);
+        }
+        else {
+            addressOne.setText(shippingAddressOne);
+            addressTwo.setText(shippingAddressTwo);
+            addressHead.setText("Shipping Address");
+            shippingUserName.setText(FullNameShipping);
+            userPhone.setText(phoneString);
+        }
+
+        //shippingUserName.setText(FullName);
         if (!products.getTotal().isEmpty() && products.getTotal() != null)
             totalPay.setText(products.getTotal());
         OrderStatus.setText(products.getStatus());

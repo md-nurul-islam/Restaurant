@@ -33,7 +33,7 @@ public class Products {
 
     @SerializedName("billing")
     @Expose
-    private Object billing;
+    private JsonElement billing;
 
     @SerializedName("line_items")
     @Expose
@@ -109,11 +109,11 @@ public class Products {
         this.total = total;
     }
 
-    public Object getBilling() {
+    public JsonElement getBilling() {
         return billing;
     }
 
-    public void setBilling(Object billing) {
+    public void setBilling(JsonElement billing) {
         this.billing = billing;
     }
 
