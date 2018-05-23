@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
+import com.muhib.restaurant.fragment.SearchResultFragment;
+import com.muhib.restaurant.utils.AppConstant;
 import com.muhib.restaurant.utils.MySheardPreference;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -123,14 +125,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                SearchResultFragment fragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
-//                if(fragment!=null && fragment.isVisible())
-//                    getSupportFragmentManager().popBackStack();
-//                miSearch.collapseActionView();
-//                Bundle bundle = new Bundle();
-//                //Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
-//                bundle.putString(AppConstant.SEARCH_TEXT, query);
-//                gotoSearchResultFragment(bundle);
+                SearchResultFragment fragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
+                if(fragment!=null && fragment.isVisible())
+                    getSupportFragmentManager().popBackStack();
+                miSearch.collapseActionView();
+                Bundle bundle = new Bundle();
+                //Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
+                bundle.putString(AppConstant.SEARCH_TEXT, query);
+                gotoSearchResultFragment(bundle);
                 return false;
             }
 
@@ -144,4 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
     SearchView searchView;
+
+    private void gotoSearchResultFragment(Bundle bundle) {
+        SearchResultFragment searchResultFragment = new SearchResultFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        searchResultFragment.setArguments(bundle);
+        transaction.add(R.id.container, searchResultFragment, "searchResultFragment").addToBackStack(null);
+        transaction.commit();
+    }
 }

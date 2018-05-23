@@ -31,9 +31,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
+import com.muhib.restaurant.adapter.SearchAdapter;
 import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.retrofit.OAuthInterceptor;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
+import com.muhib.restaurant.utils.AppConstant;
 import com.muhib.restaurant.utils.MySheardPreference;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 import com.muhib.restaurant.utils.PaginationScrollListener;
@@ -65,8 +67,8 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener{
-    HomepageAdapter adapter;
+public class SearchResultFragment extends Fragment implements PaginationAdapterCallback {
+    SearchAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
 
@@ -76,7 +78,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     Button btnRetry;
     TextView txtError;
 
-    private int SELECTED;
+    //    private int SELECTED;
     ArrayList<CategoryModel> results = new ArrayList<>();
     ArrayList<String> strList = new ArrayList<>();
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -95,8 +97,9 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private int currentOffst = PAGE_START_OFFSET;
 
     OAuthInterceptor oAuthInterceptor;
+    private String SELECTED;
 
-    public HomeFragment() {
+    public SearchResultFragment() {
         // Required empty public constructor
     }
 
@@ -105,25 +108,12 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.activity_search_result, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                android.R.color.holo_green_dark,
-                android.R.color.holo_orange_dark,
-                android.R.color.holo_blue_dark);
-        mSwipeRefreshLayout.post(new Runnable() {
+        if (getArguments().containsKey(AppConstant.SEARCH_TEXT)) {
+            SELECTED = getArguments().getString(AppConstant.SEARCH_TEXT);
+        }
 
-            @Override
-            public void run() {
-
-                mSwipeRefreshLayout.setRefreshing(false);
-
-                // Fetching data from server
-                //loadRecyclerViewData();
-            }
-        });
 
         rv = (RecyclerView) view.findViewById(R.id.main_recycler);
 //        progressBar = (ProgressBar) view.findViewById(R.id.main_progress);
@@ -133,8 +123,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         strList = getStrList();
 
 
-        adapter = new HomepageAdapter(getContext(), this, HomeFragment.this);
-
+        adapter = new SearchAdapter(getContext(), this, SearchResultFragment.this);
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -150,7 +139,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 currentOffst += 10;
 
                 //loadNextPage();
-                callNewsApiNext();
+                callNewsApiNext(SELECTED);
             }
 
             @Override
@@ -171,13 +160,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
         rv.setAdapter(adapter);
 //        loadFirstPage();
-        callNewsApiFirst(false);
+        callNewsApiFirst(SELECTED);
 
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //loadFirstPage();
-                callNewsApiNext();
+                callNewsApiNext(SELECTED);
             }
         });
 
@@ -186,8 +175,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         return view;
     }
 
-    private void callNewsApiNext() {
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+    private void callNewsApiNext(String selected) {
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -198,14 +187,15 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
                     @Override
                     public void onNext(Response<List<Products>> value) {
-                        hideProgress();
-                        if(value.code()==200){
+                        //hideProgress();
+                        if (value.code() == 200) {
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
-                            List<Products> singleList = value.body();
+                            singleList.clear();
+                            singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
-
+                            adapter.clear();
                             adapter.addAllData(singleList);
                             if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
                             else isLastPage = true;
@@ -217,7 +207,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
-                            mSwipeRefreshLayout.setRefreshing(false);
+                            //mSwipeRefreshLayout.setRefreshing(false);
 
                         }
 
@@ -262,11 +252,6 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //
 //    }
 
-    @Override
-    public void onRefresh() {
-            callNewsApiFirst(true);
-
-    }
 
     @Override
     public void retryPageLoad() {
@@ -310,19 +295,19 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 });
     }
 
+    List<Products> singleList = new ArrayList<>();
 
-    public void callNewsApiFirst(boolean isRefresh) {
+    public void callNewsApiFirst(String selected) {
 //        final String nonce = new TimestampServiceImpl().getNonce();
 //        final String timestamp = new TimestampServiceImpl().getTimestampInSeconds();
 //        String firstBaseString = original.method() + "&" + urlEncoded(dynamicStructureUrl);
 //        String baseString = firstBaseString + secoundBaseString;
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
-        if(!isRefresh)
+
         showProgress();
 
-
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -334,11 +319,12 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     @Override
                     public void onNext(Response<List<Products>> value) {
                         hideProgress();
-                        if(value.code()==200){
+                        if (value.code() == 200) {
                             adapter.clear();
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
-                            List<Products> singleList = value.body();
+                            singleList.clear();
+                            singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
 
@@ -351,10 +337,9 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
-                            mSwipeRefreshLayout.setRefreshing(false);
+
 
                         }
-
                     }
 
                     @Override
@@ -362,7 +347,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
-                        mSwipeRefreshLayout.setRefreshing(false);
+
                     }
 
                     @Override
@@ -371,93 +356,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     }
                 });
 
-//        RetrofitApiClient.getApiInterface().getTopics()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<Response<List<Products>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(Response<List<Products>> value) {
-//                        hideProgress();
-//                        if(value.code()==200){
-//                            Headers headers = value.headers();
-//                            TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
-//                            List<Products> singleList = value.body();
-//                            singleList.size();
-//                            //progressBar.setVisibility(View.GONE);
-//                            adapter.addAllData(singleList);
-//
-////                            if (currentOffst < TOTAL_ITEM)
-////                                adapter.addLoadingFooter();
-////                            else
-//                                isLastPage = true;
-////                            results.addAll(singleList);
-////                            results.add(singleList.get(4));
-////                            si++;
-//
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        //showErrorView(e);
-//                        //adapter.showRetry(true, fetchErrorMessage(e));
-//                        hideProgress();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-
     }
 
-
-
-//    private void callNewsApiNext( ) {
-//
-//        RetrofitApiClient.getApiInterface().getTopics(currentPage, currentOffst)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<Response<List<CategoryModel>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(Response<List<CategoryModel>> value) {
-//                        if (value.code() == 200) {
-//                            adapter.removeLoadingFooter();
-//                            isLoading = false;
-//                            List<CategoryModel> singleList = value.body();
-//                            //singleList.size();
-//                            adapter.addAllData(singleList);
-//
-//                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
-//                            else isLastPage = true;
-//
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        //adapter.showRetry(true, fetchErrorMessage(e));
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
-//    }
 
     public void showProgress() {
         dialog = new ProgressDialog(getActivity());
@@ -474,8 +374,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private ProgressDialog dialog;
 
 
-
     String processTime = "";
+
     public void processOrder(final String id) {
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
@@ -527,6 +427,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     String statusSt = " ";
+
     public void callUpdateApi(String id, String timeToProcess) {
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
@@ -534,8 +435,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         if (timeToProcess.equals("-1")) {
             updateModel.setStatus("rejected");
             statusSt = "rejected";
-        }
-        else {
+        } else {
             updateModel.setStatus("processing");
             statusSt = "accepted";
         }
@@ -568,7 +468,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
                         Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
-                        callNewsApiFirst(false);
+                        //callNewsApiFirst(false);
 //                        if (value.code() == 200) {
 //
 //                        }
@@ -608,11 +508,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             final TextView itemb = (TextView) layout.findViewById(R.id.ItemB);
 
 
-
             layout.measure(View.MeasureSpec.UNSPECIFIED,
                     View.MeasureSpec.UNSPECIFIED);
             mDropdown = new PopupWindow(layout, FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT,true);
+                    FrameLayout.LayoutParams.WRAP_CONTENT, true);
             Drawable background = getResources().getDrawable(android.R.drawable.editbox_dropdown_dark_frame);
             mDropdown.setBackgroundDrawable(background);
             mDropdown.showAsDropDown(selectLay, 5, 5);
@@ -624,103 +523,4 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     }
 
-
-//    private static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
-//    private static final String OAUTH_NONCE = "oauth_nonce";
-//    private static final String OAUTH_SIGNATURE = "oauth_signature";
-//    private static final String OAUTH_SIGNATURE_METHOD = "oauth_signature_method";
-//    private static final String OAUTH_SIGNATURE_METHOD_VALUE = "HMAC-SHA1";
-//    private static final String OAUTH_TIMESTAMP = "oauth_timestamp";
-//    private static final String OAUTH_VERSION = "oauth_version";
-//    private static final String OAUTH_VERSION_VALUE = "1.0";
-//
-//    private final String consumerKey="";
-//    private final String consumerSecret="";
-//
-//    @Override
-//    public okhttp3.Response intercept(Chain chain) throws IOException {
-//        Request original = chain.request();
-//        HttpUrl originalHttpUrl = original.url();
-//
-//        Log.d("URL", original.url().toString());
-//        Log.d("URL", original.url().scheme());
-//        Log.d("encodedpath", original.url().encodedPath());
-//        Log.d("query", ""+original.url().query());
-//        Log.d("path", ""+original.url().host());
-//        Log.d("encodedQuery", ""+original.url().encodedQuery());
-//        ;
-//        Log.d("method", ""+original.method());
-//
-//        ////////////////////////////////////////////////////////////
-//
-//        final String nonce = new TimestampServiceImpl().getNonce();
-//        final String timestamp = new TimestampServiceImpl().getTimestampInSeconds();
-//        Log.d("nonce", nonce);
-//        Log.d("time", timestamp);
-//
-//        String dynamicStructureUrl = original.url().scheme() + "://" + original.url().host() + original.url().encodedPath();
-//
-//        Log.d("ENCODED PATH", ""+dynamicStructureUrl);
-//        String firstBaseString = original.method() + "&" + urlEncoded(dynamicStructureUrl);
-//        Log.d("firstBaseString", firstBaseString);
-//        String generatedBaseString = "";
-//
-//
-//        if(original.url().encodedQuery()!=null) {
-//            generatedBaseString = original.url().encodedQuery() + "&oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
-//        }
-//        else
-//        {
-//            generatedBaseString = "oauth_consumer_key=" + consumerKey + "&oauth_nonce=" + nonce + "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" + timestamp + "&oauth_version=1.0";
-//
-//        }
-//
-//        ParameterList result = new ParameterList();
-//        result.addQuerystring(generatedBaseString);
-//        generatedBaseString=result.sort().asOauthBaseString();
-//        Log.d("Sorted","00--"+result.sort().asOauthBaseString());
-//
-//        String secoundBaseString = "&" + generatedBaseString;
-//
-//        if (firstBaseString.contains("%3F")) {
-//            Log.d("iff","yess iff");
-//            secoundBaseString = "%26" + urlEncoded(generatedBaseString);
-//        }
-//
-//        String baseString = firstBaseString + secoundBaseString;
-//
-//        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
-//        Log.d("Signature", signature);
-//
-//        HttpUrl url = originalHttpUrl.newBuilder()
-//
-//                .addQueryParameter(OAUTH_SIGNATURE_METHOD, OAUTH_SIGNATURE_METHOD_VALUE)
-//                .addQueryParameter(OAUTH_CONSUMER_KEY, consumerKey)
-//                .addQueryParameter(OAUTH_VERSION, OAUTH_VERSION_VALUE)
-//                .addQueryParameter(OAUTH_TIMESTAMP, timestamp)
-//                .addQueryParameter(OAUTH_NONCE, nonce)
-//                .addQueryParameter(OAUTH_SIGNATURE, signature)
-//
-//
-//                .build();
-//
-//        // Request customization: add request headers
-//        Request.Builder requestBuilder = original.newBuilder()
-//                .url(url);
-//
-//        Request request = requestBuilder.build();
-//        return chain.proceed(request);
-//    }
-//    public String urlEncoded(String url) {
-//        String encodedurl = "";
-//        try {
-//
-//            encodedurl = URLEncoder.encode(url, "UTF-8");
-//            Log.d("TEST", encodedurl);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return encodedurl;
-//    }
 }

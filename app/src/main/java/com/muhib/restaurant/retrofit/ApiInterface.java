@@ -88,6 +88,9 @@ public interface ApiInterface {
     @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 
+    @GET("wp-json/wp/v2/posts")
+    Observable<Response<List<Products>>> getSearachTopics(@Query("search") String search, @Query("per_page") int per_page, @Query("offset") int offest);
+
 }
 
 
