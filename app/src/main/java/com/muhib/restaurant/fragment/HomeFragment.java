@@ -269,7 +269,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         showProgress();
 
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList()
+        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(5, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
