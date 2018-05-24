@@ -428,6 +428,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                             OrderStatus.setText("processing");
                         else
                             OrderStatus.setText("rejected");
+                        acceptBtn.setVisibility(View.GONE);
+                        rejectBtn.setVisibility(View.GONE);
 
 //                        if (value.code() == 200) {
 //

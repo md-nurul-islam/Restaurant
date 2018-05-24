@@ -1,21 +1,16 @@
 package com.muhib.restaurant.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,15 +21,8 @@ import android.widget.Toast;
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
-import com.muhib.restaurant.activity.MainActivity;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
 import com.muhib.restaurant.myinterface.OrderProcess;
@@ -43,16 +31,13 @@ import com.muhib.restaurant.utils.PaginationAdapterCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.BillingAddressaModel;
-import model.CategoryModel;
 import model.Products;
-import model.ShippingAddressaModel;
 
 /**
  * Created by Suleiman on 19/10/16.
  */
 
-public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HomepageAdapterOld extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // View Types
     private static final int ITEM = 0;
@@ -82,7 +67,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private String errorMsg;
     //HomeFragment homeFragment;
 //
-    public HomepageAdapter(Context context, PaginationAdapterCallback mCallback, HomeFragment homeFragment) {
+    public HomepageAdapterOld(Context context, PaginationAdapterCallback mCallback, HomeFragment homeFragment) {
         this.context = context;
         this.mCallback = mCallback;
         orderList = new ArrayList<>();
@@ -90,12 +75,12 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.homeFragment = homeFragment;
     }
 
-    public HomepageAdapter(Context context) {
+    public HomepageAdapterOld(Context context) {
         this.context = context;
         orderList = new ArrayList<>();
     }
 
-    public HomepageAdapter(Context context, HomeFragment homeFragment, ArrayList<String> strList) {
+    public HomepageAdapterOld(Context context, HomeFragment homeFragment, ArrayList<String> strList) {
         this.context = context;
         this.mCallback = mCallback;
         this.strList = strList;
@@ -171,48 +156,20 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                itemHolder.name.setText("Pizza");
 //                itemHolder.quantity.setText("Total ietm 10");
                 itemHolder.itemNameLayout.removeAllViews();
-                String customerName = "";
-                int totalItem = 0;
                 for(int i=0; i< total; i++){
-//                    myView = layoutInflater.inflate(R.layout.item_row_view, itemHolder.itemNameLayout, false);
-//                    LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
-//                    TextView name = (TextView)myView.findViewById(R.id.itemName);
-//                    if(!orderList.get(position).getItemList().get(i).getName().isEmpty())
-//                        name.setText(orderList.get(position).getItemList().get(i).getName());
-//                    TextView itemNo = (TextView)myView.findViewById(R.id.itemNo);
-//                    if(orderList.get(position).getItemList().get(i).getQuantity()>0)
-//                        itemNo.setText(""+orderList.get(position).getItemList().get(i).getQuantity());
-//                    itemHolder.itemNameLayout.addView(ll);
-                    totalItem = totalItem + orderList.get(position).getItemList().get(i).getQuantity();
+                    myView = layoutInflater.inflate(R.layout.item_row_view, itemHolder.itemNameLayout, false);
+                    LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
+                    TextView name = (TextView)myView.findViewById(R.id.itemName);
+                    if(!orderList.get(position).getItemList().get(i).getName().isEmpty())
+                        name.setText(orderList.get(position).getItemList().get(i).getName());
+                    TextView itemNo = (TextView)myView.findViewById(R.id.itemNo);
+                    if(orderList.get(position).getItemList().get(i).getQuantity()>0)
+                        itemNo.setText(""+orderList.get(position).getItemList().get(i).getQuantity());
+                    itemHolder.itemNameLayout.addView(ll);
 
                 }
 
-                ShippingAddressaModel shippingAddressaModel;
-                JsonElement jsonElement = orderList.get(position).getShippingTo();
-                if (orderList.get(position).getShippingTo() != null) {
-                    Gson gson = new GsonBuilder().create();
-                    shippingAddressaModel = gson.fromJson(orderList.get(position).getShippingTo(), ShippingAddressaModel.class);
-                    customerName = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
-                }
-                BillingAddressaModel billingAddressaModel;
-                JsonElement jsonElementBilling = orderList.get(position).getBilling();
-                if (customerName.isEmpty() && orderList.get(position).getShippingTo() != null) {
-                    Gson gson = new GsonBuilder().create();
-                    billingAddressaModel = gson.fromJson(orderList.get(position).getBilling(), BillingAddressaModel.class);
-                    customerName = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();
-                }
-                if(!customerName.isEmpty()) {
-                    itemHolder.customerNameText.setText("Ordered By  ");
-                    itemHolder.name.setText(": "+customerName);
-                }
-                if(totalItem>0) {
-                    itemHolder.totalItemText.setText("Total Quantity  ");
-                    itemHolder.quantity.setText(": "+ String.valueOf(totalItem));
-                }
-
-                if(!orderList.get(position).getDateCreated().isEmpty() && orderList.get(position).getDateCreated()!=null)
-                    itemHolder.orderDate.setText(dateTimeParse(orderList.get(position).getDateCreated()));
-                itemHolder.totalPay.setText(": "+orderList.get(position).getTotal());
+                itemHolder.totalPay.setText(orderList.get(position).getTotal());
                 itemHolder.totalPayText.setText("Total pay in BDT");
                 itemHolder.status.setText(orderList.get(position).getStatus());
                 if(orderList.get(position).getStatus().equalsIgnoreCase("pending"))
@@ -585,24 +542,21 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected class OrderListItem extends RecyclerView.ViewHolder {
         private TextView orderTitle;
         private TextView accepted;
-        private TextView name, quantity, totalPay, totalPayText, orderDate; // displays "year | language"
+        private TextView name, quantity, totalPay, totalPayText; // displays "year | language"
         private ImageView itemImage;
         private ProgressBar mProgress;
         private TextView menuOption;
         private LinearLayout itemLayout;
         private LinearLayout itemNameLayout;
         private TextView rejected;
-        private TextView status, customerNameText, totalItemText;
+        private TextView status;
 
         public OrderListItem(View itemView) {
             super(itemView);
 
 //            orderTitle = (TextView) itemView.findViewById(R.id.orderTitle);
-            orderDate = (TextView) itemView.findViewById(R.id.orderDate);
-            name = (TextView) itemView.findViewById(R.id.customerName);
-            quantity = (TextView) itemView.findViewById(R.id.totalItem);
-            customerNameText = (TextView) itemView.findViewById(R.id.customerNameText);
-            totalItemText = (TextView) itemView.findViewById(R.id.totalItemText);
+//            name = (TextView) itemView.findViewById(R.id.pd_name);
+//            quantity = (TextView) itemView.findViewById(R.id.quantity);
             totalPay = (TextView) itemView.findViewById(R.id.totalPay);
             totalPayText = (TextView) itemView.findViewById(R.id.totalPayText);
             accepted = (TextView) itemView.findViewById(R.id.accept);
@@ -661,34 +615,6 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     break;
             }
         }
-    }
-
-    private String dateTimeParse(String dateTime){
-        String parsedString = "";
-        if(dateTime.contains("T")){
-            String[] parts = dateTime.split("T");
-            if(!parts[0].isEmpty() && parts[0]!=null)
-                parsedString = parsedString + dateReverse(parts[0]);
-            if(!parts[1].isEmpty() && parts[1]!=null)
-                parsedString = parsedString + "  "+ parts[1];
-        }
-
-        return parsedString;
-    }
-
-    public static String dateReverse(String duedate){
-        String result = "";
-        String dateText = duedate;
-        if(dateText!= null && dateText.contains("-")) {
-            String[] parts = dateText.split("-");
-            if(!parts[2].isEmpty())
-                result = result + parts[2];
-            if(!parts[1].isEmpty())
-                result = result +"-"+ parts[1];
-            if(!parts[0].isEmpty())
-                result = result + "-"+ parts[0];
-        }
-        return result;
     }
 
 }

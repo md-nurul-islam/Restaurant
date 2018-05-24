@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.MySheardPreference;
@@ -164,6 +165,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void callLoginApi(final String userId, final String password) {
+
+        NetUtils.noInternetWarning(_passwordText, getApplicationContext());
 
 
         RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()

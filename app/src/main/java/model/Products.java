@@ -52,6 +52,10 @@ public class Products {
     @Expose
     private ArrayList<JsonObject> images;
 
+    @SerializedName("date_created")
+    @Expose
+    private String dateCreated;
+
     public String getName() {
         return name;
     }
@@ -123,5 +127,13 @@ public class Products {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

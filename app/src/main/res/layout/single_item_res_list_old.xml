@@ -26,16 +26,7 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/margin_10dp"
                 android:paddingRight="@dimen/margin_10dp"
-                android:paddingTop="@dimen/margin_2dp">
-                <TextView
-                    android:text="date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/orderDate"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size15"
-                    android:padding="@dimen/margin_5dp"/>
+                android:paddingTop="@dimen/margin_5dp">
 
                 <LinearLayout
                     android:id="@+id/itemNameLayout"
@@ -43,62 +34,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/customerNameText"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/black"
-                        android:textStyle="normal"
-                        tools:text="Ordered By :" />
-
-                    <TextView
-                        android:id="@+id/customerName"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20dp"
-                        android:layout_weight="1"
-                        android:maxLines="2"
-                        android:textColor="@color/black"
-                        android:textStyle="normal"
-                        tools:text="Mr." />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/totalItemText"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/black"
-                        android:textStyle="normal"
-                        tools:text="Total Quantity : " />
-
-                    <TextView
-                        android:id="@+id/totalItem"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_20dp"
-                        android:layout_weight="1"
-                        android:maxLines="2"
-                        android:textColor="@color/black"
-                        android:textStyle="normal"
-                        tools:text="10" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -112,6 +47,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_20dp"
+                        android:layout_marginTop="@dimen/activity_margin_quarter"
                         android:layout_weight="1"
                         android:textColor="@color/black"
                         android:textStyle="normal"
@@ -123,6 +59,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_20dp"
+                        android:layout_marginTop="@dimen/activity_margin_quarter"
                         android:layout_weight="1"
                         android:maxLines="2"
                         android:textColor="@color/black"
