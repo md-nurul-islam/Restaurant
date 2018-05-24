@@ -109,6 +109,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/addressHead"
                 android:layout_marginTop="@dimen/margin_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,6 +126,16 @@
                 android:gravity="left"
                 android:padding="@dimen/size_3dp"
                 android:text="User Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size15"
+                android:textStyle="normal" />
+            <TextView
+                android:id="@+id/phoneNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:padding="@dimen/size_3dp"
+                android:text="User phone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size15"
                 android:textStyle="normal" />
