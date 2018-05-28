@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private TextView select;
     private LinearLayout selectLay;
 
-    private static final int PAGE_START = 10;
+    private static final int PAGE_START = 5;
     private static final int PAGE_START_OFFSET = 0;
 
     private boolean isLoading = false;
@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             protected void loadMoreItems() {
                 isLoading = true;
 //                currentPage = 15;
-                currentOffst += 10;
+                currentOffst += 5;
 
                 //loadNextPage();
                 callNewsApiNext();
@@ -200,6 +200,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     public void onNext(Response<List<Products>> value) {
                         hideProgress();
                         if(value.code()==200){
+                            adapter.removeLoadingFooter();
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
                             List<Products> singleList = value.body();
@@ -207,7 +208,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             //progressBar.setVisibility(View.GONE);
 
                             adapter.addAllData(singleList);
-                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
+                            if ((currentOffst + singleList.size()) < TOTAL_ITEM) adapter.addLoadingFooter();
                             else isLastPage = true;
 
 //                            if (currentOffst < TOTAL_ITEM)
@@ -318,8 +319,15 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //        String baseString = firstBaseString + secoundBaseString;
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
-        if(!isRefresh)
-        showProgress();
+        if(!isRefresh) {
+            showProgress();
+        }
+        else {
+            currentOffst= PAGE_START_OFFSET;
+            isLastPage = false;
+            isLoading = false;
+        }
+
 
 
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
@@ -343,7 +351,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             //progressBar.setVisibility(View.GONE);
 
                             adapter.addAllData(singleList);
-                            if (singleList.size() < TOTAL_ITEM)
+                            if (currentOffst < TOTAL_ITEM)
                                 adapter.addLoadingFooter();
                             else
                                 isLastPage = true;

@@ -170,7 +170,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                itemHolder.orderTitle.setText(orderList.get(position).getId());
 //                itemHolder.name.setText("Pizza");
 //                itemHolder.quantity.setText("Total ietm 10");
-                itemHolder.itemNameLayout.removeAllViews();
+                //itemHolder.itemNameLayout.removeAllViews();
                 String customerName = "";
                 int totalItem = 0;
                 for(int i=0; i< total; i++){
