@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.activity.DetailsActivity;
 import com.muhib.restaurant.activity.MainActivity;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
@@ -53,6 +55,7 @@ import model.ShippingAddressaModel;
  */
 
 public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
 
     // View Types
     private static final int ITEM = 0;
@@ -336,8 +339,14 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         //gotoOrderDetailsFragment(orderList.get(position).getId());
                         String str = new Gson().toJson(orderList.get(position));
-                        bundle.putString("products", str);
-                        gotoOrderDetailsFragment(bundle);
+                        //bundle.putString("products", str);
+                        //gotoOrderDetailsFragment(bundle);
+                        Products products = orderList.get(position);
+
+                        Intent intent = new Intent(context, DetailsActivity.class);
+                        intent.putExtra("products", str);
+                        context.startActivity(intent);
+                        ((AppCompatActivity)context).finish();
                     }
                 });
                 break;

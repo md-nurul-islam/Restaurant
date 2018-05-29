@@ -1,15 +1,20 @@
 package model;
 
 
+import android.os.Parcelable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Products {
+public class Products implements Serializable {
+
+
 
     @SerializedName("status")
     @Expose
@@ -135,5 +140,21 @@ public class Products {
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+
+    public Products(String status, String name, String id, String total, JsonElement shippingTo, JsonElement billing, List<SingleItemModel> itemList, ArrayList<JsonObject> images, String dateCreated) {
+        this.status = status;
+        this.name = name;
+        this.id = id;
+        this.total = total;
+        this.shippingTo = shippingTo;
+        this.billing = billing;
+        this.itemList = itemList;
+        this.images = images;
+        this.dateCreated = dateCreated;
+    }
+
+    public Products() {
     }
 }
