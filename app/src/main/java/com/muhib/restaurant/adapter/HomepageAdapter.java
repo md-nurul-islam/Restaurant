@@ -196,7 +196,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
                 BillingAddressaModel billingAddressaModel;
                 JsonElement jsonElementBilling = orderList.get(position).getBilling();
-                if (customerName.isEmpty() && orderList.get(position).getShippingTo() != null) {
+                if (customerName.trim().isEmpty() && orderList.get(position).getShippingTo() != null) {
                     Gson gson = new GsonBuilder().create();
                     billingAddressaModel = gson.fromJson(orderList.get(position).getBilling(), BillingAddressaModel.class);
                     customerName = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();

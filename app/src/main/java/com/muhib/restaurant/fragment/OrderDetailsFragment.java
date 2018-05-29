@@ -392,6 +392,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             statusSt = "rejected";
         }
         else {
+            //updateModel.setStatus("pending");
             updateModel.setStatus("processing");
             statusSt = "accepted";
         }

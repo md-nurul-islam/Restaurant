@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -100,6 +102,11 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         // Required empty public constructor
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        callNewsApiFirst(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -185,6 +192,19 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         //initView(view);
         return view;
     }
+
+    boolean allowRefresh;
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (allowRefresh)
+        {
+            allowRefresh = false;
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            callNewsApiFirst(true);
+        }
+    }
+
 
     private void callNewsApiNext() {
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
@@ -544,6 +564,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             statusSt = "rejected";
         }
         else {
+            //updateModel.setStatus("pending");
             updateModel.setStatus("processing");
             statusSt = "accepted";
         }
@@ -575,7 +596,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
-                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Order successfully " + statusSt, Toast.LENGTH_SHORT).show();
                         callNewsApiFirst(false);
 //                        if (value.code() == 200) {
 //
