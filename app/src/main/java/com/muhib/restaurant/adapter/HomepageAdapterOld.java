@@ -294,7 +294,7 @@ public class HomepageAdapterOld extends RecyclerView.Adapter<RecyclerView.ViewHo
                         //gotoOrderDetailsFragment(orderList.get(position).getId());
                         String str = new Gson().toJson(orderList.get(position));
                         bundle.putString("products", str);
-                        gotoOrderDetailsFragment(bundle);
+                        //gotoOrderDetailsFragment(bundle);
                     }
                 });
                 break;
@@ -343,16 +343,16 @@ public class HomepageAdapterOld extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    private void gotoOrderDetailsFragment(Bundle bundle) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("id", id);
-        OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
-        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        detailsFragment.setArguments(bundle);
-        transaction.add(R.id.container, detailsFragment, "detailsFragment").addToBackStack(null);
-        transaction.commit();
-    }
+//    private void gotoOrderDetailsFragment(Bundle bundle) {
+////        Bundle bundle = new Bundle();
+////        bundle.putString("id", id);
+//        OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
+//        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        detailsFragment.setArguments(bundle);
+//        transaction.add(R.id.container, detailsFragment, "detailsFragment").addToBackStack(null);
+//        transaction.commit();
+//    }
 
     @Override
     public int getItemCount() {

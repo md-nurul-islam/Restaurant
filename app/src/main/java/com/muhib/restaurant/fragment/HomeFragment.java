@@ -33,6 +33,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
+import com.muhib.restaurant.myinterface.OrderActionListener;
 import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.retrofit.OAuthInterceptor;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
@@ -102,11 +103,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         // Required empty public constructor
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        callNewsApiFirst(true);
-    }
+
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        callNewsApiFirst(true);
+//    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -193,17 +196,17 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         return view;
     }
 
-    boolean allowRefresh;
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (allowRefresh)
-        {
-            allowRefresh = false;
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-            callNewsApiFirst(true);
-        }
-    }
+//    boolean allowRefresh;
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (allowRefresh)
+//        {
+//            allowRefresh = false;
+//            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+//            callNewsApiFirst(true);
+//        }
+//    }
 
 
     private void callNewsApiNext() {

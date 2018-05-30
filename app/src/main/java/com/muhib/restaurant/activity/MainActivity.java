@@ -1,5 +1,6 @@
 package com.muhib.restaurant.activity;
 
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +52,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+            HomeFragment homeFragment = (HomeFragment)getSupportFragmentManager().findFragmentByTag("homeFragment");
+            if(homeFragment.isVisible())
+            {
+                getSupportFragmentManager().popBackStack();
+                goesToHomeFragment();
+            }
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        else
+            super.onBackPressed();
+
     }
     @Override
     public void onClick(View view) {
@@ -76,6 +90,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case android.R.id.home:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getSupportFragmentManager().popBackStack();
+                    HomeFragment homeFragment = (HomeFragment)getSupportFragmentManager().findFragmentByTag("homeFragment");
+                    if(homeFragment.isVisible())
+                    {
+                        getSupportFragmentManager().popBackStack();
+                        goesToHomeFragment();
+                    }
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
                 return true;

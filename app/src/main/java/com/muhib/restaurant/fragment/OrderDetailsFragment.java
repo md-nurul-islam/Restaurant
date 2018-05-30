@@ -24,6 +24,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.myinterface.OrderActionListener;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.MySheardPreference;
 
@@ -67,9 +68,10 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     String billingAddressOne = "";
     String billingAddressTwo = "";
     String phoneString = "";
+    OrderActionListener orderActionListener;
+
 
     public OrderDetailsFragment() {
-        // Required empty public constructor
     }
 
     String id = "";
@@ -424,7 +426,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
-                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Order successfully " + statusSt, Toast.LENGTH_SHORT).show();
                         if(statusSt.equals("accepted"))
                             OrderStatus.setText("processing");
                         else

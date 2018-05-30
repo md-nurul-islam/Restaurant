@@ -39,6 +39,7 @@ import com.muhib.restaurant.activity.DetailsActivity;
 import com.muhib.restaurant.activity.MainActivity;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
+import com.muhib.restaurant.myinterface.OrderActionListener;
 import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.utils.PaginationAdapterCallback;
 
@@ -54,7 +55,7 @@ import model.ShippingAddressaModel;
  * Created by Suleiman on 19/10/16.
  */
 
-public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OrderActionListener {
 
 
     // View Types
@@ -339,14 +340,14 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         //gotoOrderDetailsFragment(orderList.get(position).getId());
                         String str = new Gson().toJson(orderList.get(position));
-                        //bundle.putString("products", str);
-                        //gotoOrderDetailsFragment(bundle);
-                        Products products = orderList.get(position);
-
-                        Intent intent = new Intent(context, DetailsActivity.class);
-                        intent.putExtra("products", str);
-                        context.startActivity(intent);
-                        ((AppCompatActivity)context).finish();
+                        bundle.putString("products", str);
+                        gotoOrderDetailsFragment(bundle);
+//                        Products products = orderList.get(position);
+//
+//                        Intent intent = new Intent(context, DetailsActivity.class);
+//                        intent.putExtra("products", str);
+//                        context.startActivity(intent);
+//                        ((AppCompatActivity)context).finish();
                     }
                 });
                 break;
@@ -398,6 +399,7 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void gotoOrderDetailsFragment(Bundle bundle) {
 //        Bundle bundle = new Bundle();
 //        bundle.putString("id", id);
+
         OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -559,6 +561,11 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemChanged(orderList.size() - 1);
 
         if (errorMsg != null) this.errorMsg = errorMsg;
+    }
+
+    @Override
+    public void orderSubmited(String id) {
+        Toast.makeText(context, "submit", Toast.LENGTH_SHORT).show();
     }
 
 
