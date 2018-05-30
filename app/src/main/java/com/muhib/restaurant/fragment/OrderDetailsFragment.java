@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.myinterface.OrderActionListener;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
@@ -385,6 +386,12 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 
     String statusSt =" ";
     private void callUpdateApi(String id, String timeToProcess) {
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+            //NetUtils.noInternetWarning(OrderStatus, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            return;
+        }
 
         List<HashMap> mapList = new ArrayList<>();
         showProgress();

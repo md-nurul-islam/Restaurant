@@ -166,8 +166,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void callLoginApi(final String userId, final String password) {
 
-        NetUtils.noInternetWarning(_passwordText, getApplicationContext());
-
+        if(!NetUtils.isNetworkAvailable(this)) {
+            NetUtils.noInternetWarning(_passwordText, getApplicationContext());
+            progressDialog.dismiss();
+            return;
+        }
 
         RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
                 .subscribeOn(Schedulers.io())

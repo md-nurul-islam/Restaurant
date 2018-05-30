@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
 import com.muhib.restaurant.myinterface.OrderActionListener;
@@ -209,6 +210,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
 
     private void callNewsApiNext() {
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+            //NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            return;
+        }
+
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -344,12 +352,22 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //        String baseString = firstBaseString + secoundBaseString;
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
+
+
         if (!isRefresh) {
             showProgress();
         } else {
             currentOffst = PAGE_START_OFFSET;
             isLastPage = false;
             isLoading = false;
+        }
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+//            NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            if(isRefresh)
+                mSwipeRefreshLayout.setRefreshing(false);
+            return;
         }
 
 
@@ -559,7 +577,15 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     String statusSt = " ";
 
     public void callUpdateApi(String id, String timeToProcess) {
-        List<HashMap> mapList = new ArrayList<>();
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+            //NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            return;
+        }
+
+
+            List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
         if (timeToProcess.isEmpty()) {
