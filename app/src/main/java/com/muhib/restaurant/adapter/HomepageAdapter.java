@@ -386,12 +386,12 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(b)
             status = "Accepted";
         else
-            status = "Rejected";
+            status = "cancelled";
         Toast.makeText(context, "Order " + status , Toast.LENGTH_SHORT).show();
         if(b)
             homeFragment.processOrder(id);
         else
-            homeFragment.callUpdateApi(id, "-1");
+            homeFragment.callUpdateApi(id, "");
 
     }
 

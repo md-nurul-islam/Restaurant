@@ -68,7 +68,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements PaginationAdapterCallback,SwipeRefreshLayout.OnRefreshListener{
+public class HomeFragment extends Fragment implements PaginationAdapterCallback, SwipeRefreshLayout.OnRefreshListener {
     HomepageAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -144,7 +144,6 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
 
         adapter = new HomepageAdapter(getContext(), this, HomeFragment.this);
-
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -222,8 +221,9 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     @Override
                     public void onNext(Response<List<Products>> value) {
                         hideProgress();
-                        if(value.code()==200){
+                        if (value.code() == 200) {
                             adapter.removeLoadingFooter();
+                            isLoading = false;
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
                             List<Products> singleList = value.body();
@@ -231,8 +231,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                             //progressBar.setVisibility(View.GONE);
 
                             adapter.addAllData(singleList);
-                            if ((currentOffst + singleList.size()) < TOTAL_ITEM) adapter.addLoadingFooter();
-                            else isLastPage = true;
+                            if ((currentOffst + singleList.size()) <TOTAL_ITEM)
+                                adapter.addLoadingFooter();
+                            else
+                                isLastPage = true;
 
 //                            if (currentOffst < TOTAL_ITEM)
 //                                adapter.addLoadingFooter();
@@ -241,7 +243,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //                            results.addAll(singleList);
 //                            results.add(singleList.get(4));
 //                            si++;
-                            mSwipeRefreshLayout.setRefreshing(false);
+                           // mSwipeRefreshLayout.setRefreshing(false);
 
                         }
 
@@ -288,7 +290,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 
     @Override
     public void onRefresh() {
-            callNewsApiFirst(true);
+        callNewsApiFirst(true);
 
     }
 
@@ -342,15 +344,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //        String baseString = firstBaseString + secoundBaseString;
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
-        if(!isRefresh) {
+        if (!isRefresh) {
             showProgress();
-        }
-        else {
-            currentOffst= PAGE_START_OFFSET;
+        } else {
+            currentOffst = PAGE_START_OFFSET;
             isLastPage = false;
             isLoading = false;
         }
-
 
 
         RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
@@ -365,7 +365,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                     @Override
                     public void onNext(Response<List<Products>> value) {
                         hideProgress();
-                        if(value.code()==200){
+                        if (value.code() == 200) {
                             adapter.clear();
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
@@ -450,7 +450,6 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
 
-
 //    private void callNewsApiNext( ) {
 //
 //        RetrofitApiClient.getApiInterface().getTopics(currentPage, currentOffst)
@@ -505,8 +504,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private ProgressDialog dialog;
 
 
-
     String processTime = "";
+
     public void processOrder(final String id) {
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View dateDialogView = factory.inflate(R.layout.accept_dialog, null);
@@ -558,15 +557,15 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     }
 
     String statusSt = " ";
+
     public void callUpdateApi(String id, String timeToProcess) {
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
-        if (timeToProcess.equals("-1")) {
-            updateModel.setStatus("rejected");
-            statusSt = "rejected";
-        }
-        else {
+        if (timeToProcess.isEmpty()) {
+            updateModel.setStatus("cancelled");
+            statusSt = "cancelled";
+        } else {
             //updateModel.setStatus("pending");
             updateModel.setStatus("processing");
             statusSt = "accepted";
@@ -640,11 +639,10 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             final TextView itemb = (TextView) layout.findViewById(R.id.ItemB);
 
 
-
             layout.measure(View.MeasureSpec.UNSPECIFIED,
                     View.MeasureSpec.UNSPECIFIED);
             mDropdown = new PopupWindow(layout, FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT,true);
+                    FrameLayout.LayoutParams.WRAP_CONTENT, true);
             Drawable background = getResources().getDrawable(android.R.drawable.editbox_dropdown_dark_frame);
             mDropdown.setBackgroundDrawable(background);
             mDropdown.showAsDropDown(selectLay, 5, 5);

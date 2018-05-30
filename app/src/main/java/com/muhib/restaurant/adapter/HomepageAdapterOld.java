@@ -338,7 +338,7 @@ public class HomepageAdapterOld extends RecyclerView.Adapter<RecyclerView.ViewHo
         if(b)
             homeFragment.processOrder(id);
         else
-            homeFragment.callUpdateApi(id, "-1");
+            homeFragment.callUpdateApi(id, "");
 
     }
 

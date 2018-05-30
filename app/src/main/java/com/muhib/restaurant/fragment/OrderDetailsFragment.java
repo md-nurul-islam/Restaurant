@@ -327,7 +327,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         if (b)
             processOrder(id);
         else
-            callUpdateApi(products.getId(), "-1");
+            callUpdateApi(products.getId(), "");
 
     }
 
@@ -389,9 +389,9 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
-        if (timeToProcess.equals("-1")) {
-            updateModel.setStatus("rejected");
-            statusSt = "rejected";
+        if (timeToProcess.isEmpty()) {
+            updateModel.setStatus("cancelled");
+            statusSt = "cancelled";
         }
         else {
             //updateModel.setStatus("pending");
@@ -430,7 +430,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         if(statusSt.equals("accepted"))
                             OrderStatus.setText("processing");
                         else
-                            OrderStatus.setText("rejected");
+                            OrderStatus.setText("cancelled");
                         acceptBtn.setVisibility(View.GONE);
                         rejectBtn.setVisibility(View.GONE);
 
