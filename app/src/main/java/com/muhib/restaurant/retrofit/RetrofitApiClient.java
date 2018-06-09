@@ -3,6 +3,7 @@ package com.muhib.restaurant.retrofit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.muhib.restaurant.utils.MySheardPreference;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,8 +21,9 @@ public class RetrofitApiClient {
 //    www.champs21.com/wp-json/wp/v2/
 
     //public static final String BASE_URL = "http://champs21.com/wp-json/wp/v2/";
-    public static final String BASE_URL = "http://woocom.endix.net/";
+    //public static final String BASE_URL = "http://woocom.endix.net/";
     //public static final String BASE_URL = " https://api.themoviedb.org/3/";
+    public static final String BASE_URL = MySheardPreference.getUserSiteUrl()+ "/";
 
     private static Retrofit retrofit = null;
 
@@ -33,9 +35,12 @@ public class RetrofitApiClient {
 
 
 
+    String defaultSiteUrl = "http://woocom.endix.net/";
+    String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
+    String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
 
     public static synchronized Retrofit getClient(String apiKey, String secret) {
-        OAuthInterceptor oAuthInterceptor = new OAuthInterceptor("ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18", "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3");
+        OAuthInterceptor oAuthInterceptor = new OAuthInterceptor(apiKey, secret);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(oAuthInterceptor)
                 .connectTimeout(5, TimeUnit.MINUTES)
@@ -53,7 +58,7 @@ public class RetrofitApiClient {
     }
 
     public static ApiInterface getApiInterface(String apiKey, String secret){
-        return  RetrofitApiClient.getClient("api_key", "secret_key").create(ApiInterface.class);
+        return  RetrofitApiClient.getClient(apiKey, secret).create(ApiInterface.class);
     }
 
 

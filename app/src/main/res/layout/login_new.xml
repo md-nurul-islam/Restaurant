@@ -43,20 +43,19 @@
                 android:background="@color/white"
                 android:orientation="vertical"
                 android:padding="@dimen/margin_20dp">
-
                 <TextView
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User ID" />
+                    android:text="Website URL" />
 
                 <EditText
                     android:textColor="@color/black"
-                    android:id="@+id/input_email"
+                    android:id="@+id/url_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
-                    android:hint="User ID"
+                    android:hint="Website URL"
                     android:inputType="text"
                     android:padding="@dimen/margin_10dp" />
 
@@ -64,8 +63,25 @@
                     android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_20dp"
-                    android:text="Password" />
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:text="API Key" />
+
+                <EditText
+                    android:textColor="@color/black"
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_background"
+                    android:hint="API Key"
+                    android:inputType="text"
+                    android:padding="@dimen/margin_10dp" />
+
+                <TextView
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:text="API Secret" />
 
                 <EditText
                     android:textColor="@color/black"
@@ -73,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
-                    android:hint="@string/password"
+                    android:hint="API Secret"
                     android:inputType="textPassword"
                     android:padding="@dimen/margin_10dp" />
 

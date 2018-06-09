@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     Button _loginButton;
     TextView _signupLink;
     EditText _passwordText;
+    EditText websiteUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login_new);
         _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.input_password);
+        websiteUrl = (EditText) findViewById(R.id.url_field);
         _loginButton = (Button) findViewById(R.id.btn_login);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +88,11 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        String siteUrl = websiteUrl.getText().toString();
+
+        String defaultSiteUrl = "http://woocom.endix.net";
+        String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
+        String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
 
         // TODO: Implement your own authentication logic here.
 //
@@ -101,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
 //                    }
 //                }, 3000);
-        callLoginApi(email, password);
+        callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
 
 
     }
@@ -141,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
+        String siteUrl = websiteUrl.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
@@ -152,8 +160,17 @@ public class LoginActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 15) {
-            _passwordText.setError("between 4 and 15 alphanumeric characters");
+        if (siteUrl.isEmpty()) {
+//            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            websiteUrl.setError("Website URL should not be empty");
+            valid = false;
+        } else {
+            websiteUrl.setError(null);
+        }
+
+//        if (password.isEmpty() || password.length() < 4 || password.length() > 15) {
+        if (password.isEmpty() || password.length() < 4 ) {
+            _passwordText.setError("atleast 4 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -164,14 +181,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void callLoginApi(final String userId, final String password) {
+    private void callLoginApi(final String siteUrl, final String userId, final String password) {
 
         if(!NetUtils.isNetworkAvailable(this)) {
             NetUtils.noInternetWarning(_passwordText, getApplicationContext());
             progressDialog.dismiss();
             return;
         }
-
+        MySheardPreference.setUserSiteUrl(siteUrl);
         RetrofitApiClient.getApiInterface(userId, password).getLogedIn()
 //        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
                 .subscribeOn(Schedulers.io())
