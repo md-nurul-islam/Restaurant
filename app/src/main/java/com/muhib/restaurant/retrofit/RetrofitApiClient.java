@@ -34,9 +34,13 @@ public class RetrofitApiClient {
 
 
 
-    public static synchronized Retrofit getClient() {
+    public static synchronized Retrofit getClient(String apiKey, String secret) {
         OAuthInterceptor oAuthInterceptor = new OAuthInterceptor("ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18", "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3");
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(oAuthInterceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(oAuthInterceptor)
+                .connectTimeout(5, TimeUnit.MINUTES)
+                .readTimeout(5, TimeUnit.MINUTES)
+                .build();
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -48,8 +52,8 @@ public class RetrofitApiClient {
         return retrofit;
     }
 
-    public static ApiInterface getApiInterface(){
-        return  RetrofitApiClient.getClient().create(ApiInterface.class);
+    public static ApiInterface getApiInterface(String apiKey, String secret){
+        return  RetrofitApiClient.getClient("api_key", "secret_key").create(ApiInterface.class);
     }
 
 

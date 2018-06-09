@@ -217,7 +217,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             return;
         }
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+//        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -309,7 +310,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         UpdateModel updateModel = new UpdateModel();
         updateModel.setStatus("pending");
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
+//        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder("62", updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {
@@ -370,8 +372,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             return;
         }
 
-
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+//        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -608,8 +610,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         mapList.add(params);
         updateModel.setMetaData(mapList);
 
-
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
+//        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {

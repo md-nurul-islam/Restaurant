@@ -172,7 +172,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
+        RetrofitApiClient.getApiInterface(userId, password).getLogedIn()
+//        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
