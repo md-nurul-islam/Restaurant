@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "995570831686",
+    "firebase_url": "https://quitbit-woocom-dev.firebaseio.com",
+    "project_id": "quitbit-woocom-dev",
+    "storage_bucket": "quitbit-woocom-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995570831686:android:21ca6199431acb7c",
+        "android_client_info": {
+          "package_name": "com.muhib.restaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995570831686-ajucfnulblg1lu5424sqrh0a5gq074o4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.muhib.restaurant",
+            "certificate_hash": "abc658b77d9434dfb9f0d98969c19e9696ebd930"
+          }
+        },
+        {
+          "client_id": "995570831686-h4ejprtpr8kd70qr3l1lg0v62vdsk5su.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "995570831686-h4ejprtpr8kd70qr3l1lg0v62vdsk5su.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdq8_aIj33IvrnSJa-DDlEwwCa-6EoRrg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995570831686-h4ejprtpr8kd70qr3l1lg0v62vdsk5su.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
