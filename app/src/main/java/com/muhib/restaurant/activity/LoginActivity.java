@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonElement;
 import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
@@ -188,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.dismiss();
             return;
         }
+
         MySheardPreference.setUserSiteUrl(siteUrl);
         RetrofitApiClient.getApiInterface(userId, password).getLogedIn()
 //        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
@@ -205,10 +208,11 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (value.code() == 200) {
                             MySheardPreference.setUserIdAndPassword(userId, password);
-                            Headers headers = value.headers();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            callforToken(userId, password);
+//                            Headers headers = value.headers();
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                            startActivity(intent);
+//                            finish();
 
                         } else
                             Toast.makeText(getApplicationContext(), value.message(), Toast.LENGTH_SHORT).show();
@@ -230,6 +234,53 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
+
+    }
+
+    private void callforToken(String userId, String password) {
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+
+        RetrofitApiClient.getApiInterface(userId, password).getServerToken("android", "webdev.nislam@gmail.com", refreshedToken)
+//        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonElement>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JsonElement value) {
+                        progressDialog.dismiss();
+
+//                        if (value.code() == 200) {
+//
+//
+//                            Headers headers = value.headers();
+//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                            startActivity(intent);
+//                            finish();
+//
+//                        } else
+                            Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    @Override
+                    public void onError(Throwable e) {
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressDialog.dismiss();
+                    }
+                });
 
     }
 }

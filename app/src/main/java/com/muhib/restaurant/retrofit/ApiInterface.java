@@ -91,6 +91,8 @@ public interface ApiInterface {
     @GET("wp-json/wp/v2/posts")
     Observable<Response<List<Products>>> getSearachTopics(@Query("search") String search, @Query("per_page") int per_page, @Query("offset") int offest);
 
+    @GET("wp-json/apnwp/register")
+    Observable<JsonElement> getServerToken(@Query("os_type") String osType, @Query("user_email_id") String user_email_id, @Query("device_token") String device_token );
 }
 
 
