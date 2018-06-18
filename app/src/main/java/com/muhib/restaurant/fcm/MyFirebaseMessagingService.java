@@ -19,7 +19,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        sendMyNotification(message.getNotification().getBody());
+//        sendMyNotification(message.getNotification().getBody());
+        message.getData().get("order_id");
+        sendMyNotification(message.getData().get("order_id"));
     }
 
 

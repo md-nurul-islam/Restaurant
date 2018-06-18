@@ -258,9 +258,9 @@ public class LoginActivity extends AppCompatActivity {
 //
 //
 //                            Headers headers = value.headers();
-//                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                            startActivity(intent);
-//                            finish();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
 //
 //                        } else
                             Toast.makeText(getApplicationContext(),"Success", Toast.LENGTH_SHORT).show();
