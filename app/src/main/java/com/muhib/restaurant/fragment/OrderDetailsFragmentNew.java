@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -42,13 +41,11 @@ import model.BillingAddressaModel;
 import model.Products;
 import model.ShippingAddressaModel;
 import model.UpdateModel;
-import okhttp3.Headers;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderDetailsFragment extends Fragment implements View.OnClickListener {
+public class OrderDetailsFragmentNew extends Fragment implements View.OnClickListener {
     private Products products;
 
     View myView;
@@ -72,7 +69,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     OrderActionListener orderActionListener;
 
 
-    public OrderDetailsFragment() {
+    public OrderDetailsFragmentNew() {
     }
 
     String id = "";
@@ -107,7 +104,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         rejectBtn.setOnClickListener(this);
 
         shippingUserName = (TextView) view.findViewById(R.id.shippingUserName);
-
+        String FullNameShipping = " ";
+        String FullNameBilling = " ";
 
 //        if(products.getShippingTo().get(0).get("first_name")!= null)
 //            addressSt = addressSt + products.getShippingTo().get(0).get("first_name");
@@ -118,20 +116,126 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 //        }
 
 
-//        if (getArguments().containsKey("products")) {
-//            String str = getArguments().getString("products");
-//            if (str != null)
-//                products = parseNewsList(str);
-//            //callNewsApiFirst(id);
-//        }
-
-        if (getArguments().containsKey("order_id")) {
-            id = getArguments().getString("order_id");
-            if (id != null)
-                //products = parseNewsList(str);
-            callNewsApiFirst(id);
+        if (getArguments().containsKey("products")) {
+            String str = getArguments().getString("products");
+            if (str != null)
+                products = parseNewsList(str);
+            //callNewsApiFirst(id);
         }
 
+        ShippingAddressaModel shippingAddressaModel;
+        JsonElement jsonElement = products.getShippingTo();
+        if (products.getShippingTo() != null) {
+            Gson gson = new GsonBuilder().create();
+            shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
+            FullNameShipping = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
+
+            if (!shippingAddressaModel.getAddressOne().isEmpty()) {
+                addressOne.setVisibility(View.VISIBLE);
+                addressOneText.setVisibility(View.VISIBLE);
+                shippingAddressOne = shippingAddressaModel.getAddressOne() + "\n"
+                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressOne.setText(shippingAddressOne);
+            } else {
+                addressOne.setVisibility(View.GONE);
+                addressOneText.setVisibility(View.GONE);
+            }
+            if (!shippingAddressaModel.getAddressTwo().isEmpty()) {
+                addressTwo.setVisibility(View.VISIBLE);
+                addressTwoText.setVisibility(View.VISIBLE);
+                shippingAddressTwo = shippingAddressaModel.getAddressTwo() + "\n"
+                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressTwo.setText(shippingAddressTwo);
+            } else {
+                addressTwo.setVisibility(View.GONE);
+                addressTwoText.setVisibility(View.GONE);
+            }
+        }
+
+        BillingAddressaModel billingAddressaModel;
+        JsonElement jsonElementBilling = products.getBilling();
+        if (products.getShippingTo() != null) {
+            Gson gson = new GsonBuilder().create();
+            billingAddressaModel= gson.fromJson(products.getBilling(), BillingAddressaModel.class);
+            FullNameBilling = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();
+
+            phoneString = billingAddressaModel.getPhone();
+            if (!billingAddressaModel.getAddressOne().isEmpty()) {
+                addressOne.setVisibility(View.VISIBLE);
+                addressOneText.setVisibility(View.VISIBLE);
+                billingAddressOne = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+                //addressOne.setText(billingAddressOne);
+            } else {
+                addressOne.setVisibility(View.GONE);
+                addressOneText.setVisibility(View.GONE);
+            }
+            if (!billingAddressaModel.getAddressTwo().isEmpty()) {
+                addressTwo.setVisibility(View.VISIBLE);
+                addressTwoText.setVisibility(View.VISIBLE);
+                billingAddressTwo = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+                //addressTwo.setText(billingAddressTwo);
+            } else {
+                addressTwo.setVisibility(View.GONE);
+                addressTwoText.setVisibility(View.GONE);
+            }
+        }
+
+        if (products.getStatus().equalsIgnoreCase("pending")) {
+            acceptBtn.setVisibility(View.VISIBLE);
+            rejectBtn.setVisibility(View.VISIBLE);
+
+        } else {
+            acceptBtn.setVisibility(View.GONE);
+            rejectBtn.setVisibility(View.GONE);
+        }
+
+        if(shippingAddressOne.isEmpty() && shippingAddressTwo.isEmpty())
+        {
+            addressOne.setText(billingAddressOne);
+            addressTwo.setText(billingAddressTwo);
+            addressHead.setText("Billing Address");
+            shippingUserName.setText(FullNameBilling);
+            userPhone.setText(phoneString);
+        }
+        else {
+            addressOne.setText(shippingAddressOne);
+            addressTwo.setText(shippingAddressTwo);
+            addressHead.setText("Shipping Address");
+            shippingUserName.setText(FullNameShipping);
+            userPhone.setText(phoneString);
+        }
+
+        //shippingUserName.setText(FullName);
+        if (!products.getTotal().isEmpty() && products.getTotal() != null)
+            totalPay.setText(products.getTotal());
+        OrderStatus.setText(products.getStatus());
+
+
+        itemNameLayout.removeAllViews();
+        int total = products.getItemList().size();
+        for (int i = 0; i < total; i++) {
+            myView = layoutInflater.inflate(R.layout.item_row_view_details, itemNameLayout, false);
+            LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
+            TextView name = (TextView) myView.findViewById(R.id.itemName);
+            if (!products.getItemList().get(i).getName().isEmpty())
+                name.setText(products.getItemList().get(i).getName());
+
+            TextView itemNo = (TextView) myView.findViewById(R.id.itemNo);
+            if (products.getItemList().get(i).getQuantity() > 0)
+                itemNo.setText("" + products.getItemList().get(i).getQuantity());
+
+            TextView priceText = (TextView) myView.findViewById(R.id.price);
+            if (!products.getItemList().get(i).getPrice().isEmpty())
+                priceText.setText(products.getItemList().get(i).getPrice());
+            itemNameLayout.addView(ll);
+
+        }
 
     }
 
@@ -164,8 +268,6 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
-
-                        dataProcessing(r);
 //                        if (value.code() == 200) {
 //
 //                        }
@@ -355,124 +457,6 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 
                     }
                 });
-    }
-
-    private void dataProcessing(Products products){
-        String FullNameShipping = " ";
-        String FullNameBilling = " ";
-        ShippingAddressaModel shippingAddressaModel;
-        JsonElement jsonElement = products.getShippingTo();
-        if (products.getShippingTo() != null) {
-            Gson gson = new GsonBuilder().create();
-            shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
-            FullNameShipping = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
-
-            if (!shippingAddressaModel.getAddressOne().isEmpty()) {
-                addressOne.setVisibility(View.VISIBLE);
-                addressOneText.setVisibility(View.VISIBLE);
-                shippingAddressOne = shippingAddressaModel.getAddressOne() + "\n"
-                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
-                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
-                //addressOne.setText(shippingAddressOne);
-            } else {
-                addressOne.setVisibility(View.GONE);
-                addressOneText.setVisibility(View.GONE);
-            }
-            if (!shippingAddressaModel.getAddressTwo().isEmpty()) {
-                addressTwo.setVisibility(View.VISIBLE);
-                addressTwoText.setVisibility(View.VISIBLE);
-                shippingAddressTwo = shippingAddressaModel.getAddressTwo() + "\n"
-                        + shippingAddressaModel.getState()+ "\n" + shippingAddressaModel.getCity() +
-                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
-                //addressTwo.setText(shippingAddressTwo);
-            } else {
-                addressTwo.setVisibility(View.GONE);
-                addressTwoText.setVisibility(View.GONE);
-            }
-        }
-
-        BillingAddressaModel billingAddressaModel;
-        JsonElement jsonElementBilling = products.getBilling();
-        if (products.getShippingTo() != null) {
-            Gson gson = new GsonBuilder().create();
-            billingAddressaModel= gson.fromJson(products.getBilling(), BillingAddressaModel.class);
-            FullNameBilling = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();
-
-            phoneString = billingAddressaModel.getPhone();
-            if (!billingAddressaModel.getAddressOne().isEmpty()) {
-                addressOne.setVisibility(View.VISIBLE);
-                addressOneText.setVisibility(View.VISIBLE);
-                billingAddressOne = billingAddressaModel.getAddressOne() + "\n"
-                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
-                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
-                //addressOne.setText(billingAddressOne);
-            } else {
-                addressOne.setVisibility(View.GONE);
-                addressOneText.setVisibility(View.GONE);
-            }
-            if (!billingAddressaModel.getAddressTwo().isEmpty()) {
-                addressTwo.setVisibility(View.VISIBLE);
-                addressTwoText.setVisibility(View.VISIBLE);
-                billingAddressTwo = billingAddressaModel.getAddressOne() + "\n"
-                        + billingAddressaModel.getState()+ "\n" + billingAddressaModel.getCity() +
-                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
-                //addressTwo.setText(billingAddressTwo);
-            } else {
-                addressTwo.setVisibility(View.GONE);
-                addressTwoText.setVisibility(View.GONE);
-            }
-        }
-
-        if (products.getStatus().equalsIgnoreCase("pending")) {
-            acceptBtn.setVisibility(View.VISIBLE);
-            rejectBtn.setVisibility(View.VISIBLE);
-
-        } else {
-            acceptBtn.setVisibility(View.GONE);
-            rejectBtn.setVisibility(View.GONE);
-        }
-
-        if(shippingAddressOne.isEmpty() && shippingAddressTwo.isEmpty())
-        {
-            addressOne.setText(billingAddressOne);
-            addressTwo.setText(billingAddressTwo);
-            addressHead.setText("Billing Address");
-            shippingUserName.setText(FullNameBilling);
-            userPhone.setText(phoneString);
-        }
-        else {
-            addressOne.setText(shippingAddressOne);
-            addressTwo.setText(shippingAddressTwo);
-            addressHead.setText("Shipping Address");
-            shippingUserName.setText(FullNameShipping);
-            userPhone.setText(phoneString);
-        }
-
-        //shippingUserName.setText(FullName);
-        if (!products.getTotal().isEmpty() && products.getTotal() != null)
-            totalPay.setText(products.getTotal());
-        OrderStatus.setText(products.getStatus());
-
-
-        itemNameLayout.removeAllViews();
-        int total = products.getItemList().size();
-        for (int i = 0; i < total; i++) {
-            myView = layoutInflater.inflate(R.layout.item_row_view_details, itemNameLayout, false);
-            LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
-            TextView name = (TextView) myView.findViewById(R.id.itemName);
-            if (!products.getItemList().get(i).getName().isEmpty())
-                name.setText(products.getItemList().get(i).getName());
-
-            TextView itemNo = (TextView) myView.findViewById(R.id.itemNo);
-            if (products.getItemList().get(i).getQuantity() > 0)
-                itemNo.setText("" + products.getItemList().get(i).getQuantity());
-
-            TextView priceText = (TextView) myView.findViewById(R.id.price);
-            if (!products.getItemList().get(i).getPrice().isEmpty())
-                priceText.setText(products.getItemList().get(i).getPrice());
-            itemNameLayout.addView(ll);
-
-        }
     }
 }
 

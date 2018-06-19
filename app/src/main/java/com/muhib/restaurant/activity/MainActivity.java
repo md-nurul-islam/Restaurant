@@ -20,14 +20,15 @@ import android.widget.Toast;
 
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
+import com.muhib.restaurant.fragment.OrderDetailsFragment;
 import com.muhib.restaurant.fragment.SearchResultFragment;
 import com.muhib.restaurant.utils.AppConstant;
 import com.muhib.restaurant.utils.MySheardPreference;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
 
-   // https://github.com/rameshvoltella/WoocommerceAndroidOAuth1
+    // https://github.com/rameshvoltella/WoocommerceAndroidOAuth1
 
 
     @Override
@@ -36,7 +37,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.content_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         MySheardPreference.setUsingFirstTime(false);
-        goesToHomeFragment();
+        Bundle extras = getIntent().getExtras();
+
+        String orderId = "";
+        if (extras != null) {
+            orderId = extras.getString("order_id");
+        }
+        if (!orderId.isEmpty()) {
+            goesToOrderDetails(orderId);
+        } else
+            goesToHomeFragment();
 //        Intent intent = new Intent(this, LoginActivity.class);
 //        startActivity(intent);
     }
@@ -49,24 +59,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         transaction.replace(R.id.container, homeFragment, "homeFragment");
         transaction.commit();
     }
+    private void goesToOrderDetails(String id) {
+        Bundle bundle = new Bundle();
+        bundle.putString("order_id", id);
+        OrderDetailsFragment orderDetailsFragment = new OrderDetailsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        orderDetailsFragment.setArguments(bundle);
+        transaction.replace(R.id.container, orderDetailsFragment, "orderDetailsFragment").addToBackStack(null);
+        transaction.commit();
+    }
 
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-            HomeFragment homeFragment = (HomeFragment)getSupportFragmentManager().findFragmentByTag("homeFragment");
-            if(homeFragment.isVisible())
-            {
+            HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
+            OrderDetailsFragment orderDetailsFragment = (OrderDetailsFragment) getSupportFragmentManager().findFragmentByTag("orderDetailsFragment");
+            if (homeFragment != null && homeFragment.isVisible()) {
+                getSupportFragmentManager().popBackStack();
+                goesToHomeFragment();
+            }
+            else if (orderDetailsFragment != null && orderDetailsFragment.isVisible()) {
                 getSupportFragmentManager().popBackStack();
                 goesToHomeFragment();
             }
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        else
+        } else
             super.onBackPressed();
 
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -77,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//    @Override
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        MenuInflater inflater = getMenuInflater();
 //        inflater.inflate(R.menu.main_menu, menu);
@@ -89,10 +113,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportFragmentManager().popBackStack();
-                    HomeFragment homeFragment = (HomeFragment)getSupportFragmentManager().findFragmentByTag("homeFragment");
-                    if(homeFragment.isVisible())
-                    {
+                    //getSupportFragmentManager().popBackStack();
+                    OrderDetailsFragment orderDetailsFragment = (OrderDetailsFragment) getSupportFragmentManager().findFragmentByTag("orderDetailsFragment");
+                    HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
+//                    if (homeFragment.isVisible()) {
+//                        getSupportFragmentManager().popBackStack();
+//                        goesToHomeFragment();
+//                    }
+                    if (orderDetailsFragment != null && orderDetailsFragment.isVisible()) {
                         getSupportFragmentManager().popBackStack();
                         goesToHomeFragment();
                     }
@@ -111,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
     @Override
@@ -168,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return true;
     }
+
     SearchView searchView;
 
     private void gotoSearchResultFragment(Bundle bundle) {

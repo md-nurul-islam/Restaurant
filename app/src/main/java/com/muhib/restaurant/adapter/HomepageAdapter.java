@@ -340,7 +340,8 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View view) {
                         //gotoOrderDetailsFragment(orderList.get(position).getId());
                         String str = new Gson().toJson(orderList.get(position));
-                        bundle.putString("products", str);
+                        //bundle.putString("products", str);
+                        bundle.putString("order_id", orderList.get(position).getId());
                         gotoOrderDetailsFragment(bundle);
 //                        Products products = orderList.get(position);
 //
@@ -400,11 +401,11 @@ public class HomepageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        Bundle bundle = new Bundle();
 //        bundle.putString("id", id);
 
-        OrderDetailsFragment detailsFragment = new OrderDetailsFragment();
+        OrderDetailsFragment orderDetailsFragment = new OrderDetailsFragment();
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        detailsFragment.setArguments(bundle);
-        transaction.add(R.id.container, detailsFragment, "detailsFragment").addToBackStack(null);
+        orderDetailsFragment.setArguments(bundle);
+        transaction.add(R.id.container, orderDetailsFragment, "orderDetailsFragment").addToBackStack(null);
         transaction.commit();
     }
 
