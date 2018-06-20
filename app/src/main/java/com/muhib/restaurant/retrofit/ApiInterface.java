@@ -88,11 +88,14 @@ public interface ApiInterface {
     @POST("authorize")
     Observable<Response<ResponseBody>> getUserAuthentication(@Query("user_id") String userId, @Query("password") String password);
 
-    @GET("wp-json/wp/v2/posts")
+    @GET("wp-json/wp/v2/orders?_embed")
     Observable<Response<List<Products>>> getSearachTopics(@Query("search") String search, @Query("per_page") int per_page, @Query("offset") int offest);
 
     @GET("wp-json/apnwp/register")
     Observable<JsonElement> getServerToken(@Query("os_type") String osType, @Query("user_email_id") String user_email_id, @Query("device_token") String device_token );
+
+//    @GET("posts?_embed")
+//    Observable<Response<List<CategoryModel>>> getSearachTopics(@Query("search") String search, @Query("per_page") int per_page, @Query("offset") int offest);
 }
 
 
