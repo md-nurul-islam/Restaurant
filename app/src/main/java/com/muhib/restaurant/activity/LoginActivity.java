@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -107,13 +108,15 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String ck = _emailText.getText().toString();
+        String cs = _passwordText.getText().toString();
         String siteUrl = websiteUrl.getText().toString();
 
         String defaultSiteUrl = "http://woocom.endix.net";
-        String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
-        String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
+//        String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
+//        String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
+        String defaultKey = "ck_aa032e2ee368c919852094064f338e7c59ba93ac";
+        String defaultSecret = "cs_b094145969ec56f2d6dab9fa6f6c9076cb6cc252";
 
         // TODO: Implement your own authentication logic here.
 //
@@ -129,7 +132,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
 //                    }
 //                }, 3000);
-        callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
+        //callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
+
+        callLoginApi(siteUrl,ck, cs);
 
 
     }
@@ -181,11 +186,13 @@ public class LoginActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (siteUrl.isEmpty()) {
+        if (siteUrl.isEmpty()|| !URLUtil.isValidUrl(siteUrl) ) {
 //            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            websiteUrl.setError("Website URL should not be empty");
+
+            websiteUrl.setError("Website URL should not be empty and must be valid url");
             valid = false;
-        } else {
+        }
+        else {
             websiteUrl.setError(null);
         }
 

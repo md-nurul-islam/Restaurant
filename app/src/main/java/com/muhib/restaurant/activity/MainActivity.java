@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.logout:
                 //Toast.makeText(this, "logout", Toast.LENGTH_SHORT).show();
                 MySheardPreference.setUsingFirstTime(true);
+                MySheardPreference.clearSp();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -138,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearSaveData() {
+//        MySheardPreference.setUserIdAndPassword("","");
+//        MySheardPreference.setUserSiteUrl("");
+
     }
 
 
