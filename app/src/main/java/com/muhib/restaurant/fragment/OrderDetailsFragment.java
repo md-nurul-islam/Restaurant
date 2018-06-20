@@ -162,10 +162,10 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                     public void onNext(JsonElement value) {
                         hideProgress();
                         Gson gson = new GsonBuilder().create();
-                        Products r = gson.fromJson(value, Products.class);
-                        String st = r.getId();
+                        products = gson.fromJson(value, Products.class);
+                        String st = products.getId();
 
-                        dataProcessing(r);
+                        dataProcessing(products);
 //                        if (value.code() == 200) {
 //
 //                        }
