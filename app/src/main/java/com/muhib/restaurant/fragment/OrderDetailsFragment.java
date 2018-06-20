@@ -190,6 +190,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     public void showProgress() {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("please wait.");
+        dialog.setCancelable(false);
         dialog.show();
     }
 

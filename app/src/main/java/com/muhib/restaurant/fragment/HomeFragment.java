@@ -512,6 +512,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     public void showProgress() {
         dialog = new ProgressDialog(getActivity());
         dialog.setMessage("please wait.");
+        dialog.setCancelable(false);
         dialog.show();
     }
 
