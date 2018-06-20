@@ -206,10 +206,10 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.accept:
-                ordeProcess(products.getId(), true);
+                ordeProcess(id, true);
                 break;
             case R.id.reject:
-                ordeProcess(products.getId(), false);
+                ordeProcess(id, false);
                 break;
         }
     }
@@ -224,7 +224,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         if (b)
             processOrder(id);
         else
-            callUpdateApi(products.getId(), "");
+            callUpdateApi(id, "");
 
     }
 
