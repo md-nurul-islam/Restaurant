@@ -1,5 +1,6 @@
 package com.muhib.restaurant.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView _signupLink;
     EditText _passwordText;
     EditText websiteUrl;
+    private Button scan_btn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,21 @@ public class LoginActivity extends AppCompatActivity {
         _passwordText = (EditText) findViewById(R.id.input_password);
         websiteUrl = (EditText) findViewById(R.id.url_field);
         _loginButton = (Button) findViewById(R.id.btn_login);
+        final Activity activity =this;
+        scan_btn = (Button)findViewById(R.id.scan);
+        scan_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
+                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                intentIntegrator.setPrompt("Scan");
+                intentIntegrator.setCameraId(0);
+                intentIntegrator.setBeepEnabled(false);
+                intentIntegrator.setBarcodeImageEnabled(false);
+                intentIntegrator.initiateScan();
+
+            }
+        });
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -116,17 +135,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_SIGNUP) {
+//            if (resultCode == RESULT_OK) {
+//
+//                // TODO: Implement successful signup logic here
+//                // By default we just finish the Activity and log them in automatically
+//                this.finish();
+//            }
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
@@ -282,5 +301,34 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null){
+            if(result.getContents() ==null){
+                Toast.makeText(this, "You cancelled the scanning", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                String qrString = result.getContents();
+                if(qrString.contains("|")) {
+                    String[] parts = qrString.split("\\|");
+                    if(!parts[0].isEmpty() && parts[0]!=null)
+                    {
+                        _emailText.setText(parts[0]);
+                    }
+                    if(!parts[1].isEmpty() && parts[1]!=null)
+                    {
+                        _passwordText.setText(parts[1]);
+                    }
+                }
+            }
+        }
+
+
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

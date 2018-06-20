@@ -27,7 +27,7 @@
 
             <ImageView
                 android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:padding="@dimen/margin_10dp"
                 android:src="@drawable/logo" />
@@ -90,9 +90,18 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
                     android:hint="API Secret"
-                    android:inputType="textPassword"
+                    android:inputType="text"
                     android:padding="@dimen/margin_10dp" />
 
+                <Button
+                    android:id="@+id/scan"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:background="@drawable/button_background_fill"
+                    android:text="Scan QR code"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
                 <Button
                     android:id="@+id/btn_login"
                     android:layout_width="match_parent"
