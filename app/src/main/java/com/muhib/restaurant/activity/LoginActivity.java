@@ -113,10 +113,10 @@ public class LoginActivity extends AppCompatActivity {
         String siteUrl = websiteUrl.getText().toString();
 
         String defaultSiteUrl = "http://woocom.endix.net";
-//        String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
-//        String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
-        String defaultKey = "ck_aa032e2ee368c919852094064f338e7c59ba93ac";
-        String defaultSecret = "cs_b094145969ec56f2d6dab9fa6f6c9076cb6cc252";
+        String defaultKey = "ck_119af3964b19a5d9b4ccbc435b428ab8a91c6b18";
+        String defaultSecret = "cs_681801f5d8fe6f94e39fb2c15f88253cc50f63f3";
+
+
 
         // TODO: Implement your own authentication logic here.
 //
@@ -132,9 +132,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
 //                    }
 //                }, 3000);
-        //callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
+        callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
 
-        callLoginApi(siteUrl,ck, cs);
+        //callLoginApi(siteUrl,ck, cs);
 
 
     }

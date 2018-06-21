@@ -167,35 +167,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
         //start.......................................
-//        final  MenuItem miSearch = menu.findItem(R.id.action_search);
-//
-//        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-//
-//        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-//        searchEditText.setTextColor(Color.BLACK);
-//        searchEditText.setHintTextColor(getResources().getColor(R.color.colorAccent));
-//
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                SearchResultFragment fragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
-//                if(fragment!=null && fragment.isVisible())
-//                    getSupportFragmentManager().popBackStack();
-//                miSearch.collapseActionView();
-//                Bundle bundle = new Bundle();
-//                //Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
-//                bundle.putString(AppConstant.SEARCH_TEXT, query);
-//                gotoSearchResultFragment(bundle);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                return false;
-//            }
-//        });
+        final  MenuItem miSearch = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(Color.BLACK);
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorAccent));
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchResultFragment fragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
+                if(fragment!=null && fragment.isVisible())
+                    getSupportFragmentManager().popBackStack();
+                miSearch.collapseActionView();
+                Bundle bundle = new Bundle();
+                //Toast.makeText(getApplicationContext(),"clicked",Toast.LENGTH_SHORT).show();
+                bundle.putString(AppConstant.SEARCH_TEXT, query);
+                gotoSearchResultFragment(bundle);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         //end..............................
 
 

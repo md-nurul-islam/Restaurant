@@ -640,7 +640,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
-                        Toast.makeText(getActivity(), "Something wrong, Please try again later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
