@@ -16,11 +16,11 @@
         android:paddingBottom="@dimen/activity_margin_half"
         android:paddingTop="@dimen/activity_margin_half"/>
 
-    <ProgressBar
-        android:id="@+id/main_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+    <!--<ProgressBar-->
+        <!--android:id="@+id/main_progress"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"/>-->
 
     <include layout="@layout/error_layout"/>
 

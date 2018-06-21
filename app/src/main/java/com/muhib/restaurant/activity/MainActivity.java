@@ -75,13 +75,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //super.onBackPressed();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
+            SearchResultFragment searchResultFragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
             HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
             OrderDetailsFragment orderDetailsFragment = (OrderDetailsFragment) getSupportFragmentManager().findFragmentByTag("orderDetailsFragment");
             if (homeFragment != null && homeFragment.isVisible()) {
                 getSupportFragmentManager().popBackStack();
                 goesToHomeFragment();
             }
-            else if (orderDetailsFragment != null && orderDetailsFragment.isVisible()) {
+            if ((orderDetailsFragment != null && orderDetailsFragment.isVisible()) || (searchResultFragment != null && searchResultFragment.isVisible())) {
                 getSupportFragmentManager().popBackStack();
                 goesToHomeFragment();
             }
@@ -114,13 +115,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case android.R.id.home:
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     //getSupportFragmentManager().popBackStack();
+                    SearchResultFragment searchResultFragment = (SearchResultFragment)getSupportFragmentManager().findFragmentByTag("searchResultFragment");
+
                     OrderDetailsFragment orderDetailsFragment = (OrderDetailsFragment) getSupportFragmentManager().findFragmentByTag("orderDetailsFragment");
                     HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
 //                    if (homeFragment.isVisible()) {
 //                        getSupportFragmentManager().popBackStack();
 //                        goesToHomeFragment();
 //                    }
-                    if (orderDetailsFragment != null && orderDetailsFragment.isVisible()) {
+                    if ((orderDetailsFragment != null && orderDetailsFragment.isVisible()) || (searchResultFragment != null && searchResultFragment.isVisible())) {
                         getSupportFragmentManager().popBackStack();
                         goesToHomeFragment();
                     }

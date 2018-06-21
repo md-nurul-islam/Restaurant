@@ -31,7 +31,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
-import com.muhib.restaurant.adapter.SearchAdapter;
+import com.muhib.restaurant.adapter.SearchAdapterNew;
 import com.muhib.restaurant.myinterface.OrderProcess;
 import com.muhib.restaurant.retrofit.OAuthInterceptor;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
@@ -68,7 +68,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class SearchResultFragment extends Fragment implements PaginationAdapterCallback {
-    SearchAdapter adapter;
+    SearchAdapterNew adapter;
     LinearLayoutManager linearLayoutManager;
 
 
@@ -109,7 +109,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_search_result, container, false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (getArguments().containsKey(AppConstant.SEARCH_TEXT)) {
             SELECTED = getArguments().getString(AppConstant.SEARCH_TEXT);
         }
@@ -123,7 +123,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
         strList = getStrList();
 
 
-        adapter = new SearchAdapter(getContext(), this, SearchResultFragment.this);
+        adapter = new SearchAdapterNew(getContext(), this, SearchResultFragment.this);
 
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -176,7 +176,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
     }
 
     private void callNewsApiNext(String selected) {
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -189,16 +189,19 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                     public void onNext(Response<List<Products>> value) {
                         //hideProgress();
                         if (value.code() == 200) {
+                            adapter.removeLoadingFooter();
+                            isLoading = false;
                             Headers headers = value.headers();
                             TOTAL_ITEM = Integer.valueOf(headers.get("X-WP-Total"));
-                            singleList.clear();
-                            singleList = value.body();
+                            List<Products> singleList = value.body();
                             singleList.size();
                             //progressBar.setVisibility(View.GONE);
-                            adapter.clear();
+
                             adapter.addAllData(singleList);
-                            if (currentOffst < TOTAL_ITEM) adapter.addLoadingFooter();
-                            else isLastPage = true;
+                            if ((currentOffst + singleList.size()) <TOTAL_ITEM)
+                                adapter.addLoadingFooter();
+                            else
+                                isLastPage = true;
 
 //                            if (currentOffst < TOTAL_ITEM)
 //                                adapter.addLoadingFooter();
@@ -307,7 +310,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
 
         showProgress();
 
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<List<Products>>>() {
@@ -329,7 +332,9 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                             //progressBar.setVisibility(View.GONE);
 
                             adapter.addAllData(singleList);
-                            if (singleList.size() < TOTAL_ITEM)
+
+
+                            if (currentOffst < TOTAL_ITEM)
                                 adapter.addLoadingFooter();
                             else
                                 isLastPage = true;

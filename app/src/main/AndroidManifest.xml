@@ -28,7 +28,8 @@
         <!-- [END fcm_default_icon] -->
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/AppTheme.Dark">
+            android:theme="@style/AppTheme.Dark"
+            android:screenOrientation="portrait">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -38,7 +39,8 @@
             <!-- </intent-filter> -->
         </activity>
         <!--<activity android:name=".activity.MainActivity" />-->
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name=".activity.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
