@@ -3,7 +3,11 @@ package com.muhib.restaurant.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -30,10 +35,14 @@ import com.muhib.restaurant.myinterface.OrderActionListener;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.MySheardPreference;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -59,6 +68,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     TextView totalPay, shippingUserName;
     TextView addressOne, addressOneText, addressTwo, addressTwoText;
     TextView acceptBtn, rejectBtn;
+    Button printPage;
 
     private LinearLayout selectLay;
     private TextView select;
@@ -71,6 +81,20 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     String billingAddressTwo = "";
     String phoneString = "";
     OrderActionListener orderActionListener;
+
+    // android built in classes for bluetooth operations
+    BluetoothAdapter bluetoothAdapter;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+
+    // needed for communication to bluetooth device / network
+    OutputStream mmOutputStream;
+    InputStream mmInputStream;
+    Thread workerThread;
+
+    byte[] readBuffer;
+    int readBufferPosition;
+    volatile boolean stopWorker;
 
 
     public OrderDetailsFragment() {
@@ -107,6 +131,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         rejectBtn = (TextView) view.findViewById(R.id.reject);
         acceptBtn.setOnClickListener(this);
         rejectBtn.setOnClickListener(this);
+        printPage = (Button)view.findViewById(R.id.printPage);
+        printPage.setOnClickListener(this);
 
         shippingUserName = (TextView) view.findViewById(R.id.shippingUserName);
 
@@ -213,6 +239,99 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             case R.id.reject:
                 ordeProcess(id, false);
                 break;
+            case R.id.printPage:
+                IntentPrint("Printer should not work");
+                break;
+        }
+    }
+
+    String value = "";
+    TextView txtLogin;
+    public void IntentPrint(String txtvalue)
+    {
+        txtLogin = new TextView(getActivity());
+        byte[] buffer = txtvalue.getBytes();
+        byte[] PrintHeader = { (byte) 0xAA, 0x55,2,0 };
+        PrintHeader[3]=(byte) buffer.length;
+        InitPrinter();
+        if(PrintHeader.length>128)
+        {
+            value+="\nValue is more than 128 size\n";
+            txtLogin.setText(value);
+        }
+        else
+        {
+            try
+            {
+                for(int i=0;i<=PrintHeader.length-1;i++)
+                {
+                    mmOutputStream.write(PrintHeader[i]);
+                }
+                for(int i=0;i<=buffer.length-1;i++)
+                {
+                    mmOutputStream.write(buffer[i]);
+                }
+                mmOutputStream.close();
+                mmSocket.close();
+            }
+            catch(Exception ex)
+            {
+                value+=ex.toString()+ "\n" +"Excep IntentPrint \n";
+                txtLogin.setText(value);
+            }
+        }
+    }
+    public void InitPrinter()
+    {
+        try
+        {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if(!bluetoothAdapter.isEnabled())
+            {
+                Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetooth, 0);
+            }
+
+            Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
+            if(pairedDevices.size() > 0)
+            {
+                for(BluetoothDevice device : pairedDevices)
+                {
+                    if(device.getName().equals("Your Device Name")) //Note, you will need to change this to match the name of your device
+                    {
+                        mmDevice = device;
+                        break;
+                    }
+                }
+
+                UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+                //Method m = mmDevice.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
+                //mmSocket = (BluetoothSocket) m.invoke(mmDevice, uuid);
+                mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+                bluetoothAdapter.cancelDiscovery();
+                if(mmDevice.getBondState()==2)
+                {
+                    mmSocket.connect();
+                    mmOutputStream = mmSocket.getOutputStream();
+                }
+                else
+                {
+                    value+="Device not connected";
+                    txtLogin.setText(value);
+                }
+            }
+            else
+            {
+                value+="No Devices found";
+                txtLogin.setText(value);
+                return;
+            }
+        }
+        catch(Exception ex)
+        {
+            value+=ex.toString()+ "\n" +" InitPrinter \n";
+            txtLogin.setText(value);
         }
     }
 

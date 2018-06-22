@@ -257,7 +257,13 @@
                     android:textSize="@dimen/text_size17" />
 
             </RelativeLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Print"
+                android:id="@+id/printPage"/>
         </LinearLayout>
+
     </ScrollView>
     
 </LinearLayout>
