@@ -596,7 +596,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             statusSt = "cancelled";
         } else {
             //updateModel.setStatus("pending");
-            updateModel.setStatus("processing");
+            updateModel.setStatus("completed");
             statusSt = "accepted";
         }
 
