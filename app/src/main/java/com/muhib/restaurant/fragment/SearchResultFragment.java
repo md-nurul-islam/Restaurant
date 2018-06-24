@@ -528,6 +528,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
         } else {
             //updateModel.setStatus("pending");
             updateModel.setStatus("processing");
+            updateModel.setStatus("completed");
             statusSt = "accepted";
         }
 

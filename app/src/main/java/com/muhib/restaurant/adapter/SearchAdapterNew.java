@@ -207,15 +207,20 @@ public class SearchAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHold
                 itemHolder.totalPay.setText(": "+orderList.get(position).getTotal());
                 itemHolder.totalPayText.setText("Total pay in BDT");
                 itemHolder.status.setText(orderList.get(position).getStatus());
-                if(orderList.get(position).getStatus().equalsIgnoreCase("pending"))
+                if(orderList.get(position).getStatus().equalsIgnoreCase("completed") || orderList.get(position).getStatus().equalsIgnoreCase("cancelled"))
                 {
-                    itemHolder.accepted.setVisibility(View.VISIBLE);
-                    itemHolder.rejected.setVisibility(View.VISIBLE);
+                    itemHolder.accepted.setVisibility(View.GONE);
+                    itemHolder.rejected.setVisibility(View.GONE);
+//                    itemHolder.accepted.setVisibility(View.VISIBLE);
+//                    itemHolder.rejected.setVisibility(View.VISIBLE);
 
                 }
                 else {
-                    itemHolder.accepted.setVisibility(View.GONE);
-                    itemHolder.rejected.setVisibility(View.GONE);
+//                    itemHolder.accepted.setVisibility(View.GONE);
+//                    itemHolder.rejected.setVisibility(View.GONE);
+
+                    itemHolder.accepted.setVisibility(View.VISIBLE);
+                    itemHolder.rejected.setVisibility(View.VISIBLE);
                 }
 //                itemHolder.orderTitle.setText(orderList.get(position).getTitle().getRendered());
 ////                movieVH.mYear.setText(formatYearLabel(result));

@@ -419,7 +419,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         }
         else {
             //updateModel.setStatus("pending");
-            updateModel.setStatus("processing");
+            updateModel.setStatus("completed");
             statusSt = "accepted";
         }
 
@@ -545,13 +545,20 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             }
         }
 
-        if (products.getStatus().equalsIgnoreCase("pending")) {
-            acceptBtn.setVisibility(View.VISIBLE);
-            rejectBtn.setVisibility(View.VISIBLE);
+        if(products.getStatus().equalsIgnoreCase("completed") || products.getStatus().equalsIgnoreCase("cancelled")){
+//        if (products.getStatus().equalsIgnoreCase("pending")) {
 
-        } else {
             acceptBtn.setVisibility(View.GONE);
             rejectBtn.setVisibility(View.GONE);
+//            acceptBtn.setVisibility(View.VISIBLE);
+//            rejectBtn.setVisibility(View.VISIBLE);
+
+        } else {
+//            acceptBtn.setVisibility(View.GONE);
+//            rejectBtn.setVisibility(View.GONE);
+
+            acceptBtn.setVisibility(View.VISIBLE);
+            rejectBtn.setVisibility(View.VISIBLE);
         }
 
         if(shippingAddressOne.isEmpty() && shippingAddressTwo.isEmpty())
