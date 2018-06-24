@@ -16,6 +16,7 @@ public class MySheardPreference {
     private static final String keyUserId = "userId";
     private static final String keyUserPassword = "userPassword";
     private static final String keyMood = "mood";
+    private static final String keySort = "sort";
 
     private static SharedPreferences getSharedPreferences() {
         return MyApplication.getmInstance().getSharedPreferences(keyRestaurantPrefs, 0);
@@ -28,6 +29,18 @@ public class MySheardPreference {
         editor.apply();
     }
 
+    public static void setSortOrder(String sortOrder) {
+        final SharedPreferences pref = getSharedPreferences();
+        final SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString(keySort, sortOrder);
+        editor.apply();
+    }
+
+    public static String getSortOrder() {
+        final SharedPreferences pref = getSharedPreferences();
+        return pref.getString(keySort, "dsc");
+    }
     public static boolean getUsingFirstTime() {
         final SharedPreferences pref = getSharedPreferences();
         return pref.getBoolean(keyIsFirstTime, true);

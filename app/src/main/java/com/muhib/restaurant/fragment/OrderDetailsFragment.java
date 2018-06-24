@@ -457,6 +457,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                             OrderStatus.setText("cancelled");
                         acceptBtn.setVisibility(View.GONE);
                         rejectBtn.setVisibility(View.GONE);
+                        printPage.setVisibility(View.VISIBLE);
 
 //                        if (value.code() == 200) {
 //
@@ -560,6 +561,13 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             acceptBtn.setVisibility(View.VISIBLE);
             rejectBtn.setVisibility(View.VISIBLE);
         }
+        if(products.getStatus().equalsIgnoreCase("completed"))
+        {
+            printPage.setVisibility(View.VISIBLE);
+        }
+        else {
+            printPage.setVisibility(View.GONE);
+        }
 
         if(shippingAddressOne.isEmpty() && shippingAddressTwo.isEmpty())
         {
@@ -609,6 +617,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         super.onPrepareOptionsMenu(menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchItem.setVisible(false);
+        MenuItem sortItem = menu.findItem(R.id.sortId);
+        sortItem.setVisible(false);
 
     }
 

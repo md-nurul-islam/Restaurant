@@ -1,11 +1,30 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/white"
     tools:context="com.muhib.restaurant.fragment.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<ImageButton-->
+            <!--android:id="@+id/sort_up"-->
+            <!--android:src="@drawable/sort_up"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="@dimen/margin_0dp"-->
+            <!--android:layout_height="wrap_content" />-->
+        <!--<ImageButton-->
+            <!--android:id="@+id/sort_down"-->
+            <!--android:src="@drawable/sort_down"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="@dimen/margin_0dp"-->
+            <!--android:layout_height="wrap_content" />-->
+
+    <!--</LinearLayout>-->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
@@ -20,4 +39,4 @@
     </android.support.v4.widget.SwipeRefreshLayout>
     <include layout="@layout/error_layout"/>
 
-</FrameLayout>
+</LinearLayout>

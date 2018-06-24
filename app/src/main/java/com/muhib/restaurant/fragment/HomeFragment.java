@@ -16,11 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
@@ -97,6 +99,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
     private static int TOTAL_ITEM;
     private int currentPage = PAGE_START;
     private int currentOffst = PAGE_START_OFFSET;
+    ImageButton sortUp, sortDown;
 
     OAuthInterceptor oAuthInterceptor;
 
@@ -117,6 +120,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -141,6 +145,8 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
         errorLayout = (LinearLayout) view.findViewById(R.id.error_layout);
         btnRetry = (Button) view.findViewById(R.id.error_btn_retry);
         txtError = (TextView) view.findViewById(R.id.error_txt_cause);
+//        sortDown = (ImageButton)view.findViewById(R.id.sort_down);
+//        sortUp = (ImageButton)view.findViewById(R.id.sort_up);
         strList = getStrList();
 
 
@@ -680,6 +686,39 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             e.printStackTrace();
         }
         return mDropdown;
+
+    }
+
+    MenuItem sortItem;
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(true);
+        sortItem = menu.findItem(R.id.sortId);
+        sortItem.setVisible(true);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sortId:
+            {
+                if(MySheardPreference.getSortOrder().equals("asc"))
+                {
+                    sortItem.setIcon(R.drawable.up);
+                    MySheardPreference.setSortOrder("dsc");
+                }
+                else {
+                    sortItem.setIcon(R.drawable.down);
+                    MySheardPreference.setSortOrder("asc");
+                }
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 
