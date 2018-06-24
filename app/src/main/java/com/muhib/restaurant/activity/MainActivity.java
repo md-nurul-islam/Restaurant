@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
@@ -208,6 +209,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SearchView searchView;
 
     private void gotoSearchResultFragment(Bundle bundle) {
+
+        if(!NetUtils.isNetworkAvailable(this)) {
+//            NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(this, " No connectivity", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
         SearchResultFragment searchResultFragment = new SearchResultFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

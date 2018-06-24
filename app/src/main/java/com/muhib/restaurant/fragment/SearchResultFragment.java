@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.adapter.HomepageAdapter;
 import com.muhib.restaurant.adapter.SearchAdapterNew;
@@ -97,7 +98,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
     private int currentOffst = PAGE_START_OFFSET;
 
     OAuthInterceptor oAuthInterceptor;
-    private String SELECTED;
+    private static String SELECTED = "";
 
     public SearchResultFragment() {
         // Required empty public constructor
@@ -176,6 +177,13 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
     }
 
     private void callNewsApiNext(String selected) {
+
+
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+//            NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            return;
+        }
         RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -198,7 +206,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                             //progressBar.setVisibility(View.GONE);
 
                             adapter.addAllData(singleList);
-                            if ((currentOffst + singleList.size()) <TOTAL_ITEM)
+                            if ((currentOffst + singleList.size()) < TOTAL_ITEM)
                                 adapter.addLoadingFooter();
                             else
                                 isLastPage = true;
@@ -309,6 +317,13 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
         //hideErrorView();
 
         showProgress();
+        if(!NetUtils.isNetworkAvailable(getActivity())) {
+//            NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            return;
+        }
+
 
         RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getSearachTopics(selected, currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
@@ -433,14 +448,85 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
 
     String statusSt = " ";
 
+    //    public void callUpdateApi(String id, String timeToProcess) {
+//        List<HashMap> mapList = new ArrayList<>();
+//        showProgress();
+//        UpdateModel updateModel = new UpdateModel();
+//        if (timeToProcess.isEmpty()) {
+//            updateModel.setStatus("cancelled");
+//            statusSt = "cancelled";
+//        } else {
+//            //updateModel.setStatus("pending");
+//            updateModel.setStatus("processing");
+//            statusSt = "accepted";
+//        }
+//
+//        HashMap<String, String> params = new HashMap<>();
+//        params.put("key", "time_to_deliver");
+//        params.put("value", timeToProcess);
+//
+////        MetaDatum metaDatum = new MetaDatum();
+////        metaDatum.setKey("time_to_deliver");
+////        metaDatum.setValue("120 Min");
+////        metaDataList.add(metaDatum);
+//        mapList.add(params);
+//        updateModel.setMetaData(mapList);
+//
+//
+//        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<JsonElement>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(JsonElement value) {
+//                        hideProgress();
+//                        Gson gson = new GsonBuilder().create();
+//                        Products r = gson.fromJson(value, Products.class);
+//                        String st = r.getId();
+//                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
+//                        //callNewsApiFirst(false);
+////                        if (value.code() == 200) {
+////
+////                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        //showErrorView(e);
+//                        //adapter.showRetry(true, fetchErrorMessage(e));
+//                        hideProgress();
+//                        Toast.makeText(getActivity(), "Something wrong, Please try again later", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
     public void callUpdateApi(String id, String timeToProcess) {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            //NetUtils.noInternetWarning(rv, getActivity());
+            Toast.makeText(getActivity(), " No connectivity", Toast.LENGTH_SHORT).show();
+            hideProgress();
+            return;
+        }
+
+
         List<HashMap> mapList = new ArrayList<>();
         showProgress();
         UpdateModel updateModel = new UpdateModel();
-        if (timeToProcess.equals("-1")) {
-            updateModel.setStatus("rejected");
-            statusSt = "rejected";
+        if (timeToProcess.isEmpty()) {
+            updateModel.setStatus("cancelled");
+            statusSt = "cancelled";
         } else {
+            //updateModel.setStatus("pending");
             updateModel.setStatus("processing");
             statusSt = "accepted";
         }
@@ -456,8 +542,8 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
         mapList.add(params);
         updateModel.setMetaData(mapList);
 
-
-        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
+//        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).updateOrder(id, updateModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JsonElement>() {
@@ -472,8 +558,8 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                         Gson gson = new GsonBuilder().create();
                         Products r = gson.fromJson(value, Products.class);
                         String st = r.getId();
-                        Toast.makeText(getActivity(), "Order successfully" + statusSt, Toast.LENGTH_SHORT).show();
-                        //callNewsApiFirst(false);
+                        Toast.makeText(getActivity(), "Order successfully " + statusSt, Toast.LENGTH_SHORT).show();
+                        callNewsApiFirst(SELECTED);
 //                        if (value.code() == 200) {
 //
 //                        }
@@ -485,7 +571,7 @@ public class SearchResultFragment extends Fragment implements PaginationAdapterC
                         //showErrorView(e);
                         //adapter.showRetry(true, fetchErrorMessage(e));
                         hideProgress();
-                        Toast.makeText(getActivity(), "Something wrong, Please try again later", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

@@ -132,9 +132,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
 //                    }
 //                }, 3000);
-        callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
+        //callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
 
-        //callLoginApi(siteUrl,ck, cs);
+        callLoginApi(siteUrl,ck, cs);
 
 
     }

@@ -55,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_background"
-                    android:hint="Website URL"
+                    android:hint="http://woocom.endix.net"
                     android:inputType="text"
                     android:padding="@dimen/margin_10dp" />
 
