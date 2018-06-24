@@ -15,6 +15,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.activity.MainActivity;
 
+import java.util.Date;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -64,7 +66,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+//        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), notificationBuilder.build());
     }
 
 }
