@@ -1,6 +1,7 @@
 package com.muhib.restaurant.fcm;
 
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,10 +16,12 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.activity.MainActivity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
@@ -41,12 +44,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 //        sendMyNotification(message.getNotification().getBody());
         message.getData().get("order_id");
+        setAlarm();
         sendMyNotification(message.getData().get("order_id"), message.getData().get("title"), message.getData().get("body"));
     }
 
 
 
     private void sendMyNotification(String id, String title, String body) {
+
 
         //On click of notification it redirect to this Activity
         Intent intent = new Intent(this, MainActivity.class);
@@ -72,6 +77,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 //        notificationManager.notify(0, notificationBuilder.build());
         notificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), notificationBuilder.build());
+
+//        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        Calendar calendar=Calendar.getInstance();
+//// Calendar.set(int year, int month, int day, int hourOfDay, int minute, int second)
+//        calendar.set(2013, Calendar.OCTOBER, 10, 12, 10, 20);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10*1000, pendingIntent);
+    }
+
+    private void setAlarm(){
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+       PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 1000 * 60 * 20;
+
+        /* Set the alarm to start at 10:30 AM */
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 30);
+
+        /* Repeating on every 20 minutes interval */
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, System.currentTimeMillis(),
+                6000 , pendingIntent1);
     }
 
 }
