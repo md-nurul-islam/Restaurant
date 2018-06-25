@@ -67,7 +67,7 @@ public interface ApiInterface {
 //    @GET("wp-json/wc/v2/orders")
 //    Observable<Response<List<Products>>> getTopics();
     @GET("wp-json/wc/v2/orders")
-    Observable<Response<List<Products>>> getOrderList(@Query("per_page") int per_page, @Query("offset") int offest);
+    Observable<Response<List<Products>>> getOrderList(@Query("per_page") int per_page, @Query("offset") int offest, @Query("order") String order, @Query("orderby") String orderby);
 
     @GET("wp-json/wc/v2/orders/{id}")
 //    Observable<Response<List<Products>>> getOrderDetails(@Path("id") String id);

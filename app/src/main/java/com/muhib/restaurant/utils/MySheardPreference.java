@@ -39,7 +39,7 @@ public class MySheardPreference {
 
     public static String getSortOrder() {
         final SharedPreferences pref = getSharedPreferences();
-        return pref.getString(keySort, "dsc");
+        return pref.getString(keySort, "desc");
     }
     public static boolean getUsingFirstTime() {
         final SharedPreferences pref = getSharedPreferences();

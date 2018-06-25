@@ -223,7 +223,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             return;
         }
 
-        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst, MySheardPreference.getSortOrder(), "id")
 //        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -361,11 +361,12 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
 //        String signature = new HMACSha1SignatureService().getSignature(baseString, consumerSecret, "");
         //hideErrorView();
 
+        currentOffst = 0;
 
         if (!isRefresh) {
             showProgress();
         } else {
-            currentOffst = PAGE_START_OFFSET;
+
             isLastPage = false;
             isLoading = false;
         }
@@ -378,7 +379,7 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
             return;
         }
 
-        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
+        RetrofitApiClient.getApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst,MySheardPreference.getSortOrder(), "id")
 //        RetrofitApiClient.getLoginApiInterface(MySheardPreference.getUserId(), MySheardPreference.getUserPassword()).getOrderList(currentPage, currentOffst)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -708,11 +709,13 @@ public class HomeFragment extends Fragment implements PaginationAdapterCallback,
                 if(MySheardPreference.getSortOrder().equals("asc"))
                 {
                     sortItem.setIcon(R.drawable.up);
-                    MySheardPreference.setSortOrder("dsc");
+                    MySheardPreference.setSortOrder("desc");
+                    callNewsApiFirst(false);
                 }
                 else {
                     sortItem.setIcon(R.drawable.down);
                     MySheardPreference.setSortOrder("asc");
+                    callNewsApiFirst(false);
                 }
 
             }
