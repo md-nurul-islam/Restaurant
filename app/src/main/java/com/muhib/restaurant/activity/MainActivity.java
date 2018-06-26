@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.content_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         MySheardPreference.setUsingFirstTime(false);
-        setAlarm();
+        //setAlarm();
         Bundle extras = getIntent().getExtras();
 
         String orderId = "";
@@ -236,10 +236,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setAlarm(){
 
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 38);
-        calendar.set(Calendar.SECOND, 0);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, 13);
+//        calendar.set(Calendar.MINUTE, 38);
+//        calendar.set(Calendar.SECOND, 0);
         Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);

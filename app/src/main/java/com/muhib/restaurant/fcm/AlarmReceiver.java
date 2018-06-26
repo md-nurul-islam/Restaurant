@@ -31,24 +31,37 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO Auto-generated method stub
+        int num = 0;
+        String id = "", title = "", body = "";
+        if(intent.getExtras().get("order_id")!= null)
+            id = intent.getExtras().getString("order_id");
+        if(intent.getExtras().get("title")!= null)
+            title = intent.getExtras().getString("title");
+        if(intent.getExtras().get("body")!= null)
+            body = intent.getExtras().getString("body");
+
+        if(intent.getExtras().get("num")!= null)
+            num = intent.getExtras().getInt("num");
 
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent notificationIntent = new Intent(context, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        notificationIntent.putExtra("order_id", id);
+        //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        int num = (int) System.currentTimeMillis();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, num, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
-                context).setSmallIcon(R.drawable.logo)
-                .setContentTitle("Alarm Fired")
-                .setContentText("Events to be Performed").setSound(alarmSound)
+                context).setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setSound(alarmSound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(pendingIntent)
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
