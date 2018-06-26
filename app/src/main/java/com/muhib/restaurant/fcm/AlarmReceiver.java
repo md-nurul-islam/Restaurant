@@ -52,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        int num = (int) System.currentTimeMillis();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, num, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, num, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

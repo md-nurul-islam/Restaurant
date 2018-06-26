@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.muhib.restaurant.MyApplication;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.activity.MainActivity;
 
@@ -44,8 +45,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 //        sendMyNotification(message.getNotification().getBody());
         message.getData().get("order_id");
+
         //setAlarm();
-        sendMyNotification(message.getData().get("order_id"), message.getData().get("title"), message.getData().get("body"));
+        MyApplication.sendMyNotification(message.getData().get("order_id"), message.getData().get("title"), message.getData().get("body"));
     }
 
 
@@ -58,7 +60,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent1.putExtra("body", body);
         int num = (int) System.currentTimeMillis();
         intent1.putExtra("num", num);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, num,intent1, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, num,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager)this.getSystemService(this.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 20000, pendingIntent);
 

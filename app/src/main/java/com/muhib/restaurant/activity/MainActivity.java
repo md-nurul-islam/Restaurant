@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.muhib.restaurant.MyApplication;
 import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.fcm.AlarmReceiver;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String orderId = "";
         if (extras != null) {
             orderId = extras.getString("order_id");
+            MyApplication.cancelAlarm();
         }
         if (!orderId.isEmpty()) {
             goesToOrderDetails(orderId);
