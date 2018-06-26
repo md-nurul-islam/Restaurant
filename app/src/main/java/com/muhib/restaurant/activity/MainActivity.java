@@ -1,10 +1,15 @@
 package com.muhib.restaurant.activity;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.RingtoneManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,11 +25,14 @@ import android.widget.Toast;
 
 import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
+import com.muhib.restaurant.fcm.AlarmReceiver;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;
 import com.muhib.restaurant.fragment.SearchResultFragment;
 import com.muhib.restaurant.utils.AppConstant;
 import com.muhib.restaurant.utils.MySheardPreference;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
@@ -38,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.content_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         MySheardPreference.setUsingFirstTime(false);
+        setAlarm();
         Bundle extras = getIntent().getExtras();
 
         String orderId = "";
@@ -222,5 +231,56 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchResultFragment.setArguments(bundle);
         transaction.add(R.id.container, searchResultFragment, "searchResultFragment").addToBackStack(null);
         transaction.commit();
+    }
+
+    private void setAlarm(){
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 38);
+        calendar.set(Calendar.SECOND, 0);
+        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 20000, pendingIntent);
+
+
+
+
+
+////        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+//        //PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+//        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        int interval = 1000 * 60 * 20;
+//
+//        Notification.Builder builder;
+//        AlarmManager mgrAlarm = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+//        builder = new Notification.Builder(this);
+//        builder.setContentTitle("sdaas");
+//        builder.setContentText("sss");
+//        builder.setSmallIcon(R.drawable.logo);
+//        builder.setAutoCancel(true);
+//        builder.setLargeIcon(((BitmapDrawable) this.getResources().getDrawable(R.drawable.logo)).getBitmap());
+//        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+//
+////            long futureInMillis = OSharedPreference.getPeriodNotificationDateTime();
+//        long futureInMillis = System.currentTimeMillis() ;
+//        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+//        alarmIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, 1);
+//        alarmIntent.putExtra(AlarmReceiver.NOTIFICATION, builder.build());
+//        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 110, alarmIntent, 0);
+//
+//        /* Set the alarm to start at 10:30 AM */
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+////        calendar.set(Calendar.HOUR_OF_DAY, 10);
+////        calendar.set(Calendar.MINUTE, 30);
+////        Calendar calNow = Calendar.getInstance();
+////        long current_time = calNow.getTimeInMillis();
+//
+//        /* Repeating on every 20 minutes interval */
+//        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+//                futureInMillis ,60000, pendingIntent1);
     }
 }
