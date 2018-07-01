@@ -3,7 +3,9 @@ package com.muhib.restaurant;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
 
 import com.muhib.restaurant.fcm.AlarmReceiver;
 
@@ -15,6 +17,12 @@ public class MyApplication extends Application {
     private static MyApplication mInstance;
     private static AlarmManager am;
     private static PendingIntent pendingIntent;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     @Override
     public void onCreate() {
         super.onCreate();

@@ -1,1 +1,1 @@
-include ':app', ':woocommerseandroidoauth1library', ':btsdk', ':zixng'
+include ':app', ':woocommerseandroidoauth1library', ':btsdk'
