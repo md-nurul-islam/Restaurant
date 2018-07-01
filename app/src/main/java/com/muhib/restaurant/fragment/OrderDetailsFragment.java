@@ -32,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.muhib.restaurant.NetUtils;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.myinterface.OrderActionListener;
+import com.muhib.restaurant.printer.Main_Activity;
 import com.muhib.restaurant.retrofit.RetrofitApiClient;
 import com.muhib.restaurant.utils.MySheardPreference;
 
@@ -240,9 +241,15 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                 ordeProcess(id, false);
                 break;
             case R.id.printPage:
-                IntentPrint("Printer should not work");
+                callPrinter();
+                //IntentPrint("Printer should not work");
                 break;
         }
+    }
+
+    private void callPrinter() {
+        Intent printerIntent = new Intent(getActivity(), Main_Activity.class);
+        startActivity(printerIntent);
     }
 
     String value = "";
