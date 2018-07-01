@@ -61,7 +61,21 @@
         <activity
             android:name=".activity.DetailsActivity"
             android:label="@string/title_activity_details"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <!--printer .................start.......-->
+        <activity android:name=".printer.Main_Activity"
+        android:label="@string/select_device"
+            android:theme="@style/CustomTheme"
+        android:configChanges="orientation|keyboardHidden" />
+
+        <activity android:name=".printer.DeviceListActivity"
+            android:label="@string/select_device"
+            android:theme="@android:style/Theme.Dialog"
+            android:configChanges="orientation|keyboardHidden" />
+
+
+        <!--printer .................end.......-->
+
         <!-- [START firebase_service] -->
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>

@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Restaurant_.iml" filepath="$PROJECT_DIR$/Restaurant_.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/btsdk/btsdk.iml" filepath="$PROJECT_DIR$/btsdk/btsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/woocommerseandroidoauth1library/woocommerseandroidoauth1library.iml" filepath="$PROJECT_DIR$/woocommerseandroidoauth1library/woocommerseandroidoauth1library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zixng/zixng.iml" filepath="$PROJECT_DIR$/zixng/zixng.iml" />
     </modules>
   </component>
 </project>

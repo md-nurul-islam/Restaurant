@@ -9,7 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/btsdk" />
             <option value="$PROJECT_DIR$/woocommerseandroidoauth1library" />
+            <option value="$PROJECT_DIR$/zixng" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
