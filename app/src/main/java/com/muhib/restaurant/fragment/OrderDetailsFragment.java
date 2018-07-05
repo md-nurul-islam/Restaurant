@@ -103,6 +103,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
 
     String id = "";
 
+    String printText = "Order" + "\n" + "Product       Quantity       Price" + "\n";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -248,7 +250,9 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void callPrinter() {
+
         Intent printerIntent = new Intent(getActivity(), Main_Activity.class);
+        printerIntent.putExtra("printText", printText);
         startActivity(printerIntent);
     }
 
@@ -604,16 +608,22 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             myView = layoutInflater.inflate(R.layout.item_row_view_details, itemNameLayout, false);
             LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
             TextView name = (TextView) myView.findViewById(R.id.itemName);
-            if (!products.getItemList().get(i).getName().isEmpty())
+            if (!products.getItemList().get(i).getName().isEmpty()) {
                 name.setText(products.getItemList().get(i).getName());
+                printText = printText + products.getItemList().get(i).getName() + "     ";
+            }
 
             TextView itemNo = (TextView) myView.findViewById(R.id.itemNo);
-            if (products.getItemList().get(i).getQuantity() > 0)
+            if (products.getItemList().get(i).getQuantity() > 0) {
                 itemNo.setText("" + products.getItemList().get(i).getQuantity());
+                printText = printText + products.getItemList().get(i).getQuantity() + "     ";
+            }
 
             TextView priceText = (TextView) myView.findViewById(R.id.price);
-            if (!products.getItemList().get(i).getPrice().isEmpty())
+            if (!products.getItemList().get(i).getPrice().isEmpty()) {
                 priceText.setText(products.getItemList().get(i).getPrice());
+                printText = printText + products.getItemList().get(i).getPrice() + "     ";
+            }
             itemNameLayout.addView(ll);
 
         }

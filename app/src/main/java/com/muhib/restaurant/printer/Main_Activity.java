@@ -112,6 +112,7 @@ public class Main_Activity extends Activity implements OnClickListener{
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the services
     private BluetoothService mService = null;
+    String printText = "";
 
     /***************************   指                 令****************************************************************/
     final String[] items = { "复位打印机", "打印并走纸", "标准ASCII字体", "压缩ASCII字体", "正常大小",
@@ -173,6 +174,13 @@ public class Main_Activity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getIntent().getExtras()!=null)
+        {
+            printText = getIntent().getExtras().getString("printText");
+        }
+
+
         if (DEBUG)
             Log.e(TAG, "+++ ON CREATE +++");
 
@@ -693,7 +701,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                     +"  the company is a high-tech enterprise which specializes" +
                     " in R&D,manufacturing,marketing of thermal printers and barcode scanners.\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 1, 1, 0));
-            SendDataByte(PrinterCommand.POS_Print_Text(data, CHINESE, 0, 0, 0, 0));
+            SendDataByte(PrinterCommand.POS_Print_Text(printText, CHINESE, 0, 0, 0, 0));
             SendDataByte(PrinterCommand.POS_Set_Cut(1));
             SendDataByte(PrinterCommand.POS_Set_PrtInit());
         }else if((lang.compareTo("cn")) == 0){
