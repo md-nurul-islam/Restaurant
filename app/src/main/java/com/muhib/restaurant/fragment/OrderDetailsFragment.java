@@ -250,9 +250,11 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void callPrinter() {
+        String str = new Gson().toJson(products);
+        //bundle.putString("products", str);
 
         Intent printerIntent = new Intent(getActivity(), Main_Activity.class);
-        printerIntent.putExtra("printText", printText);
+        printerIntent.putExtra("printText", str);
         startActivity(printerIntent);
     }
 
@@ -620,8 +622,8 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             }
 
             TextView priceText = (TextView) myView.findViewById(R.id.price);
-            if (!products.getItemList().get(i).getPrice().isEmpty()) {
-                priceText.setText(products.getItemList().get(i).getPrice());
+            if (products.getItemList().get(i).getPrice()>0) {
+                priceText.setText(""+products.getItemList().get(i).getPrice());
                 printText = printText + products.getItemList().get(i).getPrice() + "     ";
             }
             itemNameLayout.addView(ll);

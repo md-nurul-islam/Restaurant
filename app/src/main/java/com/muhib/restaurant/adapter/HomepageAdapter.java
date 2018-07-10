@@ -35,7 +35,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.muhib.restaurant.R;
-import com.muhib.restaurant.activity.DetailsActivity;
+//import com.muhib.restaurant.activity.DetailsActivity;
 import com.muhib.restaurant.activity.MainActivity;
 import com.muhib.restaurant.fragment.HomeFragment;
 import com.muhib.restaurant.fragment.OrderDetailsFragment;

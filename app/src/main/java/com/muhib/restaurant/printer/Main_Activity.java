@@ -26,10 +26,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -43,14 +48,20 @@ import com.muhib.restaurant.printer_sub.PrinterCommand;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 
 
+import model.BillingAddressaModel;
+import model.Products;
+import model.ShippingAddressaModel;
 import zj.com.customize.sdk.Other;
 
-public class Main_Activity extends Activity implements OnClickListener{
+public class Main_Activity extends Activity implements OnClickListener {
+    private Products products;
+    String printHeader = "Order" + "\n" + "Product       Quantity       Price" + "\n";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -115,70 +126,84 @@ public class Main_Activity extends Activity implements OnClickListener{
     String printText = "";
 
     /***************************   指                 令****************************************************************/
-    final String[] items = { "复位打印机", "打印并走纸", "标准ASCII字体", "压缩ASCII字体", "正常大小",
+    final String[] items = {"复位打印机", "打印并走纸", "标准ASCII字体", "压缩ASCII字体", "正常大小",
             "二倍高倍宽", "三倍高倍宽", "四倍高倍宽", "取消加粗模式", "选择加粗模式", "取消倒置打印", "选择倒置打印", "取消黑白反显", "选择黑白反显",
             "取消顺时针旋转90°", "选择顺时针旋转90°", "走纸到切刀位置并切纸", "蜂鸣指令", "标准钱箱指令",
-            "实时弹钱箱指令", "进入字符模式", "进入中文模式", "打印自检页", "禁止按键", "取消禁止按键" ,
-            "设置汉字字符下划线", "取消汉字字符下划线", "进入十六进制模式" };
-    final String[] itemsen = { "Print Init", "Print and Paper", "Standard ASCII font", "Compressed ASCII font", "Normal size",
+            "实时弹钱箱指令", "进入字符模式", "进入中文模式", "打印自检页", "禁止按键", "取消禁止按键",
+            "设置汉字字符下划线", "取消汉字字符下划线", "进入十六进制模式"};
+    final String[] itemsen = {"Print Init", "Print and Paper", "Standard ASCII font", "Compressed ASCII font", "Normal size",
             "Double high power wide", "Twice as high power wide", "Three times the high-powered wide", "Off emphasized mode", "Choose bold mode", "Cancel inverted Print", "Invert selection Print", "Cancel black and white reverse display", "Choose black and white reverse display",
             "Cancel rotated clockwise 90 °", "Select the clockwise rotation of 90 °", "Feed paper Cut", "Beep", "Standard CashBox",
-            "Open CashBox", "Char Mode", "Chinese Mode", "Print SelfTest", "DisEnable Button", "Enable Button" ,
-            "Set Underline", "Cancel Underline", "Hex Mode" };
+            "Open CashBox", "Char Mode", "Chinese Mode", "Print SelfTest", "DisEnable Button", "Enable Button",
+            "Set Underline", "Cancel Underline", "Hex Mode"};
     final byte[][] byteCommands = {
-            { 0x1b, 0x40, 0x0a },// 复位打印机
-            { 0x0a }, //打印并走纸
-            { 0x1b, 0x4d, 0x00 },// 标准ASCII字体
-            { 0x1b, 0x4d, 0x01 },// 压缩ASCII字体
-            { 0x1d, 0x21, 0x00 },// 字体不放大
-            { 0x1d, 0x21, 0x11 },// 宽高加倍
-            { 0x1d, 0x21, 0x22 },// 宽高加倍
-            { 0x1d, 0x21, 0x33 },// 宽高加倍
-            { 0x1b, 0x45, 0x00 },// 取消加粗模式
-            { 0x1b, 0x45, 0x01 },// 选择加粗模式
-            { 0x1b, 0x7b, 0x00 },// 取消倒置打印
-            { 0x1b, 0x7b, 0x01 },// 选择倒置打印
-            { 0x1d, 0x42, 0x00 },// 取消黑白反显
-            { 0x1d, 0x42, 0x01 },// 选择黑白反显
-            { 0x1b, 0x56, 0x00 },// 取消顺时针旋转90°
-            { 0x1b, 0x56, 0x01 },// 选择顺时针旋转90°
-            { 0x0a, 0x1d, 0x56, 0x42, 0x01, 0x0a },//切刀指令
-            { 0x1b, 0x42, 0x03, 0x03 },//蜂鸣指令
-            { 0x1b, 0x70, 0x00, 0x50, 0x50 },//钱箱指令
-            { 0x10, 0x14, 0x00, 0x05, 0x05 },//实时弹钱箱指令
-            { 0x1c, 0x2e },// 进入字符模式
-            { 0x1c, 0x26 }, //进入中文模式
-            { 0x1f, 0x11, 0x04 }, //打印自检页
-            { 0x1b, 0x63, 0x35, 0x01 }, //禁止按键
-            { 0x1b, 0x63, 0x35, 0x00 }, //取消禁止按键
-            { 0x1b, 0x2d, 0x02, 0x1c, 0x2d, 0x02 }, //设置下划线
-            { 0x1b, 0x2d, 0x00, 0x1c, 0x2d, 0x00 }, //取消下划线
-            { 0x1f, 0x11, 0x03 }, //打印机进入16进制模式
+            {0x1b, 0x40, 0x0a},// 复位打印机
+            {0x0a}, //打印并走纸
+            {0x1b, 0x4d, 0x00},// 标准ASCII字体
+            {0x1b, 0x4d, 0x01},// 压缩ASCII字体
+            {0x1d, 0x21, 0x00},// 字体不放大
+            {0x1d, 0x21, 0x11},// 宽高加倍
+            {0x1d, 0x21, 0x22},// 宽高加倍
+            {0x1d, 0x21, 0x33},// 宽高加倍
+            {0x1b, 0x45, 0x00},// 取消加粗模式
+            {0x1b, 0x45, 0x01},// 选择加粗模式
+            {0x1b, 0x7b, 0x00},// 取消倒置打印
+            {0x1b, 0x7b, 0x01},// 选择倒置打印
+            {0x1d, 0x42, 0x00},// 取消黑白反显
+            {0x1d, 0x42, 0x01},// 选择黑白反显
+            {0x1b, 0x56, 0x00},// 取消顺时针旋转90°
+            {0x1b, 0x56, 0x01},// 选择顺时针旋转90°
+            {0x0a, 0x1d, 0x56, 0x42, 0x01, 0x0a},//切刀指令
+            {0x1b, 0x42, 0x03, 0x03},//蜂鸣指令
+            {0x1b, 0x70, 0x00, 0x50, 0x50},//钱箱指令
+            {0x10, 0x14, 0x00, 0x05, 0x05},//实时弹钱箱指令
+            {0x1c, 0x2e},// 进入字符模式
+            {0x1c, 0x26}, //进入中文模式
+            {0x1f, 0x11, 0x04}, //打印自检页
+            {0x1b, 0x63, 0x35, 0x01}, //禁止按键
+            {0x1b, 0x63, 0x35, 0x00}, //取消禁止按键
+            {0x1b, 0x2d, 0x02, 0x1c, 0x2d, 0x02}, //设置下划线
+            {0x1b, 0x2d, 0x00, 0x1c, 0x2d, 0x00}, //取消下划线
+            {0x1f, 0x11, 0x03}, //打印机进入16进制模式
     };
     /***************************条                          码***************************************************************/
-    final String[] codebar = { "UPC_A", "UPC_E", "JAN13(EAN13)", "JAN8(EAN8)",
-            "CODE39", "ITF", "CODABAR", "CODE93", "CODE128", "QR Code" };
+    final String[] codebar = {"UPC_A", "UPC_E", "JAN13(EAN13)", "JAN8(EAN8)",
+            "CODE39", "ITF", "CODABAR", "CODE93", "CODE128", "QR Code"};
     final byte[][] byteCodebar = {
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
-            { 0x1b, 0x40 },// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
+            {0x1b, 0x40},// 复位打印机
     };
+
+    private Products parseNewsList(String object) {
+
+        Products products = new Products();
+        Type listType = new TypeToken<Products>() {
+        }.getType();
+        products = new Gson().fromJson(object, listType);
+        return products;
+    }
+
     /******************************************************************************************************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getIntent().getExtras()!=null)
-        {
-            printText = getIntent().getExtras().getString("printText");
+        if (getIntent().getExtras().getString("printText") != null) {
+            String str = getIntent().getExtras().getString("printText");
+            if (str != null)
+                products = parseNewsList(str);
         }
+//        if (getIntent().getExtras() != null) {
+//            printText = getIntent().getExtras().getString("printText");
+//        }
 
 
         if (DEBUG)
@@ -274,52 +299,52 @@ public class Main_Activity extends Activity implements OnClickListener{
         printbmpButton = (Button) findViewById(R.id.btn_printpicture);
         printbmpButton.setOnClickListener(this);
 
-        btnScanButton = (Button)findViewById(R.id.button_scan);
+        btnScanButton = (Button) findViewById(R.id.button_scan);
         btnScanButton.setOnClickListener(this);
 
-        hexBox = (CheckBox)findViewById(R.id.checkBoxHEX);
+        hexBox = (CheckBox) findViewById(R.id.checkBoxHEX);
         hexBox.setOnClickListener(this);
 
-        width_58mm = (RadioButton)findViewById(R.id.width_58mm);
+        width_58mm = (RadioButton) findViewById(R.id.width_58mm);
         width_58mm.setOnClickListener(this);
 
-        width_80 = (RadioButton)findViewById(R.id.width_80mm);
+        width_80 = (RadioButton) findViewById(R.id.width_80mm);
         width_80.setOnClickListener(this);
 
         imageViewPicture = (ImageView) findViewById(R.id.imageViewPictureUSB);
         imageViewPicture.setOnClickListener(this);
 
-        btnClose = (Button)findViewById(R.id.btn_close);
+        btnClose = (Button) findViewById(R.id.btn_close);
         btnClose.setOnClickListener(this);
 
-        btn_BMP = (Button)findViewById(R.id.btn_prtbmp);
+        btn_BMP = (Button) findViewById(R.id.btn_prtbmp);
         btn_BMP.setOnClickListener(this);
 
-        btn_ChoseCommand = (Button)findViewById(R.id.btn_prtcommand);
+        btn_ChoseCommand = (Button) findViewById(R.id.btn_prtcommand);
         btn_ChoseCommand.setOnClickListener(this);
 
-        btn_prtsma = (Button)findViewById(R.id.btn_prtsma);
+        btn_prtsma = (Button) findViewById(R.id.btn_prtsma);
         btn_prtsma.setOnClickListener(this);
 
-        btn_prttableButton = (Button)findViewById(R.id.btn_prttable);
+        btn_prttableButton = (Button) findViewById(R.id.btn_prttable);
         btn_prttableButton.setOnClickListener(this);
 
-        btn_prtcodeButton = (Button)findViewById(R.id.btn_prtbarcode);
+        btn_prtcodeButton = (Button) findViewById(R.id.btn_prtbarcode);
         btn_prtcodeButton.setOnClickListener(this);
 
-        btn_camer = (Button)findViewById(R.id.btn_dyca);
+        btn_camer = (Button) findViewById(R.id.btn_dyca);
         btn_camer.setOnClickListener(this);
 
-        btn_scqrcode = (Button)findViewById(R.id.btn_scqr);
+        btn_scqrcode = (Button) findViewById(R.id.btn_scqr);
         btn_scqrcode.setOnClickListener(this);
 
-        Simplified = (RadioButton)findViewById(R.id.gbk12);
+        Simplified = (RadioButton) findViewById(R.id.gbk12);
         Simplified.setOnClickListener(this);
-        big5 = (RadioButton)findViewById(R.id.big5);
+        big5 = (RadioButton) findViewById(R.id.big5);
         big5.setOnClickListener(this);
-        thai = (RadioButton)findViewById(R.id.thai);
+        thai = (RadioButton) findViewById(R.id.thai);
         thai.setOnClickListener(this);
-        Korean = (RadioButton)findViewById(R.id.kor);
+        Korean = (RadioButton) findViewById(R.id.kor);
         Korean.setOnClickListener(this);
 
         Bitmap bm = getImageFromAssetsFile("demo.bmp");
@@ -355,12 +380,12 @@ public class Main_Activity extends Activity implements OnClickListener{
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
-            case R.id.button_scan:{
+            case R.id.button_scan: {
                 Intent serverIntent = new Intent(Main_Activity.this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                 break;
             }
-            case R.id.btn_close:{
+            case R.id.btn_close: {
                 mService.stop();
                 editText.setEnabled(false);
                 imageViewPicture.setEnabled(false);
@@ -386,14 +411,15 @@ public class Main_Activity extends Activity implements OnClickListener{
                 btnScanButton.setText(getText(R.string.connect));
                 break;
             }
-            case R.id.btn_test:{
-                BluetoothPrintTest();;
+            case R.id.btn_test: {
+                BluetoothPrintTest();
+                ;
                 break;
             }
-            case R.id.Send_Button:{
+            case R.id.Send_Button: {
                 if (hexBox.isChecked()) {
                     String str = editText.getText().toString().trim();//去掉头尾空白
-                    if(str.length() > 0){
+                    if (str.length() > 0) {
                         str = Other.RemoveChar(str, ' ').toString();
                         if (str.length() <= 0)
                             return;
@@ -404,78 +430,78 @@ public class Main_Activity extends Activity implements OnClickListener{
                         }
                         byte[] buf = Other.HexStringToBytes(str);
                         SendDataByte(buf);
-                    }else{
+                    } else {
                         Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     String msg = editText.getText().toString();
-                    if(msg.length()>0){
-                        if(thai.isChecked()){
+                    if (msg.length() > 0) {
+                        if (thai.isChecked()) {
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 0, 0, 0));
                             SendDataByte(Command.LF);
-                        }else if(big5.isChecked()){
+                        } else if (big5.isChecked()) {
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 0, 0, 0));
                             SendDataByte(Command.LF);
-                        }else if(Korean.isChecked()){
+                        } else if (Korean.isChecked()) {
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
                             SendDataByte(Command.LF);
-                        }else if(Simplified.isChecked()){
+                        } else if (Simplified.isChecked()) {
                             SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 0, 0, 0));
                             SendDataByte(Command.LF);
                         }
-                    }else{
+                    } else {
                         Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
             }
             case R.id.width_58mm:
-            case R.id.width_80mm:{
+            case R.id.width_80mm: {
                 is58mm = v == width_58mm;
                 width_58mm.setChecked(is58mm);
                 width_80.setChecked(!is58mm);
                 break;
             }
-            case R.id.btn_printpicture:{
+            case R.id.btn_printpicture: {
                 GraphicalPrint();
                 break;
             }
-            case R.id.imageViewPictureUSB:{
+            case R.id.imageViewPictureUSB: {
                 Intent loadpicture = new Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(loadpicture, REQUEST_CHOSE_BMP);
                 break;
             }
-            case R.id.btn_prtbmp:{
+            case R.id.btn_prtbmp: {
                 Print_BMP();
                 break;
             }
-            case R.id.btn_prtcommand:{
+            case R.id.btn_prtcommand: {
                 CommandTest();
                 break;
             }
-            case R.id.btn_prtsma:{
+            case R.id.btn_prtsma: {
                 SendDataByte(Command.ESC_Init);
                 SendDataByte(Command.LF);
                 Print_Ex();
                 break;
             }
-            case R.id.btn_prttable:{
+            case R.id.btn_prttable: {
                 SendDataByte(Command.ESC_Init);
                 SendDataByte(Command.LF);
                 PrintTable();
                 break;
             }
-            case R.id.btn_prtbarcode:{
+            case R.id.btn_prtbarcode: {
                 printBarCode();
                 break;
             }
-            case R.id.btn_scqr:{
+            case R.id.btn_scqr: {
                 createImage();
                 break;
             }
-            case R.id.btn_dyca:{
+            case R.id.btn_dyca: {
                 dispatchTakePictureIntent(REQUEST_CAMER);
                 break;
             }
@@ -532,7 +558,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                             mTitle.setText(R.string.title_connected_to);
                             mTitle.append(mConnectedDeviceName);
                             btnScanButton.setText(getText(R.string.Connecting));
-                            Print_Test();//
+                            //Print_Test();//
                             btnScanButton.setEnabled(false);
                             editText.setEnabled(true);
                             imageViewPicture.setEnabled(true);
@@ -619,7 +645,7 @@ public class Main_Activity extends Activity implements OnClickListener{
         if (DEBUG)
             Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE:{
+            case REQUEST_CONNECT_DEVICE: {
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     // Get the device MAC address
@@ -635,7 +661,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                 }
                 break;
             }
-            case REQUEST_ENABLE_BT:{
+            case REQUEST_ENABLE_BT: {
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a session
@@ -649,10 +675,10 @@ public class Main_Activity extends Activity implements OnClickListener{
                 }
                 break;
             }
-            case REQUEST_CHOSE_BMP:{
-                if (resultCode == Activity.RESULT_OK){
+            case REQUEST_CHOSE_BMP: {
+                if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaColumns.DATA };
+                    String[] filePathColumn = {MediaColumns.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
@@ -673,15 +699,15 @@ public class Main_Activity extends Activity implements OnClickListener{
                     if (null != bitmap) {
                         imageViewPicture.setImageBitmap(bitmap);
                     }
-                }else{
+                } else {
                     Toast.makeText(this, getString(R.string.msg_statev1), Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
-            case REQUEST_CAMER:{
-                if (resultCode == Activity.RESULT_OK){
+            case REQUEST_CAMER: {
+                if (resultCode == Activity.RESULT_OK) {
                     handleSmallCameraPhoto(data);
-                }else{
+                } else {
                     Toast.makeText(this, getText(R.string.camer), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -693,39 +719,40 @@ public class Main_Activity extends Activity implements OnClickListener{
     /**
      * 连接成功后打印测试页
      */
-    private void Print_Test(){
+    private void Print_Test() {
         String lang = getString(R.string.strLang);
-        if((lang.compareTo("en")) == 0){
+        if ((lang.compareTo("en")) == 0) {
             String msg = "Congratulations!\n\n";
+            //String myData = dataProcessing(products);
             String data = "You have sucessfully created communications between your device and our bluetooth printer.\n"
-                    +"  the company is a high-tech enterprise which specializes" +
+                    + "  the company is a high-tech enterprise which specializes" +
                     " in R&D,manufacturing,marketing of thermal printers and barcode scanners.\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 1, 1, 0));
-            SendDataByte(PrinterCommand.POS_Print_Text(printText, CHINESE, 0, 0, 0, 0));
+            SendDataByte(PrinterCommand.POS_Print_Text("", CHINESE, 0, 0, 0, 0));
             SendDataByte(PrinterCommand.POS_Set_Cut(1));
             SendDataByte(PrinterCommand.POS_Set_PrtInit());
-        }else if((lang.compareTo("cn")) == 0){
+        } else if ((lang.compareTo("cn")) == 0) {
             String msg = "恭喜您!\n\n";
             String data = "您已经成功的连接上了我们的便携式蓝牙打印机！\n我们公司是一家专业从事研发，生产，销售商用票据打印机和条码扫描设备于一体的高科技企业.\n\n\n\n\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 1, 1, 0));
             SendDataByte(PrinterCommand.POS_Print_Text(data, CHINESE, 0, 0, 0, 0));
             SendDataByte(PrinterCommand.POS_Set_Cut(1));
             SendDataByte(PrinterCommand.POS_Set_PrtInit());
-        }else if((lang.compareTo("hk")) == 0 ){
+        } else if ((lang.compareTo("hk")) == 0) {
             String msg = "恭喜您!\n";
             String data = "您已經成功的連接上了我們的便攜式藍牙打印機！ \n我們公司是一家專業從事研發，生產，銷售商用票據打印機和條碼掃描設備於一體的高科技企業.\n\n\n\n\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 1, 1, 0));
             SendDataByte(PrinterCommand.POS_Print_Text(data, BIG5, 0, 0, 0, 0));
             SendDataByte(PrinterCommand.POS_Set_Cut(1));
             SendDataByte(PrinterCommand.POS_Set_PrtInit());
-        }else if((lang.compareTo("kor")) == 0){
+        } else if ((lang.compareTo("kor")) == 0) {
             String msg = "축하 해요!\n";
             String data = "성공적으로 우리의 휴대용 블루투스 프린터에 연결 한! \n우리는 하이테크 기업 중 하나에서 개발, 생산 및 상업 영수증 프린터와 바코드 스캐닝 장비 판매 전문 회사입니다.\n\n\n\n\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 1, 1, 0));
             SendDataByte(PrinterCommand.POS_Print_Text(data, KOREAN, 0, 0, 0, 0));
             SendDataByte(PrinterCommand.POS_Set_Cut(1));
             SendDataByte(PrinterCommand.POS_Set_PrtInit());
-        }else if((lang.compareTo("thai")) == 0){
+        } else if ((lang.compareTo("thai")) == 0) {
             String msg = "ขอแสดงความยินดี!\n";
             String data = "คุณได้เชื่อมต่อกับบลูทู ธ เครื่องพิมพ์แบบพกพาของเรา! \n เราเป็น บริษัท ที่มีความเชี่ยวชาญในการพัฒนา, การผลิตและการขายของเครื่องพิมพ์ใบเสร็จรับเงินและการสแกนบาร์โค้ดอุปกรณ์เชิงพาณิชย์ในหนึ่งในองค์กรที่มีเทคโนโลยีสูง.\n\n\n\n\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 1, 1, 0));
@@ -737,24 +764,26 @@ public class Main_Activity extends Activity implements OnClickListener{
 
     /**
      * 打印测试页
+     *
      * @param mPrinter
      */
     private void BluetoothPrintTest() {
         String msg = "";
         String lang = getString(R.string.strLang);
-        if((lang.compareTo("en")) == 0 ){
-            msg = "Division I is a research and development, production and services in one high-tech research and development, production-oriented enterprises, specializing in POS terminals finance, retail, restaurants, bars, songs and other areas, computer terminals, self-service terminal peripheral equipment R & D, manufacturing and sales! \n company's organizational structure concise and practical, pragmatic style of rigorous, efficient operation. Integrity, dedication, unity, and efficient is the company's corporate philosophy, and constantly strive for today, vibrant, the company will be strong scientific and technological strength, eternal spirit of entrepreneurship, the pioneering and innovative attitude, confidence towards the international information industry, with friends to create brilliant information industry !!! \n\n\n";
+        if ((lang.compareTo("en")) == 0) {
+            msg = dataProcessing(products);
+            // msg = "Division I is a research and development, production and services in one high-tech research and development, production-oriented enterprises, specializing in POS terminals finance, retail, restaurants, bars, songs and other areas, computer terminals, self-service terminal peripheral equipment R & D, manufacturing and sales! \n company's organizational structure concise and practical, pragmatic style of rigorous, efficient operation. Integrity, dedication, unity, and efficient is the company's corporate philosophy, and constantly strive for today, vibrant, the company will be strong scientific and technological strength, eternal spirit of entrepreneurship, the pioneering and innovative attitude, confidence towards the international information industry, with friends to create brilliant information industry !!! \n\n\n";
             SendDataString(msg);
-        }else if((lang.compareTo("cn")) == 0){
+        } else if ((lang.compareTo("cn")) == 0) {
             msg = "我司是一家集科研开发、生产经营和服务于一体的高技术研发、生产型企业，专业从事金融、商业零售、餐饮、酒吧、歌吧等领域的POS终端、计算机终端、自助终端周边配套设备的研发、制造及销售！\n公司的组织机构简练实用，作风务实严谨，运行高效。诚信、敬业、团结、高效是公司的企业理念和不断追求今天，朝气蓬勃，公司将以雄厚的科技力量，永恒的创业精神，不断开拓创新的姿态，充满信心的朝着国际化信息产业领域，与朋友们携手共创信息产业的辉煌!!!\n\n\n";
             SendDataString(msg);
-        }else if((lang.compareTo("hk")) == 0){
+        } else if ((lang.compareTo("hk")) == 0) {
             msg = "我司是一家集科研開發、生產經營和服務於一體的高技術研發、生產型企業，專業從事金融、商業零售、餐飲、酒吧、歌吧等領域的POS終端、計算機終端、自助終端周邊配套設備的研發、製造及銷售！ \n公司的組織機構簡練實用，作風務實嚴謹，運行高效。誠信、敬業、團結、高效是公司的企業理念和不斷追求今天，朝氣蓬勃，公司將以雄厚的科技力量，永恆的創業精神，不斷開拓創新的姿態，充滿信心的朝著國際化信息產業領域，與朋友們攜手共創信息產業的輝煌!!!\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 0, 0, 0));
-        }else if((lang.compareTo("kor")) == 0){
+        } else if ((lang.compareTo("kor")) == 0) {
             msg = "부문 I는 금융, 소매, 레스토랑, 바, 노래 및 기타 분야, 컴퓨터 단말기, 셀프 서비스 터미널 주변 장치 POS 터미널을 전문으로 한 첨단 기술 연구 및 개발, 생산 지향적 인 기업의 연구 및 개발, 생산 및 서비스입니다 R & D, 제조 및 판매! \n 회사의 조직 구조의 간결하고 엄격한, 효율적인 운영의 실제, 실용적인 스타일. 무결성, 헌신, 단결, 효율적인 회사의 기업 철학이며, 지속적으로, 활기찬,이 회사는 강력한 과학 기술 강도, 기업가 정신의 영원한 정신이 될 것입니다 오늘을 위해 노력, 개척과 혁신적인 태도, 국제 정보 산업을 향해 자신감, 친구와 함께 화려한 정보 산업을 만들 수 있습니다!!!\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
-        }else if((lang.compareTo("thai")) == 0){
+        } else if ((lang.compareTo("thai")) == 0) {
             msg = "ส่วนฉันคือการวิจัยและการพัฒนาการผลิตและการบริการในการวิจัยหนึ่งที่มีเทคโนโลยีสูงและการพัฒนาสถานประกอบการผลิตที่มุ่งเน้นความเชี่ยวชาญในขั้ว POS การเงิน, ค้าปลีก, ร้านอาหาร, บาร์, เพลงและพื้นที่อื่น ๆ , เครื่องคอมพิวเตอร์, บริการตนเองขั้วอุปกรณ์ต่อพ่วง R & D, การผลิตและยอดขาย! \n กระชับโครงสร้าง บริษัท  ขององค์กรและการปฏิบัติในทางปฏิบัติของสไตล์อย่างเข้มงวดดำเนินงานมีประสิทธิภาพ ความซื่อสัตย์ทุ่มเทความสามัคคีและมีประสิทธิภาพคือปรัชญาขององค์กรของ บริษัท อย่างต่อเนื่องและมุ่งมั่นเพื่อวันนี้ที่สดใสของ บริษัท จะมีกำลังแรงขึ้นทางวิทยาศาสตร์และเทคโนโลยีที่แข็งแกร่งจิตวิญญาณนิรันดร์ของผู้ประกอบการที่มีทัศนคติที่เป็นผู้บุกเบิกและนวัตกรรมความเชื่อมั่นที่มีต่ออุตสาหกรรมข้อมูลระหว่างประเทศ กับเพื่อน ๆ ในการสร้างอุตสาหกรรมข้อมูลที่ยอดเยี่ยม!!!\n\n\n";
             SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 0, 0, 0));
         }
@@ -763,19 +792,18 @@ public class Main_Activity extends Activity implements OnClickListener{
     /*
      * 打印图片
      */
-    private void Print_BMP(){
+    private void Print_BMP() {
 
         //	byte[] buffer = PrinterCommand.POS_Set_PrtInit();
         Bitmap mBitmap = ((BitmapDrawable) imageViewPicture.getDrawable())
                 .getBitmap();
         int nMode = 0;
         int nPaperWidth = 384;
-        if(width_58mm.isChecked())
+        if (width_58mm.isChecked())
             nPaperWidth = 384;
         else if (width_80.isChecked())
             nPaperWidth = 576;
-        if(mBitmap != null)
-        {
+        if (mBitmap != null) {
             /**
              * Parameters:
              * mBitmap  要打印的图片
@@ -798,15 +826,15 @@ public class Main_Activity extends Activity implements OnClickListener{
      * 打印自定义表格
      */
     @SuppressLint("SimpleDateFormat")
-    private void PrintTable(){
+    private void PrintTable() {
 
         String lang = getString(R.string.strLang);
-        if((lang.compareTo("cn")) == 0){
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日 HH:mm:ss ");
+        if ((lang.compareTo("cn")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
             String str = formatter.format(curDate);
             String date = str + "\n\n\n\n\n\n";
-            if(is58mm){
+            if (is58mm) {
 
                 Command.ESC_Align[2] = 0x02;
                 byte[][] allbuf;
@@ -815,13 +843,13 @@ public class Main_Activity extends Activity implements OnClickListener{
 
                             Command.ESC_Init, Command.ESC_Three,
                             String.format("┏━━┳━━━┳━━┳━━━━┓\n").getBytes("GBK"),
-                            String.format("┃发站┃%-4s┃到站┃%-6s┃\n","深圳","成都").getBytes("GBK"),
+                            String.format("┃发站┃%-4s┃到站┃%-6s┃\n", "深圳", "成都").getBytes("GBK"),
                             String.format("┣━━╋━━━╋━━╋━━━━┫\n").getBytes("GBK"),
-                            String.format("┃件数┃%2d/%-3d┃单号┃%-8d┃\n",1,222,555).getBytes("GBK"),
+                            String.format("┃件数┃%2d/%-3d┃单号┃%-8d┃\n", 1, 222, 555).getBytes("GBK"),
                             String.format("┣━━┻┳━━┻━━┻━━━━┫\n").getBytes("GBK"),
-                            String.format("┃收件人┃%-12s┃\n","【送】测试/测试人").getBytes("GBK"),
+                            String.format("┃收件人┃%-12s┃\n", "【送】测试/测试人").getBytes("GBK"),
                             String.format("┣━━━╋━━┳━━┳━━━━┫\n").getBytes("GBK"),
-                            String.format("┃业务员┃%-2s┃名称┃%-6s┃\n","测试","深圳").getBytes("GBK"),
+                            String.format("┃业务员┃%-2s┃名称┃%-6s┃\n", "测试", "深圳").getBytes("GBK"),
                             String.format("┗━━━┻━━┻━━┻━━━━┛\n").getBytes("GBK"),
                             Command.ESC_Align, "\n".getBytes("GBK")
                     };
@@ -833,7 +861,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
                 }
-            }else {
+            } else {
 
                 Command.ESC_Align[2] = 0x02;
                 byte[][] allbuf;
@@ -861,12 +889,12 @@ public class Main_Activity extends Activity implements OnClickListener{
                     e.printStackTrace();
                 }
             }
-        }else if((lang.compareTo("en")) == 0){
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd/ HH:mm:ss ");
+        } else if ((lang.compareTo("en")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
             String str = formatter.format(curDate);
             String date = str + "\n\n\n\n\n\n";
-            if(is58mm){
+            if (is58mm) {
 
                 Command.ESC_Align[2] = 0x02;
                 byte[][] allbuf;
@@ -875,13 +903,13 @@ public class Main_Activity extends Activity implements OnClickListener{
 
                             Command.ESC_Init, Command.ESC_Three,
                             String.format("┏━━┳━━━┳━━┳━━━━┓\n").getBytes("GBK"),
-                            String.format("┃XXXX┃%-6s┃XXXX┃%-8s┃\n","XXXX","XXXX").getBytes("GBK"),
+                            String.format("┃XXXX┃%-6s┃XXXX┃%-8s┃\n", "XXXX", "XXXX").getBytes("GBK"),
                             String.format("┣━━╋━━━╋━━╋━━━━┫\n").getBytes("GBK"),
-                            String.format("┃XXXX┃%2d/%-3d┃XXXX┃%-8d┃\n",1,222,555).getBytes("GBK"),
+                            String.format("┃XXXX┃%2d/%-3d┃XXXX┃%-8d┃\n", 1, 222, 555).getBytes("GBK"),
                             String.format("┣━━┻┳━━┻━━┻━━━━┫\n").getBytes("GBK"),
-                            String.format("┃XXXXXX┃%-18s┃\n","【XX】XXXX/XXXXXX").getBytes("GBK"),
+                            String.format("┃XXXXXX┃%-18s┃\n", "【XX】XXXX/XXXXXX").getBytes("GBK"),
                             String.format("┣━━━╋━━┳━━┳━━━━┫\n").getBytes("GBK"),
-                            String.format("┃XXXXXX┃%-2s┃XXXX┃%-8s┃\n","XXXX","XXXX").getBytes("GBK"),
+                            String.format("┃XXXXXX┃%-2s┃XXXX┃%-8s┃\n", "XXXX", "XXXX").getBytes("GBK"),
                             String.format("┗━━━┻━━┻━━┻━━━━┛\n").getBytes("GBK"),
                             Command.ESC_Align, "\n".getBytes("GBK")
                     };
@@ -893,7 +921,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
                 }
-            }else {
+            } else {
 
                 Command.ESC_Align[2] = 0x02;
                 byte[][] allbuf;
@@ -928,11 +956,11 @@ public class Main_Activity extends Activity implements OnClickListener{
      * 打印自定义小票
      */
     @SuppressLint("SimpleDateFormat")
-    private void Print_Ex(){
+    private void Print_Ex() {
 
         String lang = getString(R.string.strLang);
-        if((lang.compareTo("cn")) == 0){
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy年MM月dd日 HH:mm:ss ");
+        if ((lang.compareTo("cn")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
             String str = formatter.format(curDate);
             String date = str + "\n\n\n\n\n\n";
@@ -1016,8 +1044,8 @@ public class Main_Activity extends Activity implements OnClickListener{
                     e.printStackTrace();
                 }
             }
-        }else if((lang.compareTo("en")) == 0){
-            SimpleDateFormat formatter = new SimpleDateFormat ("yyyy/MM/dd/ HH:mm:ss ");
+        } else if ((lang.compareTo("en")) == 0) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss ");
             Date curDate = new Date(System.currentTimeMillis());//获取当前时间
             String str = formatter.format(curDate);
             String date = str + "\n\n\n\n\n\n";
@@ -1114,145 +1142,104 @@ public class Main_Activity extends Activity implements OnClickListener{
                     public void onClick(DialogInterface dialog, int which) {
                         SendDataByte(byteCodebar[which]);
                         String str = editText.getText().toString();
-                        if(which == 0)
-                        {
-                            if(str.length() == 11 || str.length() == 12)
-                            {
+                        if (which == 0) {
+                            if (str.length() == 11 || str.length() == 12) {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 65, 3, 168, 0, 2);
                                 SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataString("UPC_A\n");
                                 SendDataByte(code);
-                            }else {
+                            } else {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
-                        else if(which == 1)
-                        {
-                            if(str.length() == 6 || str.length() == 7)
-                            {
+                        } else if (which == 1) {
+                            if (str.length() == 6 || str.length() == 7) {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 66, 3, 168, 0, 2);
                                 SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataString("UPC_E\n");
                                 SendDataByte(code);
-                            }else {
+                            } else {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
-                        else if(which == 2)
-                        {
-                            if(str.length() == 12 || str.length() == 13)
-                            {
+                        } else if (which == 2) {
+                            if (str.length() == 12 || str.length() == 13) {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 67, 3, 168, 0, 2);
                                 SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataString("JAN13(EAN13)\n");
                                 SendDataByte(code);
-                            }else {
+                            } else {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
-                        else if(which == 3)
-                        {
-                            if(str.length() >0 )
-                            {
+                        } else if (which == 3) {
+                            if (str.length() > 0) {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 68, 3, 168, 0, 2);
                                 SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataString("JAN8(EAN8)\n");
                                 SendDataByte(code);
-                            }else {
+                            } else {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
-                        else if(which == 4)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 4) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 69, 3, 168, 1, 2);
                                 SendDataString("CODE39\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
-                        }
-                        else if(which == 5)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 5) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 70, 3, 168, 1, 2);
                                 SendDataString("ITF\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
-                        }
-                        else if(which == 6)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 6) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 71, 3, 168, 1, 2);
                                 SendDataString("CODABAR\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
-                        }
-                        else if(which == 7)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 7) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 72, 3, 168, 1, 2);
                                 SendDataString("CODE93\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
-                        }
-                        else if(which == 8)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 8) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getCodeBarCommand(str, 73, 3, 168, 1, 2);
                                 SendDataString("CODE128\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
-                        }
-                        else if(which == 9)
-                        {
-                            if(str.length() == 0)
-                            {
+                        } else if (which == 9) {
+                            if (str.length() == 0) {
                                 Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
                                 return;
-                            }
-                            else
-                            {
+                            } else {
                                 byte[] code = PrinterCommand.getBarCommand(str, 1, 3, 8);
                                 SendDataString("QR Code\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00 });
+                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
                                 SendDataByte(code);
                             }
                         }
@@ -1267,22 +1254,21 @@ public class Main_Activity extends Activity implements OnClickListener{
      * boolean is58mm   打印宽度(58和80)
      * int hight        转换后的图片高度
      */
-    private void GraphicalPrint(){
+    private void GraphicalPrint() {
 
         String txt_msg = editText.getText().toString();
-        if(txt_msg.length() == 0){
+        if (txt_msg.length() == 0) {
             Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
             return;
-        }else{
+        } else {
             Bitmap bm1 = getImageFromAssetsFile("demo.jpg");
-            if(width_58mm.isChecked()){
+            if (width_58mm.isChecked()) {
 
-                Bitmap bmp = Other.createAppIconText(bm1,txt_msg,25,is58mm,200);
+                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, is58mm, 200);
                 int nMode = 0;
                 int nPaperWidth = 384;
 
-                if(bmp != null)
-                {
+                if (bmp != null) {
                     byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
                     SendDataByte(Command.ESC_Init);
                     SendDataByte(Command.LF);
@@ -1291,14 +1277,12 @@ public class Main_Activity extends Activity implements OnClickListener{
                     SendDataByte(PrinterCommand.POS_Set_Cut(1));
                     SendDataByte(PrinterCommand.POS_Set_PrtInit());
                 }
-            }
-            else if (width_80.isChecked()){
-                Bitmap bmp = Other.createAppIconText(bm1,txt_msg,25,false,200);
+            } else if (width_80.isChecked()) {
+                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, false, 200);
                 int nMode = 0;
 
                 int nPaperWidth = 576;
-                if(bmp != null)
-                {
+                if (bmp != null) {
                     byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
                     SendDataByte(Command.ESC_Init);
                     SendDataByte(Command.LF);
@@ -1314,19 +1298,19 @@ public class Main_Activity extends Activity implements OnClickListener{
     /**
      * 打印指令测试
      */
-    private void CommandTest(){
+    private void CommandTest() {
 
         String lang = getString(R.string.strLang);
-        if((lang.compareTo("cn")) == 0){
+        if ((lang.compareTo("cn")) == 0) {
             new AlertDialog.Builder(Main_Activity.this).setTitle(getText(R.string.chosecommand))
                     .setItems(items, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             SendDataByte(byteCommands[which]);
                             try {
-                                if(which == 16 || which == 17 || which == 18 || which == 19 || which == 22
-                                        || which == 23 || which == 24|| which == 0 || which == 1 || which == 27){
-                                    return ;
-                                }else {
+                                if (which == 16 || which == 17 || which == 18 || which == 19 || which == 22
+                                        || which == 23 || which == 24 || which == 0 || which == 1 || which == 27) {
+                                    return;
+                                } else {
                                     SendDataByte("热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n热敏票据打印机ABCDEFGabcdefg123456,.;'/[{}]!\n".getBytes("GBK"));
                                 }
 
@@ -1336,16 +1320,16 @@ public class Main_Activity extends Activity implements OnClickListener{
                             }
                         }
                     }).create().show();
-        }else if((lang.compareTo("en")) == 0){
+        } else if ((lang.compareTo("en")) == 0) {
             new AlertDialog.Builder(Main_Activity.this).setTitle(getText(R.string.chosecommand))
                     .setItems(itemsen, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             SendDataByte(byteCommands[which]);
                             try {
-                                if(which == 16 || which == 17 || which == 18 || which == 19 || which == 22
-                                        || which == 23 || which == 24|| which == 0 || which == 1 || which == 27){
-                                    return ;
-                                }else {
+                                if (which == 16 || which == 17 || which == 18 || which == 19 || which == 22
+                                        || which == 23 || which == 24 || which == 0 || which == 1 || which == 27) {
+                                    return;
+                                } else {
                                     SendDataByte("Thermal Receipt Printer ABCDEFGabcdefg123456,.;'/[{}]!\nThermal Receipt PrinterABCDEFGabcdefg123456,.;'/[{}]!\nThermal Receipt PrinterABCDEFGabcdefg123456,.;'/[{}]!\nThermal Receipt PrinterABCDEFGabcdefg123456,.;'/[{}]!\nThermal Receipt PrinterABCDEFGabcdefg123456,.;'/[{}]!\nThermal Receipt PrinterABCDEFGabcdefg123456,.;'/[{}]!\n".getBytes("GBK"));
                                 }
 
@@ -1357,6 +1341,7 @@ public class Main_Activity extends Activity implements OnClickListener{
                     }).create().show();
         }
     }
+
     /************************************************************************************************/
     /*
      * 生成QR图
@@ -1411,6 +1396,7 @@ public class Main_Activity extends Activity implements OnClickListener{
             e.printStackTrace();
         }
     }
+
     //************************************************************************************************//
     /*
      * 调用系统相机
@@ -1442,6 +1428,149 @@ public class Main_Activity extends Activity implements OnClickListener{
 
         return image;
 
+    }
+
+    String billing = "Billing Address" + "\n";
+    String shipping = "Shipping Address" + "\n";
+    String address1 = "Address 1" + "\n";
+    String address2 = "Address 2" + "\n";
+
+    String Baddress1 = "Address 1" + "\n";
+    String Baddress2 = "Address 2" + "\n";
+
+    String productDetails = "";
+
+    String totalPay = "Total Pay:    ";
+
+    String phoneString = "";
+
+    private String dataProcessing(Products products) {
+        String FullNameShipping = " ";
+        String FullNameBilling = " ";
+        ShippingAddressaModel shippingAddressaModel;
+        //JsonElement jsonElement = products.getShippingTo();
+        if (products.getShippingTo() != null) {
+            Gson gson = new GsonBuilder().create();
+            shippingAddressaModel = gson.fromJson(products.getShippingTo(), ShippingAddressaModel.class);
+            FullNameShipping = shippingAddressaModel.getFirstName() + " " + shippingAddressaModel.getLastName();
+            //shipping = shipping + FullNameShipping + "\n";
+
+            if (!shippingAddressaModel.getAddressOne().isEmpty()) {
+
+                address1 = shippingAddressaModel.getAddressOne() + "\n"
+                        + shippingAddressaModel.getState() + "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressOne.setText(shippingAddressOne);
+            } else {
+//                addressOne.setVisibility(View.GONE);
+//                addressOneText.setVisibility(View.GONE);
+            }
+            if (!shippingAddressaModel.getAddressTwo().isEmpty()) {
+//                addressTwo.setVisibility(View.VISIBLE);
+//                addressTwoText.setVisibility(View.VISIBLE);
+                address2 = shippingAddressaModel.getAddressTwo() + "\n"
+                        + shippingAddressaModel.getState() + "\n" + shippingAddressaModel.getCity() +
+                        " " + shippingAddressaModel.getPostcode() + "\n" + shippingAddressaModel.getCountry();
+                //addressTwo.setText(shippingAddressTwo);
+            } else {
+//                addressTwo.setVisibility(View.GONE);
+//                addressTwoText.setVisibility(View.GONE);
+            }
+        }
+
+        BillingAddressaModel billingAddressaModel;
+        //JsonElement jsonElementBilling = products.getBilling();
+        if (products.getShippingTo() != null) {
+            Gson gson = new GsonBuilder().create();
+            billingAddressaModel = gson.fromJson(products.getBilling(), BillingAddressaModel.class);
+            FullNameBilling = billingAddressaModel.getFirstName() + " " + billingAddressaModel.getLastName();
+            phoneString = billingAddressaModel.getPhone();
+
+            shipping = shipping + "\n";
+            if (!billingAddressaModel.getAddressOne().isEmpty()) {
+//                addressOne.setVisibility(View.VISIBLE);
+//                addressOneText.setVisibility(View.VISIBLE);
+                Baddress1 = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState() + "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+                //addressOne.setText(billingAddressOne);
+            } else {
+//                addressOne.setVisibility(View.GONE);
+//                addressOneText.setVisibility(View.GONE);
+            }
+            if (!billingAddressaModel.getAddressTwo().isEmpty()) {
+//                addressTwo.setVisibility(View.VISIBLE);
+//                addressTwoText.setVisibility(View.VISIBLE);
+                Baddress2 = billingAddressaModel.getAddressOne() + "\n"
+                        + billingAddressaModel.getState() + "\n" + billingAddressaModel.getCity() +
+                        " " + billingAddressaModel.getPostcode() + "\n" + billingAddressaModel.getCountry();
+
+                //addressTwo.setText(billingAddressTwo);
+            } else {
+//                addressTwo.setVisibility(View.GONE);
+//                addressTwoText.setVisibility(View.GONE);
+            }
+        }
+
+
+        if (address1.isEmpty() && address2.isEmpty()) {
+
+            address1 = Baddress1;
+            address2 = Baddress2;
+        } else {
+//            addressOne.setText(shippingAddressOne);
+//            addressTwo.setText(shippingAddressTwo);
+//            addressHead.setText("Shipping Address");
+//            shippingUserName.setText(FullNameShipping);
+//            userPhone.setText(phoneString);
+        }
+
+        //shippingUserName.setText(FullName);
+        if (!products.getTotal().isEmpty() && products.getTotal() != null)
+//            totalPay.setText(products.getTotal());
+//        OrderStatus.setText(products.getStatus());
+            totalPay = totalPay + products.getTotal();
+
+
+//        itemNameLayout.removeAllViews();
+        int total = products.getItemList().size();
+        for (int i = 0; i < total; i++) {
+//            myView = layoutInflater.inflate(R.layout.item_row_view_details, itemNameLayout, false);
+//            LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
+//            TextView name = (TextView) myView.findViewById(R.id.itemName);
+            if (!products.getItemList().get(i).getName().isEmpty()) {
+//                name.setText(products.getItemList().get(i).getName());
+                productDetails = productDetails + products.getItemList().get(i).getName() + "     ";
+            }
+
+//            TextView itemNo = (TextView) myView.findViewById(R.id.itemNo);
+            if (products.getItemList().get(i).getQuantity() > 0) {
+//                itemNo.setText("" + products.getItemList().get(i).getQuantity());
+                productDetails = productDetails + products.getItemList().get(i).getQuantity() + "     ";
+                //printText = printText + products.getItemList().get(i).getQuantity() + "     ";
+            }
+
+//            TextView priceText = (TextView) myView.findViewById(R.id.price);
+            if (products.getItemList().get(i).getPrice() > 0) {
+//                priceText.setText(products.getItemList().get(i).getPrice());
+                productDetails = productDetails + products.getItemList().get(i).getPrice() + "     ";
+                //printText = printText + products.getItemList().get(i).getPrice() + "     ";
+            }
+
+
+        }
+
+        if (FullNameShipping.isEmpty()) {
+            shipping = shipping + FullNameBilling + "\n";
+            shipping = shipping + phoneString + "\n";
+        } else {
+            shipping = shipping + FullNameShipping + "\n";
+            shipping = shipping + phoneString + "\n";
+        }
+
+
+        String pageStr = printHeader + productDetails + totalPay + shipping + address1;
+        return pageStr;
     }
 
 }
