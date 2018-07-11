@@ -51,11 +51,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bundle extras = getIntent().getExtras();
 
         String orderId = "";
-        if (extras != null) {
+        if (extras != null && !extras.isEmpty()) {
             orderId = extras.getString("order_id");
             MyApplication.cancelAlarm();
-        }
-        if (!orderId.isEmpty()) {
+//        }
+//        if (!orderId.isEmpty() ) {
+            MyApplication.cancelAlarm();
             goesToOrderDetails(orderId);
         } else
             goesToHomeFragment();

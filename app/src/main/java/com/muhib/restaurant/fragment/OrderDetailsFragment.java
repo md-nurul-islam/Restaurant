@@ -67,7 +67,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     LinearLayout layout;
     private LinearLayout itemNameLayout;
     TextView totalPay, shippingUserName;
-    TextView addressOne, addressOneText, addressTwo, addressTwoText;
+    TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency;
     TextView acceptBtn, rejectBtn;
     Button printPage;
 
@@ -120,6 +120,9 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         itemNameLayout = (LinearLayout) view.findViewById(R.id.itemNameLayout);
         totalPay = (TextView) view.findViewById(R.id.totalPay);
+        totalCurrency = (TextView) view.findViewById(R.id.totalCurrency);
+
+        currencyText = (TextView) view.findViewById(R.id.currency);
 
         OrderStatus = (TextView) view.findViewById(R.id.status);
         addressHead = (TextView) view.findViewById(R.id.addressHead);
@@ -494,6 +497,9 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void dataProcessing(Products products){
+        currencyText.setText("Price(" + products.getCurrency() + ")");
+        totalCurrency.setText("Total Pay in " + products.getCurrency() + ": ");
+
         String FullNameShipping = " ";
         String FullNameBilling = " ";
         ShippingAddressaModel shippingAddressaModel;

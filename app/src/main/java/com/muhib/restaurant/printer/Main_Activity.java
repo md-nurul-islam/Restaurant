@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Qubit IT Limited" + "\n" + "Product       Quantity       Price" + "\n";
+    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity     Price" + "\n";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -1440,12 +1440,14 @@ public class Main_Activity extends Activity implements OnClickListener {
 
     String productDetails = "";
 
-    String totalPay = "Total Pay:    ";
+    String totalPay = "";
 
     String phoneString = "";
     String footerText = "\n\n";
 
     private String dataProcessing(Products products) {
+        printHeader  = printHeader + "(" + products.getCurrency() + ")";
+        totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
         String FullNameShipping = " ";
         String FullNameBilling = " ";
         ShippingAddressaModel shippingAddressaModel;
@@ -1541,20 +1543,24 @@ public class Main_Activity extends Activity implements OnClickListener {
 //            TextView name = (TextView) myView.findViewById(R.id.itemName);
             if (!products.getItemList().get(i).getName().isEmpty()) {
 //                name.setText(products.getItemList().get(i).getName());
-                productDetails = productDetails + products.getItemList().get(i).getName() + "     ";
+                productDetails = productDetails + products.getItemList().get(i).getName();
+                String name = products.getItemList().get(i).getName();
+                for(int j = name.length(); j< 21 ; j++)
+                    productDetails = productDetails + " ";
+
             }
 
 //            TextView itemNo = (TextView) myView.findViewById(R.id.itemNo);
             if (products.getItemList().get(i).getQuantity() > 0) {
 //                itemNo.setText("" + products.getItemList().get(i).getQuantity());
-                productDetails = productDetails + products.getItemList().get(i).getQuantity() + "     ";
+                productDetails = productDetails + products.getItemList().get(i).getQuantity() + "          ";
                 //printText = printText + products.getItemList().get(i).getQuantity() + "     ";
             }
 
 //            TextView priceText = (TextView) myView.findViewById(R.id.price);
             if (products.getItemList().get(i).getPrice() > 0) {
 //                priceText.setText(products.getItemList().get(i).getPrice());
-                productDetails = productDetails + products.getItemList().get(i).getPrice() + "     ";
+                productDetails = productDetails + products.getItemList().get(i).getPrice();
                 //printText = printText + products.getItemList().get(i).getPrice() + "     ";
             }
             productDetails = productDetails + "\n";
@@ -1571,11 +1577,11 @@ public class Main_Activity extends Activity implements OnClickListener {
         }
 
 
-        String pageStr = printHeader + productDetails + totalPay + dotLine +
+        String pageStr = printHeader + productDetails +  dotLine + "\n"+ totalPay +
                 "\n"+ shipping + address1 + footerText;
         return pageStr;
     }
 
-    String dotLine = "-----------------------------";
+    String dotLine = "--------------------------------------";
 
 }
