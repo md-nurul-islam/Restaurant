@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Order" + "\n" + "Product       Quantity       Price" + "\n";
+    String printHeader = "Qubit IT Limited" + "\n" + "Product       Quantity       Price" + "\n";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -288,16 +288,16 @@ public class Main_Activity extends Activity implements OnClickListener {
     /*****************************************************************************************************/
     private void KeyListenerInit() {
 
-        editText = (EditText) findViewById(R.id.edit_text_out);
+//        editText = (EditText) findViewById(R.id.edit_text_out);
 
-        sendButton = (Button) findViewById(R.id.Send_Button);
-        sendButton.setOnClickListener(this);
+//        sendButton = (Button) findViewById(R.id.Send_Button);
+//        sendButton.setOnClickListener(this);
 
         testButton = (Button) findViewById(R.id.btn_test);
         testButton.setOnClickListener(this);
 
-        printbmpButton = (Button) findViewById(R.id.btn_printpicture);
-        printbmpButton.setOnClickListener(this);
+//        printbmpButton = (Button) findViewById(R.id.btn_printpicture);
+//        printbmpButton.setOnClickListener(this);
 
         btnScanButton = (Button) findViewById(R.id.button_scan);
         btnScanButton.setOnClickListener(this);
@@ -311,67 +311,67 @@ public class Main_Activity extends Activity implements OnClickListener {
         width_80 = (RadioButton) findViewById(R.id.width_80mm);
         width_80.setOnClickListener(this);
 
-        imageViewPicture = (ImageView) findViewById(R.id.imageViewPictureUSB);
-        imageViewPicture.setOnClickListener(this);
+//        imageViewPicture = (ImageView) findViewById(R.id.imageViewPictureUSB);
+//        imageViewPicture.setOnClickListener(this);
 
         btnClose = (Button) findViewById(R.id.btn_close);
         btnClose.setOnClickListener(this);
 
-        btn_BMP = (Button) findViewById(R.id.btn_prtbmp);
-        btn_BMP.setOnClickListener(this);
+//        btn_BMP = (Button) findViewById(R.id.btn_prtbmp);
+//        btn_BMP.setOnClickListener(this);
 
-        btn_ChoseCommand = (Button) findViewById(R.id.btn_prtcommand);
-        btn_ChoseCommand.setOnClickListener(this);
+//        btn_ChoseCommand = (Button) findViewById(R.id.btn_prtcommand);
+//        btn_ChoseCommand.setOnClickListener(this);
 
-        btn_prtsma = (Button) findViewById(R.id.btn_prtsma);
-        btn_prtsma.setOnClickListener(this);
+//        btn_prtsma = (Button) findViewById(R.id.btn_prtsma);
+//        btn_prtsma.setOnClickListener(this);
+//
+//        btn_prttableButton = (Button) findViewById(R.id.btn_prttable);
+//        btn_prttableButton.setOnClickListener(this);
+//
+//        btn_prtcodeButton = (Button) findViewById(R.id.btn_prtbarcode);
+//        btn_prtcodeButton.setOnClickListener(this);
+//
+//        btn_camer = (Button) findViewById(R.id.btn_dyca);
+//        btn_camer.setOnClickListener(this);
+//
+//        btn_scqrcode = (Button) findViewById(R.id.btn_scqr);
+//        btn_scqrcode.setOnClickListener(this);
+//
+//        Simplified = (RadioButton) findViewById(R.id.gbk12);
+//        Simplified.setOnClickListener(this);
+//        big5 = (RadioButton) findViewById(R.id.big5);
+//        big5.setOnClickListener(this);
+//        thai = (RadioButton) findViewById(R.id.thai);
+//        thai.setOnClickListener(this);
+//        Korean = (RadioButton) findViewById(R.id.kor);
+//        Korean.setOnClickListener(this);
+//
+//        Bitmap bm = getImageFromAssetsFile("demo.bmp");
+//        if (null != bm) {
+//            imageViewPicture.setImageBitmap(bm);
+//        }
 
-        btn_prttableButton = (Button) findViewById(R.id.btn_prttable);
-        btn_prttableButton.setOnClickListener(this);
-
-        btn_prtcodeButton = (Button) findViewById(R.id.btn_prtbarcode);
-        btn_prtcodeButton.setOnClickListener(this);
-
-        btn_camer = (Button) findViewById(R.id.btn_dyca);
-        btn_camer.setOnClickListener(this);
-
-        btn_scqrcode = (Button) findViewById(R.id.btn_scqr);
-        btn_scqrcode.setOnClickListener(this);
-
-        Simplified = (RadioButton) findViewById(R.id.gbk12);
-        Simplified.setOnClickListener(this);
-        big5 = (RadioButton) findViewById(R.id.big5);
-        big5.setOnClickListener(this);
-        thai = (RadioButton) findViewById(R.id.thai);
-        thai.setOnClickListener(this);
-        Korean = (RadioButton) findViewById(R.id.kor);
-        Korean.setOnClickListener(this);
-
-        Bitmap bm = getImageFromAssetsFile("demo.bmp");
-        if (null != bm) {
-            imageViewPicture.setImageBitmap(bm);
-        }
-
-        editText.setEnabled(false);
-        imageViewPicture.setEnabled(false);
+//        editText.setEnabled(false);
+//        imageViewPicture.setEnabled(false);
         width_58mm.setEnabled(false);
         width_80.setEnabled(false);
         hexBox.setEnabled(false);
-        sendButton.setEnabled(false);
+//        sendButton.setEnabled(false);
         testButton.setEnabled(false);
-        printbmpButton.setEnabled(false);
+//        printbmpButton.setEnabled(false);
         btnClose.setEnabled(false);
-        btn_BMP.setEnabled(false);
-        btn_ChoseCommand.setEnabled(false);
-        btn_prtcodeButton.setEnabled(false);
-        btn_prtsma.setEnabled(false);
-        btn_prttableButton.setEnabled(false);
-        btn_camer.setEnabled(false);
-        btn_scqrcode.setEnabled(false);
-        Simplified.setEnabled(false);
-        Korean.setEnabled(false);
-        big5.setEnabled(false);
-        thai.setEnabled(false);
+//        btn_BMP.setEnabled(false);
+//        btn_ChoseCommand.setEnabled(false);
+//        btn_prtcodeButton.setEnabled(false);
+//        btn_prtsma.setEnabled(false);
+//        btn_prttableButton.setEnabled(false);
+//        btn_camer.setEnabled(false);
+//        btn_scqrcode.setEnabled(false);
+//        Simplified.setEnabled(false);
+//        Korean.setEnabled(false);
+//        big5.setEnabled(false);
+//        thai.setEnabled(false);
 
         mService = new BluetoothService(this, mHandler);
     }
@@ -387,27 +387,27 @@ public class Main_Activity extends Activity implements OnClickListener {
             }
             case R.id.btn_close: {
                 mService.stop();
-                editText.setEnabled(false);
-                imageViewPicture.setEnabled(false);
+//                editText.setEnabled(false);
+//                imageViewPicture.setEnabled(false);
                 width_58mm.setEnabled(false);
                 width_80.setEnabled(false);
                 hexBox.setEnabled(false);
-                sendButton.setEnabled(false);
+//                sendButton.setEnabled(false);
                 testButton.setEnabled(false);
-                printbmpButton.setEnabled(false);
+//                printbmpButton.setEnabled(false);
                 btnClose.setEnabled(false);
-                btn_BMP.setEnabled(false);
-                btn_ChoseCommand.setEnabled(false);
-                btn_prtcodeButton.setEnabled(false);
-                btn_prtsma.setEnabled(false);
-                btn_prttableButton.setEnabled(false);
-                btn_camer.setEnabled(false);
-                btn_scqrcode.setEnabled(false);
+//                btn_BMP.setEnabled(false);
+//                btn_ChoseCommand.setEnabled(false);
+//                btn_prtcodeButton.setEnabled(false);
+//                btn_prtsma.setEnabled(false);
+//                btn_prttableButton.setEnabled(false);
+//                btn_camer.setEnabled(false);
+//                btn_scqrcode.setEnabled(false);
                 btnScanButton.setEnabled(true);
-                Simplified.setEnabled(false);
-                Korean.setEnabled(false);
-                big5.setEnabled(false);
-                thai.setEnabled(false);
+//                Simplified.setEnabled(false);
+//                Korean.setEnabled(false);
+//                big5.setEnabled(false);
+//                thai.setEnabled(false);
                 btnScanButton.setText(getText(R.string.connect));
                 break;
             }
@@ -416,45 +416,45 @@ public class Main_Activity extends Activity implements OnClickListener {
                 ;
                 break;
             }
-            case R.id.Send_Button: {
-                if (hexBox.isChecked()) {
-                    String str = editText.getText().toString().trim();//去掉头尾空白
-                    if (str.length() > 0) {
-                        str = Other.RemoveChar(str, ' ').toString();
-                        if (str.length() <= 0)
-                            return;
-                        if ((str.length() % 2) != 0) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.msg_state),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        byte[] buf = Other.HexStringToBytes(str);
-                        SendDataByte(buf);
-                    } else {
-                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    String msg = editText.getText().toString();
-                    if (msg.length() > 0) {
-                        if (thai.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (big5.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (Korean.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        } else if (Simplified.isChecked()) {
-                            SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 0, 0, 0));
-                            SendDataByte(Command.LF);
-                        }
-                    } else {
-                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
-            }
+//            case R.id.Send_Button: {
+//                if (hexBox.isChecked()) {
+//                    String str = editText.getText().toString().trim();//去掉头尾空白
+//                    if (str.length() > 0) {
+//                        str = Other.RemoveChar(str, ' ').toString();
+//                        if (str.length() <= 0)
+//                            return;
+//                        if ((str.length() % 2) != 0) {
+//                            Toast.makeText(getApplicationContext(), getString(R.string.msg_state),
+//                                    Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        byte[] buf = Other.HexStringToBytes(str);
+//                        SendDataByte(buf);
+//                    } else {
+//                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    String msg = editText.getText().toString();
+//                    if (msg.length() > 0) {
+//                        if (thai.isChecked()) {
+//                            SendDataByte(PrinterCommand.POS_Print_Text(msg, THAI, 255, 0, 0, 0));
+//                            SendDataByte(Command.LF);
+//                        } else if (big5.isChecked()) {
+//                            SendDataByte(PrinterCommand.POS_Print_Text(msg, BIG5, 0, 0, 0, 0));
+//                            SendDataByte(Command.LF);
+//                        } else if (Korean.isChecked()) {
+//                            SendDataByte(PrinterCommand.POS_Print_Text(msg, KOREAN, 0, 0, 0, 0));
+//                            SendDataByte(Command.LF);
+//                        } else if (Simplified.isChecked()) {
+//                            SendDataByte(PrinterCommand.POS_Print_Text(msg, CHINESE, 0, 0, 0, 0));
+//                            SendDataByte(Command.LF);
+//                        }
+//                    } else {
+//                        Toast.makeText(Main_Activity.this, getText(R.string.empty), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//                break;
+//            }
             case R.id.width_58mm:
             case R.id.width_80mm: {
                 is58mm = v == width_58mm;
@@ -462,49 +462,49 @@ public class Main_Activity extends Activity implements OnClickListener {
                 width_80.setChecked(!is58mm);
                 break;
             }
-            case R.id.btn_printpicture: {
-                GraphicalPrint();
-                break;
-            }
-            case R.id.imageViewPictureUSB: {
-                Intent loadpicture = new Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(loadpicture, REQUEST_CHOSE_BMP);
-                break;
-            }
-            case R.id.btn_prtbmp: {
-                Print_BMP();
-                break;
-            }
-            case R.id.btn_prtcommand: {
-                CommandTest();
-                break;
-            }
-            case R.id.btn_prtsma: {
-                SendDataByte(Command.ESC_Init);
-                SendDataByte(Command.LF);
-                Print_Ex();
-                break;
-            }
-            case R.id.btn_prttable: {
-                SendDataByte(Command.ESC_Init);
-                SendDataByte(Command.LF);
-                PrintTable();
-                break;
-            }
-            case R.id.btn_prtbarcode: {
-                printBarCode();
-                break;
-            }
-            case R.id.btn_scqr: {
-                createImage();
-                break;
-            }
-            case R.id.btn_dyca: {
-                dispatchTakePictureIntent(REQUEST_CAMER);
-                break;
-            }
+//            case R.id.btn_printpicture: {
+//                GraphicalPrint();
+//                break;
+//            }
+//            case R.id.imageViewPictureUSB: {
+//                Intent loadpicture = new Intent(
+//                        Intent.ACTION_PICK,
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(loadpicture, REQUEST_CHOSE_BMP);
+//                break;
+//            }
+//            case R.id.btn_prtbmp: {
+//                Print_BMP();
+//                break;
+//            }
+//            case R.id.btn_prtcommand: {
+//                CommandTest();
+//                break;
+//            }
+//            case R.id.btn_prtsma: {
+//                SendDataByte(Command.ESC_Init);
+//                SendDataByte(Command.LF);
+//                Print_Ex();
+//                break;
+//            }
+//            case R.id.btn_prttable: {
+//                SendDataByte(Command.ESC_Init);
+//                SendDataByte(Command.LF);
+//                PrintTable();
+//                break;
+//            }
+//            case R.id.btn_prtbarcode: {
+//                printBarCode();
+//                break;
+//            }
+//            case R.id.btn_scqr: {
+//                createImage();
+//                break;
+//            }
+//            case R.id.btn_dyca: {
+//                dispatchTakePictureIntent(REQUEST_CAMER);
+//                break;
+//            }
             default:
                 break;
         }
@@ -560,26 +560,26 @@ public class Main_Activity extends Activity implements OnClickListener {
                             btnScanButton.setText(getText(R.string.Connecting));
                             //Print_Test();//
                             btnScanButton.setEnabled(false);
-                            editText.setEnabled(true);
-                            imageViewPicture.setEnabled(true);
+//                            editText.setEnabled(true);
+//                            imageViewPicture.setEnabled(true);
                             width_58mm.setEnabled(true);
                             width_80.setEnabled(true);
                             hexBox.setEnabled(true);
-                            sendButton.setEnabled(true);
+//                            sendButton.setEnabled(true);
                             testButton.setEnabled(true);
-                            printbmpButton.setEnabled(true);
+//                            printbmpButton.setEnabled(true);
                             btnClose.setEnabled(true);
-                            btn_BMP.setEnabled(true);
-                            btn_ChoseCommand.setEnabled(true);
-                            btn_prtcodeButton.setEnabled(true);
-                            btn_prtsma.setEnabled(true);
-                            btn_prttableButton.setEnabled(true);
-                            btn_camer.setEnabled(true);
-                            btn_scqrcode.setEnabled(true);
-                            Simplified.setEnabled(true);
-                            Korean.setEnabled(true);
-                            big5.setEnabled(true);
-                            thai.setEnabled(true);
+//                            btn_BMP.setEnabled(true);
+//                            btn_ChoseCommand.setEnabled(true);
+//                            btn_prtcodeButton.setEnabled(true);
+//                            btn_prtsma.setEnabled(true);
+//                            btn_prttableButton.setEnabled(true);
+//                            btn_camer.setEnabled(true);
+//                            btn_scqrcode.setEnabled(true);
+//                            Simplified.setEnabled(true);
+//                            Korean.setEnabled(true);
+//                            big5.setEnabled(true);
+//                            thai.setEnabled(true);
                             break;
                         case BluetoothService.STATE_CONNECTING:
                             mTitle.setText(R.string.title_connecting);
@@ -611,26 +611,26 @@ public class Main_Activity extends Activity implements OnClickListener {
                 case MESSAGE_CONNECTION_LOST:    //蓝牙已断开连接
                     Toast.makeText(getApplicationContext(), "Device connection was lost",
                             Toast.LENGTH_SHORT).show();
-                    editText.setEnabled(false);
-                    imageViewPicture.setEnabled(false);
+//                    editText.setEnabled(false);
+//                    imageViewPicture.setEnabled(false);
                     width_58mm.setEnabled(false);
                     width_80.setEnabled(false);
                     hexBox.setEnabled(false);
-                    sendButton.setEnabled(false);
+//                    sendButton.setEnabled(false);
                     testButton.setEnabled(false);
-                    printbmpButton.setEnabled(false);
-                    btnClose.setEnabled(false);
-                    btn_BMP.setEnabled(false);
-                    btn_ChoseCommand.setEnabled(false);
-                    btn_prtcodeButton.setEnabled(false);
-                    btn_prtsma.setEnabled(false);
-                    btn_prttableButton.setEnabled(false);
-                    btn_camer.setEnabled(false);
-                    btn_scqrcode.setEnabled(false);
-                    Simplified.setEnabled(false);
-                    Korean.setEnabled(false);
-                    big5.setEnabled(false);
-                    thai.setEnabled(false);
+//                    printbmpButton.setEnabled(false);
+//                    btnClose.setEnabled(false);
+//                    btn_BMP.setEnabled(false);
+//                    btn_ChoseCommand.setEnabled(false);
+//                    btn_prtcodeButton.setEnabled(false);
+//                    btn_prtsma.setEnabled(false);
+//                    btn_prttableButton.setEnabled(false);
+//                    btn_camer.setEnabled(false);
+//                    btn_scqrcode.setEnabled(false);
+//                    Simplified.setEnabled(false);
+//                    Korean.setEnabled(false);
+//                    big5.setEnabled(false);
+//                    thai.setEnabled(false);
                     break;
                 case MESSAGE_UNABLE_CONNECT:     //无法连接设备
                     Toast.makeText(getApplicationContext(), "Unable to connect device",
@@ -1135,117 +1135,117 @@ public class Main_Activity extends Activity implements OnClickListener {
     /**
      * 打印条码、二维码
      */
-    private void printBarCode() {
-
-        new AlertDialog.Builder(Main_Activity.this).setTitle(getText(R.string.btn_prtcode))
-                .setItems(codebar, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        SendDataByte(byteCodebar[which]);
-                        String str = editText.getText().toString();
-                        if (which == 0) {
-                            if (str.length() == 11 || str.length() == 12) {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 65, 3, 168, 0, 2);
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataString("UPC_A\n");
-                                SendDataByte(code);
-                            } else {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } else if (which == 1) {
-                            if (str.length() == 6 || str.length() == 7) {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 66, 3, 168, 0, 2);
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataString("UPC_E\n");
-                                SendDataByte(code);
-                            } else {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } else if (which == 2) {
-                            if (str.length() == 12 || str.length() == 13) {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 67, 3, 168, 0, 2);
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataString("JAN13(EAN13)\n");
-                                SendDataByte(code);
-                            } else {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } else if (which == 3) {
-                            if (str.length() > 0) {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 68, 3, 168, 0, 2);
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataString("JAN8(EAN8)\n");
-                                SendDataByte(code);
-                            } else {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                        } else if (which == 4) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 69, 3, 168, 1, 2);
-                                SendDataString("CODE39\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        } else if (which == 5) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 70, 3, 168, 1, 2);
-                                SendDataString("ITF\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        } else if (which == 6) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 71, 3, 168, 1, 2);
-                                SendDataString("CODABAR\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        } else if (which == 7) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 72, 3, 168, 1, 2);
-                                SendDataString("CODE93\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        } else if (which == 8) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getCodeBarCommand(str, 73, 3, 168, 1, 2);
-                                SendDataString("CODE128\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        } else if (which == 9) {
-                            if (str.length() == 0) {
-                                Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                byte[] code = PrinterCommand.getBarCommand(str, 1, 3, 8);
-                                SendDataString("QR Code\n");
-                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
-                                SendDataByte(code);
-                            }
-                        }
-                    }
-                }).create().show();
-    }
+//    private void printBarCode() {
+//
+//        new AlertDialog.Builder(Main_Activity.this).setTitle(getText(R.string.btn_prtcode))
+//                .setItems(codebar, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        SendDataByte(byteCodebar[which]);
+////                        String str = editText.getText().toString();
+//                        if (which == 0) {
+//                            if (str.length() == 11 || str.length() == 12) {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 65, 3, 168, 0, 2);
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataString("UPC_A\n");
+//                                SendDataByte(code);
+//                            } else {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        } else if (which == 1) {
+//                            if (str.length() == 6 || str.length() == 7) {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 66, 3, 168, 0, 2);
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataString("UPC_E\n");
+//                                SendDataByte(code);
+//                            } else {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        } else if (which == 2) {
+//                            if (str.length() == 12 || str.length() == 13) {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 67, 3, 168, 0, 2);
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataString("JAN13(EAN13)\n");
+//                                SendDataByte(code);
+//                            } else {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        } else if (which == 3) {
+//                            if (str.length() > 0) {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 68, 3, 168, 0, 2);
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataString("JAN8(EAN8)\n");
+//                                SendDataByte(code);
+//                            } else {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                        } else if (which == 4) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 69, 3, 168, 1, 2);
+//                                SendDataString("CODE39\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        } else if (which == 5) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 70, 3, 168, 1, 2);
+//                                SendDataString("ITF\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        } else if (which == 6) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 71, 3, 168, 1, 2);
+//                                SendDataString("CODABAR\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        } else if (which == 7) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 72, 3, 168, 1, 2);
+//                                SendDataString("CODE93\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        } else if (which == 8) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.msg_error), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getCodeBarCommand(str, 73, 3, 168, 1, 2);
+//                                SendDataString("CODE128\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        } else if (which == 9) {
+//                            if (str.length() == 0) {
+//                                Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
+//                                return;
+//                            } else {
+//                                byte[] code = PrinterCommand.getBarCommand(str, 1, 3, 8);
+//                                SendDataString("QR Code\n");
+//                                SendDataByte(new byte[]{0x1b, 0x61, 0x00});
+//                                SendDataByte(code);
+//                            }
+//                        }
+//                    }
+//                }).create().show();
+//    }
 
     /**
      * public static Bitmap createAppIconText(Bitmap icon, String txt, boolean is58mm, int hight)
@@ -1254,46 +1254,46 @@ public class Main_Activity extends Activity implements OnClickListener {
      * boolean is58mm   打印宽度(58和80)
      * int hight        转换后的图片高度
      */
-    private void GraphicalPrint() {
-
-        String txt_msg = editText.getText().toString();
-        if (txt_msg.length() == 0) {
-            Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Bitmap bm1 = getImageFromAssetsFile("demo.jpg");
-            if (width_58mm.isChecked()) {
-
-                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, is58mm, 200);
-                int nMode = 0;
-                int nPaperWidth = 384;
-
-                if (bmp != null) {
-                    byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
-                    SendDataByte(Command.ESC_Init);
-                    SendDataByte(Command.LF);
-                    SendDataByte(data);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
-                    SendDataByte(PrinterCommand.POS_Set_Cut(1));
-                    SendDataByte(PrinterCommand.POS_Set_PrtInit());
-                }
-            } else if (width_80.isChecked()) {
-                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, false, 200);
-                int nMode = 0;
-
-                int nPaperWidth = 576;
-                if (bmp != null) {
-                    byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
-                    SendDataByte(Command.ESC_Init);
-                    SendDataByte(Command.LF);
-                    SendDataByte(data);
-                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
-                    SendDataByte(PrinterCommand.POS_Set_Cut(1));
-                    SendDataByte(PrinterCommand.POS_Set_PrtInit());
-                }
-            }
-        }
-    }
+//    private void GraphicalPrint() {
+//
+//        String txt_msg = editText.getText().toString();
+//        if (txt_msg.length() == 0) {
+//            Toast.makeText(Main_Activity.this, getText(R.string.empty1), Toast.LENGTH_SHORT).show();
+//            return;
+//        } else {
+//            Bitmap bm1 = getImageFromAssetsFile("demo.jpg");
+//            if (width_58mm.isChecked()) {
+//
+//                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, is58mm, 200);
+//                int nMode = 0;
+//                int nPaperWidth = 384;
+//
+//                if (bmp != null) {
+//                    byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
+//                    SendDataByte(Command.ESC_Init);
+//                    SendDataByte(Command.LF);
+//                    SendDataByte(data);
+//                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
+//                    SendDataByte(PrinterCommand.POS_Set_Cut(1));
+//                    SendDataByte(PrinterCommand.POS_Set_PrtInit());
+//                }
+//            } else if (width_80.isChecked()) {
+//                Bitmap bmp = Other.createAppIconText(bm1, txt_msg, 25, false, 200);
+//                int nMode = 0;
+//
+//                int nPaperWidth = 576;
+//                if (bmp != null) {
+//                    byte[] data = PrintPicture.POS_PrintBMP(bmp, nPaperWidth, nMode);
+//                    SendDataByte(Command.ESC_Init);
+//                    SendDataByte(Command.LF);
+//                    SendDataByte(data);
+//                    SendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
+//                    SendDataByte(PrinterCommand.POS_Set_Cut(1));
+//                    SendDataByte(PrinterCommand.POS_Set_PrtInit());
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 打印指令测试
@@ -1443,6 +1443,7 @@ public class Main_Activity extends Activity implements OnClickListener {
     String totalPay = "Total Pay:    ";
 
     String phoneString = "";
+    String footerText = "\n\n";
 
     private String dataProcessing(Products products) {
         String FullNameShipping = " ";
@@ -1569,8 +1570,11 @@ public class Main_Activity extends Activity implements OnClickListener {
         }
 
 
-        String pageStr = printHeader + productDetails + totalPay + shipping + address1;
+        String pageStr = printHeader + productDetails + totalPay + dotLine +
+                "\n"+ shipping + address1 + footerText;
         return pageStr;
     }
+
+    String dotLine = "-----------------------------";
 
 }

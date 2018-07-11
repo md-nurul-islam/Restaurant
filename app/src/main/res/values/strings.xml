@@ -25,7 +25,7 @@
     <string name="width2">80mm</string>
     <string name="printhex">HEX</string>
     <string name="btnSend">Send Data</string>
-    <string name="btn_test">Print Test</string>
+    <string name="btn_test">Print</string>
     <string name="btn_prtbmp">Print Picture</string>
     <string name="printpicture">Graphical Print</string>
     <string name="chosecommand">Please select instruction</string>
