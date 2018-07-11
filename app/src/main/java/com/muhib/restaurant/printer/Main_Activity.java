@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity     Price";
+    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity    Price";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -1554,7 +1554,7 @@ public class Main_Activity extends Activity implements OnClickListener {
             if (products.getItemList().get(i).getQuantity() > 0) {
 //                itemNo.setText("" + products.getItemList().get(i).getQuantity());
                 productDetails = productDetails + products.getItemList().get(i).getQuantity() + "          ";
-                //printText = printText + products.getItemList().get(i).getQuantity() + "     ";
+                //printText = printText + products.getItemList().get(i).getQuantity() + "       ";
             }
 
 //            TextView priceText = (TextView) myView.findViewById(R.id.price);
@@ -1582,6 +1582,6 @@ public class Main_Activity extends Activity implements OnClickListener {
         return pageStr;
     }
 
-    String dotLine = "--------------------------------------";
+    String dotLine = "----------------------------------------";
 
 }
