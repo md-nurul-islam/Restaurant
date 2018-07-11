@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity     Price" + "\n";
+    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity     Price";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -1446,7 +1446,7 @@ public class Main_Activity extends Activity implements OnClickListener {
     String footerText = "\n\n";
 
     private String dataProcessing(Products products) {
-        printHeader  = printHeader + "(" + products.getCurrency() + ")";
+        printHeader  = printHeader + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
         String FullNameShipping = " ";
         String FullNameBilling = " ";
