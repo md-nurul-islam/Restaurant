@@ -1557,6 +1557,7 @@ public class Main_Activity extends Activity implements OnClickListener {
                 productDetails = productDetails + products.getItemList().get(i).getPrice() + "     ";
                 //printText = printText + products.getItemList().get(i).getPrice() + "     ";
             }
+            productDetails = productDetails + "\n";
 
 
         }

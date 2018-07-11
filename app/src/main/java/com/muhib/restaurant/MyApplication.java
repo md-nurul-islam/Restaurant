@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.muhib.restaurant.fcm.AlarmReceiver;
 
@@ -44,7 +45,8 @@ public class MyApplication extends Application {
         intent1.putExtra("num", num);
         pendingIntent = PendingIntent.getBroadcast(mInstance, num, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         am = (AlarmManager) mInstance.getSystemService(mInstance.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 20000, pendingIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
+        Log.v("alarm", "alarm set");
     }
 
     public static void cancelAlarm() {
