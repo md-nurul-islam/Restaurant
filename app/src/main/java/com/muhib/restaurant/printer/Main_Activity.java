@@ -1444,12 +1444,14 @@ public class Main_Activity extends Activity implements OnClickListener {
 
     String phoneString = "";
     String footerText = "\n\n";
+    String payment = "Payment: ";
 
     private String dataProcessing(Products products) {
         delivery = delivery + dateTimeParse(products.getDelivery()) ;
         printHeader  = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
 
+        payment = payment + products.getPaymentMethodTitle();
         String FullNameShipping = " ";
         String FullNameBilling = " ";
         ShippingAddressaModel shippingAddressaModel;
@@ -1580,7 +1582,7 @@ public class Main_Activity extends Activity implements OnClickListener {
 
 
         String pageStr = printHeader + productDetails +  dotLine + "\n"+ totalPay +
-                "\n"+ shipping + address1 + footerText;
+                "\n" + "\n" + payment + "\n" + "\n"+ shipping + address1 + "\n" + "\n";
         return pageStr;
     }
 

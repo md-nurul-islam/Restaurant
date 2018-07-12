@@ -37,15 +37,24 @@ public class MyApplication extends Application {
 
     public static void sendMyNotification(String id, String title, String body) {
 
+        if(am !=null)
+        {
+            cancelAlarm();
+            Log.v("alarm", "alarm cancelled");
+        }
+
         Intent intent1 = new Intent(mInstance, AlarmReceiver.class);
         intent1.putExtra("order_id", id);
         intent1.putExtra("title", title);
         intent1.putExtra("body", body);
         int num = (int) System.currentTimeMillis();
         intent1.putExtra("num", num);
-        pendingIntent = PendingIntent.getBroadcast(mInstance, num, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingIntent = PendingIntent.getBroadcast(mInstance, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+
         am = (AlarmManager) mInstance.getSystemService(mInstance.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
+//        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
+
         Log.v("alarm", "alarm set");
     }
 

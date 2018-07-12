@@ -205,7 +205,7 @@ public class SearchAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if(!orderList.get(position).getDateCreated().isEmpty() && orderList.get(position).getDateCreated()!=null)
                     itemHolder.orderDate.setText(dateTimeParse(orderList.get(position).getDateCreated()));
                 itemHolder.totalPay.setText(": "+orderList.get(position).getTotal());
-                itemHolder.totalPayText.setText("Total pay in BDT");
+                itemHolder.totalPayText.setText("Total pay in " + orderList.get(position).getCurrency());
                 itemHolder.status.setText(orderList.get(position).getStatus());
                 if(orderList.get(position).getStatus().equalsIgnoreCase("completed") || orderList.get(position).getStatus().equalsIgnoreCase("cancelled"))
                 {

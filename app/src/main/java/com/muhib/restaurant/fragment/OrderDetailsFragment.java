@@ -67,7 +67,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     LinearLayout layout;
     private LinearLayout itemNameLayout;
     TextView totalPay, shippingUserName;
-    TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency;
+    TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency, paymentMethod;
     TextView acceptBtn, rejectBtn;
     Button printPage;
     TextView delivery;
@@ -122,6 +122,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         itemNameLayout = (LinearLayout) view.findViewById(R.id.itemNameLayout);
         totalPay = (TextView) view.findViewById(R.id.totalPay);
         totalCurrency = (TextView) view.findViewById(R.id.totalCurrency);
+        paymentMethod = (TextView) view.findViewById(R.id.paymentMethod);
 
         currencyText = (TextView) view.findViewById(R.id.currency);
         delivery = (TextView) view.findViewById(R.id.delivery);
@@ -503,6 +504,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     private void dataProcessing(Products products){
         currencyText.setText("Price(" + products.getCurrency() + ")");
         totalCurrency.setText("Total Pay in " + products.getCurrency() + ": ");
+        paymentMethod.setText("Payment: " + products.getPaymentMethodTitle());
 
         String FullNameShipping = " ";
         String FullNameBilling = " ";

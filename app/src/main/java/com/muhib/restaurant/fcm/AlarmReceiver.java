@@ -52,13 +52,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        int num = (int) System.currentTimeMillis();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, num, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
-                context).setSmallIcon(R.mipmap.ic_launcher)
+                context).setSmallIcon(R.mipmap.qbit)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSound(alarmSound)

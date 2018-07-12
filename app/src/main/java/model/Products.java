@@ -14,6 +14,11 @@ import java.util.List;
 
 public class Products implements Serializable {
 
+
+    @SerializedName("payment_method_title")
+    @Expose
+    private String paymentMethodTitle;
+
     @SerializedName("date_modified")
     @Expose
     private String delivery;
@@ -178,5 +183,13 @@ public class Products implements Serializable {
 
     public void setDelivery(String delivery) {
         this.delivery = delivery;
+    }
+
+    public String getPaymentMethodTitle() {
+        return paymentMethodTitle;
+    }
+
+    public void setPaymentMethodTitle(String paymentMethodTitle) {
+        this.paymentMethodTitle = paymentMethodTitle;
     }
 }

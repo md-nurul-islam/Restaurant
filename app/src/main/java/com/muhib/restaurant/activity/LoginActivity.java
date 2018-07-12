@@ -264,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void callforToken(String userId, String password) {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         RetrofitApiClient.getApiInterface(userId, password).getServerToken("android", "webdev.nislam@gmail.com", refreshedToken)
 //        RetrofitApiClient.getLoginApiInterface(userId, password).getLogedIn()
@@ -279,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onNext(JsonElement value) {
                         progressDialog.dismiss();
+                        Log.d(TAG, "Refreshed token Login: " + refreshedToken);
 
 //                        if (value.code() == 200) {
 //

@@ -58,10 +58,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.DetailsActivity"
-            android:label="@string/title_activity_details"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <!--<activity-->
+            <!--android:name=".activity.DetailsActivity"-->
+            <!--android:label="@string/title_activity_details"-->
+            <!--android:theme="@style/AppTheme.NoActionBar"/>-->
         <!--printer .................start.......-->
         <activity android:name=".printer.Main_Activity"
         android:label="@string/select_device"
