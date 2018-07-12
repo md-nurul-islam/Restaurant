@@ -14,6 +14,10 @@ import java.util.List;
 
 public class Products implements Serializable {
 
+    @SerializedName("date_modified")
+    @Expose
+    private String delivery;
+
     @SerializedName("currency")
     @Expose
     private String currency;
@@ -166,5 +170,13 @@ public class Products implements Serializable {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
     }
 }

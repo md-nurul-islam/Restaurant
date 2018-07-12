@@ -70,6 +70,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency;
     TextView acceptBtn, rejectBtn;
     Button printPage;
+    TextView delivery;
 
     private LinearLayout selectLay;
     private TextView select;
@@ -123,6 +124,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         totalCurrency = (TextView) view.findViewById(R.id.totalCurrency);
 
         currencyText = (TextView) view.findViewById(R.id.currency);
+        delivery = (TextView) view.findViewById(R.id.delivery);
 
         OrderStatus = (TextView) view.findViewById(R.id.status);
         addressHead = (TextView) view.findViewById(R.id.addressHead);
@@ -464,16 +466,18 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                     public void onNext(JsonElement value) {
                         hideProgress();
                         Gson gson = new GsonBuilder().create();
-                        Products r = gson.fromJson(value, Products.class);
-                        String st = r.getId();
+                        products = gson.fromJson(value, Products.class);
+                        String st = products.getId();
                         Toast.makeText(getActivity(), "Order successfully " + statusSt, Toast.LENGTH_SHORT).show();
-                        if(statusSt.equals("accepted"))
-                            OrderStatus.setText("processing");
-                        else
-                            OrderStatus.setText("cancelled");
-                        acceptBtn.setVisibility(View.GONE);
-                        rejectBtn.setVisibility(View.GONE);
-                        printPage.setVisibility(View.VISIBLE);
+
+                        dataProcessing(products);
+//                        if(statusSt.equals("accepted"))
+//                            OrderStatus.setText("processing");
+//                        else
+//                            OrderStatus.setText("cancelled");
+//                        acceptBtn.setVisibility(View.GONE);
+//                        rejectBtn.setVisibility(View.GONE);
+//                        printPage.setVisibility(View.VISIBLE);
 
 //                        if (value.code() == 200) {
 //
@@ -582,9 +586,12 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         }
         if(products.getStatus().equalsIgnoreCase("completed"))
         {
+            delivery.setVisibility(View.VISIBLE);
             printPage.setVisibility(View.VISIBLE);
+            delivery.setText("Delivery: "+dateTimeParse(products.getDelivery()));
         }
         else {
+            delivery.setVisibility(View.GONE);
             printPage.setVisibility(View.GONE);
         }
 
@@ -635,6 +642,34 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             itemNameLayout.addView(ll);
 
         }
+    }
+
+    private String dateTimeParse(String dateTime){
+        String parsedString = "";
+        if(dateTime.contains("T")){
+            String[] parts = dateTime.split("T");
+            if(!parts[0].isEmpty() && parts[0]!=null)
+                parsedString = parsedString + dateReverse(parts[0]);
+            if(!parts[1].isEmpty() && parts[1]!=null)
+                parsedString = parsedString + "  "+ parts[1].substring(0, parts[1].lastIndexOf(":"));
+        }
+
+        return parsedString;
+    }
+
+    public static String dateReverse(String duedate){
+        String result = "";
+        String dateText = duedate;
+        if(dateText!= null && dateText.contains("-")) {
+            String[] parts = dateText.split("-");
+            if(!parts[2].isEmpty())
+                result = result + parts[2];
+            if(!parts[1].isEmpty())
+                result = result +"-"+ parts[1];
+            if(!parts[0].isEmpty())
+                result = result + "-"+ parts[0];
+        }
+        return result;
     }
 
     @Override

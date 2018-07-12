@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Qubit IT Limited" + "\n" + "Product             Quantity    Price";
+    String printHeader = "Qubit IT Limited";
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -1446,8 +1446,10 @@ public class Main_Activity extends Activity implements OnClickListener {
     String footerText = "\n\n";
 
     private String dataProcessing(Products products) {
-        printHeader  = printHeader + "(" + products.getCurrency() + ")" + "\n";
+        delivery = delivery + dateTimeParse(products.getDelivery()) ;
+        printHeader  = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
+
         String FullNameShipping = " ";
         String FullNameBilling = " ";
         ShippingAddressaModel shippingAddressaModel;
@@ -1583,5 +1585,35 @@ public class Main_Activity extends Activity implements OnClickListener {
     }
 
     String dotLine = "----------------------------------------";
+    String delivery = "Delivery: ";
+
+
+    private String dateTimeParse(String dateTime){
+        String parsedString = "";
+        if(dateTime.contains("T")){
+            String[] parts = dateTime.split("T");
+            if(!parts[0].isEmpty() && parts[0]!=null)
+                parsedString = parsedString + dateReverse(parts[0]);
+            if(!parts[1].isEmpty() && parts[1]!=null)
+                parsedString = parsedString + "  "+ parts[1].substring(0, parts[1].lastIndexOf(":"));
+        }
+
+        return parsedString;
+    }
+
+    public static String dateReverse(String duedate){
+        String result = "";
+        String dateText = duedate;
+        if(dateText!= null && dateText.contains("-")) {
+            String[] parts = dateText.split("-");
+            if(!parts[2].isEmpty())
+                result = result + parts[2];
+            if(!parts[1].isEmpty())
+                result = result +"-"+ parts[1];
+            if(!parts[0].isEmpty())
+                result = result + "-"+ parts[0];
+        }
+        return result;
+    }
 
 }
