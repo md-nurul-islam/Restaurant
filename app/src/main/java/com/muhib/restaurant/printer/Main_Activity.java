@@ -1444,14 +1444,17 @@ public class Main_Activity extends Activity implements OnClickListener {
 
     String phoneString = "";
     String footerText = "\n\n";
-    String payment = "Payment: ";
+    String payment = "Delivery: ";
 
     private String dataProcessing(Products products) {
         delivery = delivery + dateTimeParse(products.getDelivery()) ;
         printHeader  = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
 
-        payment = payment + products.getPaymentMethodTitle();
+        if(!products.getShippingLines().get(0).getMethodTitle().isEmpty() && products.getShippingLines().get(0).getMethodTitle()!=null)
+        payment = payment + products.getShippingLines().get(0).getMethodTitle();
+        else
+            payment = "";
         String FullNameShipping = " ";
         String FullNameBilling = " ";
         ShippingAddressaModel shippingAddressaModel;
@@ -1587,7 +1590,7 @@ public class Main_Activity extends Activity implements OnClickListener {
     }
 
     String dotLine = "----------------------------------------";
-    String delivery = "Delivery: ";
+    String delivery = "Delivery Time: ";
 
 
     private String dateTimeParse(String dateTime){

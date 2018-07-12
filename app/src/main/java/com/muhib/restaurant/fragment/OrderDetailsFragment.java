@@ -504,7 +504,10 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     private void dataProcessing(Products products){
         currencyText.setText("Price(" + products.getCurrency() + ")");
         totalCurrency.setText("Total Pay in " + products.getCurrency() + ": ");
-        paymentMethod.setText("Payment: " + products.getPaymentMethodTitle());
+        if(!products.getShippingLines().get(0).getMethodTitle().isEmpty() && products.getShippingLines().get(0).getMethodTitle() != null)
+        paymentMethod.setText("Delivery: " + products.getShippingLines().get(0).getMethodTitle());
+        else
+            paymentMethod.setVisibility(View.GONE);
 
         String FullNameShipping = " ";
         String FullNameBilling = " ";
@@ -590,7 +593,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         {
             delivery.setVisibility(View.VISIBLE);
             printPage.setVisibility(View.VISIBLE);
-            delivery.setText("Delivery: "+dateTimeParse(products.getDelivery()));
+            delivery.setText("Delivery Time: "+dateTimeParse(products.getDelivery()));
         }
         else {
             delivery.setVisibility(View.GONE);

@@ -64,6 +64,10 @@ public class Products implements Serializable {
 //    @Expose
 //    private ImageUrl image;
 
+    @SerializedName("shipping_lines")
+    @Expose
+    private List<ShippingLines> shippingLines = null;
+
     @SerializedName("images")
     @Expose
     private ArrayList<JsonObject> images;
@@ -191,5 +195,13 @@ public class Products implements Serializable {
 
     public void setPaymentMethodTitle(String paymentMethodTitle) {
         this.paymentMethodTitle = paymentMethodTitle;
+    }
+
+    public List<ShippingLines> getShippingLines() {
+        return shippingLines;
+    }
+
+    public void setShippingLines(List<ShippingLines> shippingLines) {
+        this.shippingLines = shippingLines;
     }
 }
