@@ -1448,7 +1448,7 @@ public class Main_Activity extends Activity implements OnClickListener {
 
         String phoneString = "";
         String footerText = "\n\n";
-        String payment = "Delivery: ";
+        String payment = "Shipping Method: ";
         String dotLine = "----------------------------------------";
         String delivery = "Delivery Time: ";
 
