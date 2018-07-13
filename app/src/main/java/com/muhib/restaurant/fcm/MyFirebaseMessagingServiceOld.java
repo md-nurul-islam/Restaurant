@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.muhib.restaurant.MyApplication;
 import com.muhib.restaurant.R;
 import com.muhib.restaurant.activity.MainActivity;
 
@@ -57,19 +58,21 @@ public class MyFirebaseMessagingServiceOld extends FirebaseMessagingService {
         PendingIntent pendingIntent=PendingIntent.getActivity(this,num,intent,PendingIntent.FLAG_ONE_SHOT);
 
 
-        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri sound = Uri.parse("android.resource://com.muhib.restaurant/" + R.raw.sound);
+//        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
-                .setSound(soundUri)
+                .setSound(sound)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), notificationBuilder.build());
+        //MyApplication.start();
 
 
 

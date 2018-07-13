@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //            }
 
         }
-//        sendMyNotification(message.getNotification().getBody());
+        //sendMyNotification(message.getData().get("order_id"), message.getData().get("title"), message.getData().get("body"));
         message.getData().get("order_id");
 
         //setAlarm();

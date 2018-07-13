@@ -65,8 +65,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setSound(sound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(pendingIntent)
-                .setVibrate(new long[]{5000, 5000, 5000, 5000, 5000});
-        notificationManager.notify(c, mNotifyBuilder.build());
+                .setVibrate(new long[]{6000});
+        notificationManager.notify(0, mNotifyBuilder.build());
         c++;
 
     }

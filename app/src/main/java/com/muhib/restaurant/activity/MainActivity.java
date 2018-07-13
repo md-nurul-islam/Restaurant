@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MyApplication.cancelAlarm();
 //        }
 //        if (!orderId.isEmpty() ) {
-            MyApplication.cancelAlarm();
+            //MyApplication.cancelAlarm();
             goesToOrderDetails(orderId);
         } else
             goesToHomeFragment();
