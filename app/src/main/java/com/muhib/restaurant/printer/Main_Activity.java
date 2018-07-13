@@ -61,7 +61,7 @@ import zj.com.customize.sdk.Other;
 
 public class Main_Activity extends Activity implements OnClickListener {
     private Products products;
-    String printHeader = "Qubit IT Limited";
+
     /******************************************************************************************************/
     // Debugging
     private static final String TAG = "Main_Activity";
@@ -771,6 +771,7 @@ public class Main_Activity extends Activity implements OnClickListener {
         String msg = "";
         String lang = getString(R.string.strLang);
         if ((lang.compareTo("en")) == 0) {
+
             msg = dataProcessing(products);
             // msg = "Division I is a research and development, production and services in one high-tech research and development, production-oriented enterprises, specializing in POS terminals finance, retail, restaurants, bars, songs and other areas, computer terminals, self-service terminal peripheral equipment R & D, manufacturing and sales! \n company's organizational structure concise and practical, pragmatic style of rigorous, efficient operation. Integrity, dedication, unity, and efficient is the company's corporate philosophy, and constantly strive for today, vibrant, the company will be strong scientific and technological strength, eternal spirit of entrepreneurship, the pioneering and innovative attitude, confidence towards the international information industry, with friends to create brilliant information industry !!! \n\n\n";
             SendDataString(msg);
@@ -1430,29 +1431,34 @@ public class Main_Activity extends Activity implements OnClickListener {
 
     }
 
-    String billing = "Billing Address" + "\n";
-    String shipping = "Shipping Address" + "\n";
-    String address1 = "Address 1" + "\n";
-    String address2 = "Address 2" + "\n";
-
-    String Baddress1 = "Address 1" + "\n";
-    String Baddress2 = "Address 2" + "\n";
-
-    String productDetails = "";
-
-    String totalPay = "";
-
-    String phoneString = "";
-    String footerText = "\n\n";
-    String payment = "Delivery: ";
 
     private String dataProcessing(Products products) {
-        delivery = delivery + dateTimeParse(products.getDelivery()) ;
-        printHeader  = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
+        String printHeader = "Qubit IT Limited";
+        String billing = "Billing Address" + "\n";
+        String shipping = "Shipping Address" + "\n";
+        String address1 = "Address 1" + "\n";
+        String address2 = "Address 2" + "\n";
+
+        String Baddress1 = "Address 1" + "\n";
+        String Baddress2 = "Address 2" + "\n";
+
+        String productDetails = "";
+
+        String totalPay = "";
+
+        String phoneString = "";
+        String footerText = "\n\n";
+        String payment = "Delivery: ";
+        String dotLine = "----------------------------------------";
+        String delivery = "Delivery Time: ";
+
+
+        delivery = delivery + dateTimeParse(products.getDelivery());
+        printHeader = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
 
-        if(!products.getShippingLines().get(0).getMethodTitle().isEmpty() && products.getShippingLines().get(0).getMethodTitle()!=null)
-        payment = payment + products.getShippingLines().get(0).getMethodTitle();
+        if (products.getShippingLines().size() > 0 && products.getShippingLines().get(0).getMethodTitle() != null && !products.getShippingLines().get(0).getMethodTitle().isEmpty())
+            payment = payment + products.getShippingLines().get(0).getMethodTitle();
         else
             payment = "";
         String FullNameShipping = " ";
@@ -1552,7 +1558,7 @@ public class Main_Activity extends Activity implements OnClickListener {
 //                name.setText(products.getItemList().get(i).getName());
                 productDetails = productDetails + products.getItemList().get(i).getName();
                 String name = products.getItemList().get(i).getName();
-                for(int j = name.length(); j< 21 ; j++)
+                for (int j = name.length(); j < 21; j++)
                     productDetails = productDetails + " ";
 
             }
@@ -1584,39 +1590,36 @@ public class Main_Activity extends Activity implements OnClickListener {
         }
 
 
-        String pageStr = printHeader + productDetails +  dotLine + "\n"+ totalPay +
-                "\n" + "\n" + payment + "\n" + "\n"+ shipping + address1 + "\n" + "\n";
+        String pageStr = printHeader + productDetails + dotLine + "\n" + totalPay +
+                "\n" + "\n" + payment + "\n" + "\n" + shipping + address1 + "\n" + "\n";
         return pageStr;
     }
 
-    String dotLine = "----------------------------------------";
-    String delivery = "Delivery Time: ";
 
-
-    private String dateTimeParse(String dateTime){
+    private String dateTimeParse(String dateTime) {
         String parsedString = "";
-        if(dateTime.contains("T")){
+        if (dateTime.contains("T")) {
             String[] parts = dateTime.split("T");
-            if(!parts[0].isEmpty() && parts[0]!=null)
+            if (!parts[0].isEmpty() && parts[0] != null)
                 parsedString = parsedString + dateReverse(parts[0]);
-            if(!parts[1].isEmpty() && parts[1]!=null)
-                parsedString = parsedString + "  "+ parts[1].substring(0, parts[1].lastIndexOf(":"));
+            if (!parts[1].isEmpty() && parts[1] != null)
+                parsedString = parsedString + "  " + parts[1].substring(0, parts[1].lastIndexOf(":"));
         }
 
         return parsedString;
     }
 
-    public static String dateReverse(String duedate){
+    public static String dateReverse(String duedate) {
         String result = "";
         String dateText = duedate;
-        if(dateText!= null && dateText.contains("-")) {
+        if (dateText != null && dateText.contains("-")) {
             String[] parts = dateText.split("-");
-            if(!parts[2].isEmpty())
+            if (!parts[2].isEmpty())
                 result = result + parts[2];
-            if(!parts[1].isEmpty())
-                result = result +"-"+ parts[1];
-            if(!parts[0].isEmpty())
-                result = result + "-"+ parts[0];
+            if (!parts[1].isEmpty())
+                result = result + "-" + parts[1];
+            if (!parts[0].isEmpty())
+                result = result + "-" + parts[0];
         }
         return result;
     }

@@ -504,7 +504,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     private void dataProcessing(Products products){
         currencyText.setText("Price(" + products.getCurrency() + ")");
         totalCurrency.setText("Total Pay in " + products.getCurrency() + ": ");
-        if(!products.getShippingLines().get(0).getMethodTitle().isEmpty() && products.getShippingLines().get(0).getMethodTitle() != null)
+        if(products.getShippingLines().size()>0 && products.getShippingLines().get(0).getMethodTitle() != null && !products.getShippingLines().get(0).getMethodTitle().isEmpty())
         paymentMethod.setText("Delivery: " + products.getShippingLines().get(0).getMethodTitle());
         else
             paymentMethod.setVisibility(View.GONE);

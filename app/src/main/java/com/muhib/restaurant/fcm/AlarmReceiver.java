@@ -54,17 +54,18 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Uri sound = Uri.parse("android.resource://com.muhib.restaurant/" + R.raw.sound);
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
                 context).setSmallIcon(R.mipmap.qbit)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSound(alarmSound)
+                .setSound(sound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(pendingIntent)
-                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                .setVibrate(new long[]{5000, 5000, 5000, 5000, 5000});
         notificationManager.notify(c, mNotifyBuilder.build());
         c++;
 
