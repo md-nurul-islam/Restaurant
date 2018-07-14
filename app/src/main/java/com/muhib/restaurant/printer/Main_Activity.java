@@ -1564,19 +1564,30 @@ public class Main_Activity extends Activity implements OnClickListener {
                 StringBuilder sb = new StringBuilder(name);
 
                 int k = 0;
-                while ((k = sb.indexOf(" ", k + 14)) != -1) {
+                while ((k = sb.indexOf(" ", k + 10)) != -1) {
                     sb.replace(k, k + 1, "\n");
                 }
 //                if(name.length()>14)
 //                {
+//                    String st = "";
 //                    String[] nameParts = name.split(" ");
 //                    for(int k =0; k< nameParts.length; k++)
+//                        st = st + nameParts[k]
 //                }
+
+                int lastIn = sb.lastIndexOf("\n");
+                String subst = "";
+                if(lastIn>0){
+                    subst = sb.substring(lastIn + 1, sb.length());
+                }
+                else
+                    subst = name;
+
 
                 productDetails = productDetails + sb;
 
-//                for (int j = name.length(); j < 14; j++)
-//                    productDetails = productDetails + " ";
+                for (int j = subst.length(); j < 15; j++)
+                    productDetails = productDetails + " ";
 
             }
 
@@ -1609,6 +1620,7 @@ public class Main_Activity extends Activity implements OnClickListener {
         if(!products.getCustomerNote().isEmpty() && products.getCustomerNote()!=null)
             customerNote += "\n" +"Comments: " + products.getCustomerNote() + "\n";
 
+        //String pageStr = productDetails;
 
         String pageStr = printHeader + productDetails + dotLine + "\n" + totalPay +
                 "\n" + "\n" + payment + "\n" + "\n" + shipping + address1 + customerNote + "\n" + "\n";
