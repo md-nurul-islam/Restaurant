@@ -1449,13 +1449,14 @@ public class Main_Activity extends Activity implements OnClickListener {
         String phoneString = "";
         String footerText = "\n\n";
         String payment = "Shipping Method: ";
-        String dotLine = "----------------------------------------";
+        String dotLine = "--------------------------------";
         String delivery = "Delivery Time: ";
+        String customerNote = "";
 
 
         delivery = delivery + dateTimeParse(products.getDelivery());
-        printHeader = printHeader + "\n" + delivery + "\n" + "Product             Quantity    Price" + "(" + products.getCurrency() + ")" + "\n";
-        totalPay = totalPay + "       Total pay in " + products.getCurrency() + ":     ";
+        printHeader = printHeader + "\n" + "\n" + delivery + "\n" + "Product       Qty   Price" + "(" + products.getCurrency() + ")" + "\n";
+        totalPay = totalPay + "   Total pay in " + products.getCurrency() + ":     ";
 
         if (products.getShippingLines().size() > 0 && products.getShippingLines().get(0).getMethodTitle() != null && !products.getShippingLines().get(0).getMethodTitle().isEmpty())
             payment = payment + products.getShippingLines().get(0).getMethodTitle();
@@ -1551,15 +1552,31 @@ public class Main_Activity extends Activity implements OnClickListener {
 //        itemNameLayout.removeAllViews();
         int total = products.getItemList().size();
         for (int i = 0; i < total; i++) {
+            int newLineNo = 0;
 //            myView = layoutInflater.inflate(R.layout.item_row_view_details, itemNameLayout, false);
 //            LinearLayout ll = (LinearLayout) myView.findViewById(R.id.ll);
 //            TextView name = (TextView) myView.findViewById(R.id.itemName);
             if (!products.getItemList().get(i).getName().isEmpty()) {
 //                name.setText(products.getItemList().get(i).getName());
-                productDetails = productDetails + products.getItemList().get(i).getName();
-                String name = products.getItemList().get(i).getName();
-                for (int j = name.length(); j < 21; j++)
-                    productDetails = productDetails + " ";
+                //productDetails = productDetails + products.getItemList().get(i).getName();
+                String name = products.getItemList().get(i).getName() ;
+
+                StringBuilder sb = new StringBuilder(name);
+
+                int k = 0;
+                while ((k = sb.indexOf(" ", k + 14)) != -1) {
+                    sb.replace(k, k + 1, "\n");
+                }
+//                if(name.length()>14)
+//                {
+//                    String[] nameParts = name.split(" ");
+//                    for(int k =0; k< nameParts.length; k++)
+//                }
+
+                productDetails = productDetails + sb;
+
+//                for (int j = name.length(); j < 14; j++)
+//                    productDetails = productDetails + " ";
 
             }
 
@@ -1567,7 +1584,7 @@ public class Main_Activity extends Activity implements OnClickListener {
             if (products.getItemList().get(i).getQuantity() > 0) {
 //                itemNo.setText("" + products.getItemList().get(i).getQuantity());
                 productDetails = productDetails + products.getItemList().get(i).getQuantity() + "          ";
-                //printText = printText + products.getItemList().get(i).getQuantity() + "       ";
+                //printText = printText + products.getItemList().get(i).getQuantity() + "   ";
             }
 
 //            TextView priceText = (TextView) myView.findViewById(R.id.price);
@@ -1589,9 +1606,12 @@ public class Main_Activity extends Activity implements OnClickListener {
             shipping = shipping + phoneString + "\n";
         }
 
+        if(!products.getCustomerNote().isEmpty() && products.getCustomerNote()!=null)
+            customerNote += "\n" +"Comments: " + products.getCustomerNote() + "\n";
+
 
         String pageStr = printHeader + productDetails + dotLine + "\n" + totalPay +
-                "\n" + "\n" + payment + "\n" + "\n" + shipping + address1 + "\n" + "\n";
+                "\n" + "\n" + payment + "\n" + "\n" + shipping + address1 + customerNote + "\n" + "\n";
         return pageStr;
     }
 

@@ -14,6 +14,9 @@ import java.util.List;
 
 public class Products implements Serializable {
 
+    @SerializedName("customer_note")
+    @Expose
+    private String customerNote;
 
     @SerializedName("payment_method_title")
     @Expose
@@ -203,5 +206,13 @@ public class Products implements Serializable {
 
     public void setShippingLines(List<ShippingLines> shippingLines) {
         this.shippingLines = shippingLines;
+    }
+
+    public String getCustomerNote() {
+        return customerNote;
+    }
+
+    public void setCustomerNote(String customerNote) {
+        this.customerNote = customerNote;
     }
 }
