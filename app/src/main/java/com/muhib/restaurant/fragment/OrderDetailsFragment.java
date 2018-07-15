@@ -45,6 +45,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import io.reactivex.Observer;
@@ -677,6 +678,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     public static String dateReverse(String duedate, String times, int timeToAdd){
 
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+//        format1.setTimeZone(TimeZone.getTimeZone("GMT"));
         String result = "";
         String dateText = duedate;
         String[] timeparts = times.split(":");
@@ -687,12 +689,14 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
             c.set(Calendar.YEAR, Integer.parseInt(parts[0]));
             c.set(Calendar.MONTH, Integer.parseInt(parts[1])- 1);
             c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(parts[2]));
-            c.set(Calendar.HOUR, Integer.parseInt(timeparts[0]));
+            c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeparts[0]));
             c.set(Calendar.MINUTE, Integer.parseInt(timeparts[1]));
             c.add(Calendar.MINUTE, timeToAdd);
+            String tt = c.getTime().toString();
 
 
-             result = ( new SimpleDateFormat( "dd-MM-yyyy' 'HH:mm" ) ).format( c.getTime()).toString();;
+            // result = ( new SimpleDateFormat( "dd-MM-yyyy' 'HH:mm" ) ).format( c.getTime()).toString();;
+            result = format1.format(c.getTime());
 
 //            if(!parts[2].isEmpty())
 //                result = result + parts[2];
