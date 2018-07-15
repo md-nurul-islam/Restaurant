@@ -69,7 +69,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
     LinearLayout layout;
     private LinearLayout itemNameLayout;
     TextView totalPay, shippingUserName;
-    TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency, paymentMethod;
+    TextView addressOne, addressOneText, addressTwo, addressTwoText, currencyText,totalCurrency, paymentMethod, customerNoteText;
     TextView acceptBtn, rejectBtn;
     Button printPage;
     TextView delivery;
@@ -125,6 +125,7 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
         totalPay = (TextView) view.findViewById(R.id.totalPay);
         totalCurrency = (TextView) view.findViewById(R.id.totalCurrency);
         paymentMethod = (TextView) view.findViewById(R.id.paymentMethod);
+        customerNoteText = (TextView) view.findViewById(R.id.customerNote);
 
         currencyText = (TextView) view.findViewById(R.id.currency);
         delivery = (TextView) view.findViewById(R.id.delivery);
@@ -502,10 +503,18 @@ public class OrderDetailsFragment extends Fragment implements View.OnClickListen
                     }
                 });
     }
+    String customerNote = "";
 
     private void dataProcessing(Products products){
         currencyText.setText("Price(" + products.getCurrency() + ")");
         totalCurrency.setText("Total Pay in " + products.getCurrency() + ": ");
+        if(!products.getCustomerNote().isEmpty() && products.getCustomerNote()!=null) {
+            customerNote += "Comments: " + products.getCustomerNote() + "\n";
+            customerNoteText.setVisibility(View.VISIBLE);
+            customerNoteText.setText(customerNote);
+        }
+        else
+            customerNoteText.setVisibility(View.GONE);
         if(products.getShippingLines().size()>0 && products.getShippingLines().get(0).getMethodTitle() != null && !products.getShippingLines().get(0).getMethodTitle().isEmpty())
         paymentMethod.setText("Shipping Method: " + products.getShippingLines().get(0).getMethodTitle());
         else

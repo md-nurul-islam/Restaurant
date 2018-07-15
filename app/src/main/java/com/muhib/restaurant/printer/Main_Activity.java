@@ -51,6 +51,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Hashtable;
 
 
@@ -1454,7 +1455,7 @@ public class Main_Activity extends Activity implements OnClickListener {
         String customerNote = "";
 
 
-        delivery = delivery + dateTimeParse(products.getDelivery());
+        delivery = delivery + dateTimeParse(products.getDelivery(), products.getMetaData().get(0).getValue());
         printHeader = printHeader + "\n" + "\n" + delivery + "\n" + "Product       Qty   Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "   Total pay in " + products.getCurrency() + ":     ";
 
@@ -1628,30 +1629,74 @@ public class Main_Activity extends Activity implements OnClickListener {
     }
 
 
-    private String dateTimeParse(String dateTime) {
+//    private String dateTimeParse(String dateTime) {
+//        String parsedString = "";
+//        if (dateTime.contains("T")) {
+//            String[] parts = dateTime.split("T");
+//            if (!parts[0].isEmpty() && parts[0] != null)
+//                parsedString = parsedString + dateReverse(parts[0]);
+//            if (!parts[1].isEmpty() && parts[1] != null)
+//                parsedString = parsedString + "  " + parts[1].substring(0, parts[1].lastIndexOf(":"));
+//        }
+//
+//        return parsedString;
+//    }
+//
+//    public static String dateReverse(String duedate) {
+//        String result = "";
+//        String dateText = duedate;
+//        if (dateText != null && dateText.contains("-")) {
+//            String[] parts = dateText.split("-");
+//            if (!parts[2].isEmpty())
+//                result = result + parts[2];
+//            if (!parts[1].isEmpty())
+//                result = result + "-" + parts[1];
+//            if (!parts[0].isEmpty())
+//                result = result + "-" + parts[0];
+//        }
+//        return result;
+//    }
+
+    private String dateTimeParse(String dateTime, String timeToAdd){
+        String[] timeToAddParts = timeToAdd.split(" ");
         String parsedString = "";
-        if (dateTime.contains("T")) {
+        if(dateTime.contains("T")){
             String[] parts = dateTime.split("T");
-            if (!parts[0].isEmpty() && parts[0] != null)
-                parsedString = parsedString + dateReverse(parts[0]);
-            if (!parts[1].isEmpty() && parts[1] != null)
-                parsedString = parsedString + "  " + parts[1].substring(0, parts[1].lastIndexOf(":"));
+            if(!parts[0].isEmpty() && parts[0]!=null)
+                parsedString = parsedString + dateReverse(parts[0], parts[1], Integer.valueOf(timeToAddParts[0]));
+//            if(!parts[1].isEmpty() && parts[1]!=null)
+//                parsedString = parsedString + "  "+ parts[1].substring(0, parts[1].lastIndexOf(":"));
         }
 
         return parsedString;
     }
 
-    public static String dateReverse(String duedate) {
+    public static String dateReverse(String duedate, String times, int timeToAdd){
+
+        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String result = "";
         String dateText = duedate;
-        if (dateText != null && dateText.contains("-")) {
+        String[] timeparts = times.split(":");
+
+        if(dateText!= null && dateText.contains("-")) {
             String[] parts = dateText.split("-");
-            if (!parts[2].isEmpty())
-                result = result + parts[2];
-            if (!parts[1].isEmpty())
-                result = result + "-" + parts[1];
-            if (!parts[0].isEmpty())
-                result = result + "-" + parts[0];
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.YEAR, Integer.parseInt(parts[0]));
+            c.set(Calendar.MONTH, Integer.parseInt(parts[1])- 1);
+            c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(parts[2]));
+            c.set(Calendar.HOUR, Integer.parseInt(timeparts[0]));
+            c.set(Calendar.MINUTE, Integer.parseInt(timeparts[1]));
+            c.add(Calendar.MINUTE, timeToAdd);
+
+
+            result = ( new SimpleDateFormat( "dd-MM-yyyy' 'HH:mm" ) ).format( c.getTime()).toString();;
+
+//            if(!parts[2].isEmpty())
+//                result = result + parts[2];
+//            if(!parts[1].isEmpty())
+//                result = result +"-"+ parts[1];
+//            if(!parts[0].isEmpty())
+//                result = result + "-"+ parts[0];
         }
         return result;
     }
