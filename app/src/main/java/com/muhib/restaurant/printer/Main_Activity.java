@@ -1456,7 +1456,7 @@ public class Main_Activity extends Activity implements OnClickListener {
 
 
         delivery = delivery + dateTimeParse(products.getDelivery(), products.getMetaData().get(0).getValue());
-        printHeader = printHeader + "\n" + "\n" + delivery + "\n" + "Product       Qty   Price" + "(" + products.getCurrency() + ")" + "\n";
+        printHeader = printHeader + "\n" + "\n" + delivery + "\n" + "\n" + "Product       Qty   Price" + "(" + products.getCurrency() + ")" + "\n";
         totalPay = totalPay + "   Total pay in " + products.getCurrency() + ":     ";
 
         if (products.getShippingLines().size() > 0 && products.getShippingLines().get(0).getMethodTitle() != null && !products.getShippingLines().get(0).getMethodTitle().isEmpty())
