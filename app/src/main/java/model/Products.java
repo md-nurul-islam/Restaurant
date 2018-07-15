@@ -67,6 +67,9 @@ public class Products implements Serializable {
 //    @Expose
 //    private ImageUrl image;
 
+    @SerializedName("meta_data")
+    @Expose
+    private List<MetaData> metaData = null;
     @SerializedName("shipping_lines")
     @Expose
     private List<ShippingLines> shippingLines = null;
@@ -214,5 +217,13 @@ public class Products implements Serializable {
 
     public void setCustomerNote(String customerNote) {
         this.customerNote = customerNote;
+    }
+
+    public List<MetaData> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(List<MetaData> metaData) {
+        this.metaData = metaData;
     }
 }
