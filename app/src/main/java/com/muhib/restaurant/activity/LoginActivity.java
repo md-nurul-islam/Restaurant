@@ -132,9 +132,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        finish();
 //                    }
 //                }, 3000);
-        callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
+        //callLoginApi(defaultSiteUrl,defaultKey, defaultSecret);
 
-        //callLoginApi(siteUrl,ck, cs);
+        callLoginApi(siteUrl,ck, cs);
 
 
     }
@@ -318,7 +318,7 @@ public class LoginActivity extends AppCompatActivity {
             if(result.getContents() ==null){
                 Toast.makeText(this, "You cancelled the scanning", Toast.LENGTH_LONG).show();
             }else {
-                Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                 String qrString = result.getContents();
                 if(qrString.contains("|")) {
                     String[] parts = qrString.split("\\|");

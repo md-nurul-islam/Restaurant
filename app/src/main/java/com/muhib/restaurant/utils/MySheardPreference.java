@@ -79,6 +79,8 @@ public class MySheardPreference {
     public static void clearSp(){
         final SharedPreferences pref = getSharedPreferences();
         final SharedPreferences.Editor editor = pref.edit();
+        setUserSiteUrl("");
+       setUserIdAndPassword("", "");
         editor.clear().apply();
 
     }
