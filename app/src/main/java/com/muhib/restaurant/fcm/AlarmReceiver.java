@@ -52,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        int num = (int) System.currentTimeMillis();
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1111, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri sound = Uri.parse("android.resource://com.muhib.restaurant/" + R.raw.sound);
 
@@ -65,7 +65,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setSound(sound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(pendingIntent)
-                .setVibrate(new long[]{6000});
+                .setVibrate(new long[]{6000,6000});
         notificationManager.notify(0, mNotifyBuilder.build());
         c++;
 

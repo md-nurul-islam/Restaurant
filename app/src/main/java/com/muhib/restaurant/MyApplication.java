@@ -21,6 +21,7 @@ public class MyApplication extends Application {
     private static AlarmManager am;
     private static PendingIntent pendingIntent;
     private static Intent intent1;
+    private static int ALARM_CODE = 1111;
 
     private static Handler h = new Handler();
 
@@ -76,8 +77,8 @@ public class MyApplication extends Application {
 
         am = (AlarmManager) mInstance.getSystemService(mInstance.ALARM_SERVICE);
 //        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
-        pendingIntent = PendingIntent.getBroadcast(mInstance, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
+        pendingIntent = PendingIntent.getBroadcast(mInstance, ALARM_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
 
         Log.v("alarm", "alarm set");
 
